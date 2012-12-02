@@ -52,8 +52,8 @@ prompt.unknownServiceStatus    = '未知的服务状态'
 prompt.version    = '禅道控制面板1.0版本'
 prompt.currentDir = '当前目录：%s'
 
-prompt.withoutVC = '检测到没有VC环境，请先下载安装'
-prompt.down      = '下载'
+prompt.withoutVC = '检测到没有VC环境，请先安装'
+prompt.install   = '安装'
 prompt.cancel    = '取消'
 
 prompt.fileUnfindable = '找不到%s'

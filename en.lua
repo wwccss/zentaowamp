@@ -3,12 +3,12 @@ dialogTitle.controlPanel = 'ZenTao Integrated Run Environment'
 dialogTitle.configPort   = 'Port configure'
 
 button = {}
-button.start   = "start"
-button.access  = "access"
-button.stop    = "stop"
-button.more    = "more"
-button.exit    = "exit"
-button.save    = 'save'
+button.start   = "Start"
+button.access  = "Access"
+button.stop    = "Stop"
+button.more    = "More"
+button.exit    = "Exit"
+button.save    = 'Save'
 button.running = 'running...'
 button.stopped = 'stoped'
 
@@ -52,7 +52,7 @@ prompt.version    = 'ZenTao Control Panel Version 1.0'
 prompt.currentDir = 'Current Directory:%s'
 
 prompt.withoutVC = 'Without vcredist, Please install first.'
-prompt.down      = 'down'
+prompt.install   = 'install'
 prompt.cancel    = 'cancel'
 
 prompt.fileUnfindable = "Can't find %s"

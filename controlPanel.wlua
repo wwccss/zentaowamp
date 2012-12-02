@@ -15,9 +15,10 @@ MOUSE_PRESSED = 1
 MAX_PORT      = 65535
 HOST          = '127.0.0.1'
 SOCKET        = require("socket")
-VC_DOWNLINK   = 'http://www.microsoft.com/en-us/download/confirmation.aspx?id=29'
+VC_REDIST     = 'vcredist_x86.exe'
 LABEL_SIZE    = '40x10'
 BUTTON_SIZE   = "50x15"
+TMP_BAT       = 'tmp.bat'
 
 ----------------------------------------------------------------------------------
 -- Init apache and mysql table.
@@ -36,6 +37,16 @@ mysql.serviceName = 'mysqlzt'
 mysql.status      = 'stopped'
 mysql.port        = 3306 
 mysql.suggestPort = 3308 
+
+----------------------------------------------------------------------------------
+-- Rewrite ex.spawn method.
+----------------------------------------------------------------------------------
+function exSpawn(command) 
+    local batFile = io.open(TMP_BAT, 'w')
+    batFile:write(command)
+    batFile:close()
+    return ex.spawn{"wscript.exe", "spawn.vbs", TMP_BAT}
+end
 
 ----------------------------------------------------------------------------------
 -- Get and Set the language.  
@@ -344,7 +355,7 @@ end
 ----------------------------------------------------------------------------------
 function controlPanel.siteLabel:button_cb(btn, press)
     if(btn ~= MOUSE_LEFT or press ~= MOUSE_PRESSED) then return false end
-    os.execute("start http://www.zentao.net")
+    exSpawn("start http://www.zentao.net")
 end
 
 ----------------------------------------------------------------------------------
@@ -352,42 +363,40 @@ end
 ----------------------------------------------------------------------------------
 function controlPanel.startButton:action()
     controlPanel.dialog.cursor = 'busy'
-    print(prompt.divider)
     print(prompt.tryToStartServices)
-    print(prompt.newLine)
     apache.port   = getConfigPort('apache')
     mysql.port    = getConfigPort('mysql')
     updateZentaoConfig(mysql.port)
     apache.status = startService(apache.serviceName, apache.port)
     mysql.status  = startService(mysql.serviceName,  mysql.port)
-    if(apache.status ~= 'running') then apache.suggestPort = getSuggestPort(apache.port) end
-    if(mysql.status  ~= 'running') then mysql.suggestPort  = getSuggestPort(mysql.port)  end
+    if apache.status ~= 'running' then apache.suggestPort = getSuggestPort(apache.port) end
+    if mysql.status  ~= 'running' then mysql.suggestPort  = getSuggestPort(mysql.port)  end
 
-    if(apache.status ~= 'running' or mysql.status ~= 'running') then 
+    if apache.status ~= 'running' or mysql.status ~= 'running' then 
         configPort()
     else
-        print(prompt.newLine)
         print(prompt.startSuccessfully)
         controlPanel.setButtonStatus()
     end
     controlPanel.dialog.cursor = 'arrow'
+    print(prompt.newLine)
 end
 
 function getSuggestPort(currentPort)
     local suggestPort = currentPort + 1
-    if(suggestPort == MAX_PORT) then return '' end
-    if(SOCKET.connect(HOST, suggestPort) == nil) then return suggestPort end
+    if suggestPort == MAX_PORT then return '' end
+    if SOCKET.connect(HOST, suggestPort) == nil then return suggestPort end
     return getSuggestPort(suggestPort)
 end
 
 -- Start service.
 function startService(serviceName, port)
     local serviceStatus = getServiceStatus(serviceName)
-    if(serviceStatus == 'running') then 
+    if serviceStatus == 'running' then 
         print(string.format(prompt.serviceIsRunning, serviceName, port)) 
-    elseif(serviceStatus == 'failed') then
+    elseif serviceStatus == 'failed' then
         serviceStatus = installService(serviceName, port)
-    elseif(serviceStatus == 'stopped') then
+    elseif serviceStatus == 'stopped' then
         print(string.format(prompt.serviceExists, serviceName), prompt.tryToStart)
         os.execute('net start ' .. serviceName)
         serviceStatus = getServiceStatus(serviceName)
@@ -396,7 +405,7 @@ function startService(serviceName, port)
         elseif(serviceStatus == 'stopped') then
             if(uninstallService(serviceName) == 'failed') then serviceStatus = installService(serviceName, port) end
         end
-    elseif(serviceStatus == 'unknown') then
+    elseif serviceStatus == 'unknown' then
         print(prompt.unknownServiceStatus)
     end
 
@@ -410,13 +419,13 @@ function getServiceStatus(serviceName)
     content = f:read('*a')
     f:close()
 
-    if(string.find(content, 'RUNNING') ~= nil) then  
+    if string.find(content, 'RUNNING') ~= nil then  
         return 'running' 
-    elseif(string.find(content, 'STOPPED') ~= nil) then
+    elseif string.find(content, 'STOPPED') ~= nil then
         return 'stopped'
-    elseif(string.find(content, '1060') ~= nil) then
+    elseif string.find(content, '1060') ~= nil then
         return 'failed'
-    elseif(string.find(content, 'PENDING') ~= nil) then
+    elseif string.find(content, 'PENDING') ~= nil then
         return getServiceStatus(serviceName)
     end
 
@@ -425,7 +434,6 @@ end
 
 -- Install service.
 function installService(serviceName, port)
-    print(prompt.newLine)
     local serviceStatus = getServiceStatus(serviceName)
     local process = ''
     local killProcess
@@ -471,15 +479,15 @@ end
 -- Adjust if need vc environment.
 function isNeedVC()
     local file = io.open('installApache', 'r')
-    if(file == ni) then return false end
-    if(string.find(file:read('*a'), 'sxstrace')) then return true end
+    if file == ni then return false end
+    if string.find(file:read('*a'), 'sxstrace') then return true end
     return false
 end
 
 -- Install vc environment.
 function installVC()
-    local buttonPress = iup.Alarm(prompt.common, prompt.withoutVC, prompt.down, prompt.cancel)
-    if(buttonPress == 1) then os.execute('start ' .. VC_DOWNLINK) end
+    local buttonPress = iup.Alarm(prompt.common, prompt.withoutVC, prompt.install, prompt.cancel)
+    if buttonPress == 1 then os.execute('start ' .. VC_REDIST) end
     controlPanel.dialog.tray = "NO" 
     os.exit()
 end
@@ -499,13 +507,13 @@ config.saveButton      = iup.button{title = button.save, size = BUTTON_SIZE}
  
 -- Init config dialog and show it.
 function configPort()
-    if(apache.status ~= 'running') then
+    if apache.status ~= 'running' then
         config.apacheLabel     = iup.label{title = apache.serviceName .. string.format(label.portIsConflict, apache.port), expand="Yes"} 
         config.apachePortInput = iup.text{value = apache.suggestPort, filter = 'number', spin = 'YES', spinmax = MAX_PORT, nc = 5}
         config.apacheBox       = iup.hbox{config.apacheLabel, config.apachePortInput} 
     end
 
-    if(mysql.status ~= 'running') then 
+    if mysql.status ~= 'running' then 
         config.mysqlLabel     = iup.label{title = mysql.serviceName .. string.format(label.portIsConflict, mysql.port), expand="Yes"} 
         config.mysqlPortInput = iup.text{value = mysql.suggestPort, filter = 'number', spin = 'YES', spinmax = MAX_PORT, nc = 5}
         config.mysqlBox       = iup.hbox{config.mysqlLabel, config.mysqlPortInput} 
@@ -517,28 +525,32 @@ function configPort()
         {
             config.apacheBox, 
             config.mysqlBox, 
-            config.saveButton,
+            iup.hbox
+            {
+                iup.fill{},
+                config.saveButton,
+                iup.fill{}
+            }
         },
         margin="10x10",
         gap="10",
-        alignment="ACENTER",
         title = dialogTitle.configPort
     }   
     config.dialog:popup()
     
   --if(config.mysqlReadonly == false)  then iup.SetFocus(config.mysqlPortInput) end
   --if(config.apacheReadonly == false) then iup.SetFocus(config.apachePortInput) end
-     config.dialog:destroy()
 end
 
 ------------------------------------
 -- When click save button.
 ------------------------------------
 function config.saveButton:action()
+    config.dialog.cursor = 'busy'
     local apachePort
     local mysqlPort
 
-    if(config.apachePortInput ~= nil) then
+    if config.apachePortInput ~= nil then
         apachePort = config.apachePortInput.value
         if(SOCKET.connect(HOST, apachePort) == nil) then 
            if(setConfigPort('apache', apachePort)) then 
@@ -548,7 +560,7 @@ function config.saveButton:action()
         end
     end
     
-    if(config.mysqlPortInput ~= nil) then
+    if config.mysqlPortInput ~= nil then
         mysqlPort = config.mysqlPortInput.value
         if(SOCKET.connect(HOST, mysqlPort) == nil) then 
            if(setConfigPort('mysql', mysqlPort)) then 
@@ -558,11 +570,12 @@ function config.saveButton:action()
         end
      end
     
-    if(apache.status ~= 'running' or mysql.status ~= 'running') then 
+    if apache.status ~= 'running' or mysql.status ~= 'running' then 
         configPort()
     else
         print(prompt.startSuccessfully)
         controlPanel.setButtonStatus()
+        config.dialog:destroy()
     end
 end
 
@@ -571,7 +584,7 @@ end
 ----------------------------------------------------------------------------------
 function controlPanel.accessButton:action()
     apache.port = getConfigPort('apache')
-    os.execute("start http://" .. HOST .. ':' .. apache.port)
+    exSpawn("start http://" .. HOST .. ':' .. apache.port)
 end
 
 ----------------------------------------------------------------------------------
@@ -579,25 +592,24 @@ end
 ----------------------------------------------------------------------------------
 function controlPanel.stopButton:action()
     controlPanel.dialog.cursor = 'busy'
-    print(prompt.divider)
     print(prompt.tryToStopServices)
-    print(prompt.newLine)
     apache.status = stopService(apache.serviceName)
     mysql.status  = stopService(mysql.serviceName)
-    if(apache.status ~= 'running' and mysql.status ~= 'running') then print(prompt.newLine) print(prompt.stopSuccessfully) end
+    if apache.status ~= 'running' and mysql.status ~= 'running' then print(prompt.stopSuccessfully) end
     controlPanel.setButtonStatus()
     controlPanel.dialog.cursor = 'arrow'
+    print(prompt.newLine)
 end
 
 -- Stop a service.
 function stopService(serviceName)
     local serviceStatus = getServiceStatus(serviceName)
-    if(serviceStatus == 'failed')  then print(string.format(prompt.serviceUnfindable, serviceName)) return serviceStatus end
-    if(serviceStatus == 'stopped') then print(string.format(prompt.serviceIsStopped, serviceName))  return serviceStatus end
-    if(serviceStatus == 'running') then 
+    if serviceStatus == 'failed'  then print(string.format(prompt.serviceUnfindable, serviceName)) return serviceStatus end
+    if serviceStatus == 'stopped' then print(string.format(prompt.serviceIsStopped, serviceName))  return serviceStatus end
+    if serviceStatus == 'running' then 
         os.execute("net stop " .. serviceName) 
         serviceStatus = getServiceStatus(serviceName)
-        if(serviceStatus == 'stopped') then print(string.format(prompt.stopServiceSuccessfully, serviceName)) end
+        if serviceStatus == 'stopped' then print(string.format(prompt.stopServiceSuccessfully, serviceName)) end
     end
 
     return serviceStatus
@@ -605,7 +617,6 @@ end
 
 -- Uninstall a service.
 function uninstallService(serviceName)
-    print(prompt.newLine)
     print(string.format(prompt.tryToUninstallService, serviceName))
     if(getServiceStatus(serviceName) == 'running') then 
         print(string.format(prompt.tryToStopService, serviceName))
@@ -622,6 +633,7 @@ function uninstallService(serviceName)
             print(string.format(prompt.uninstallSuccessfully, serviceName)) 
         end
     end
+
     return getServiceStatus(serviceName)
 end
 
@@ -629,7 +641,7 @@ end
 -- When click more button.
 ----------------------------------------------------------------------------------
 function controlPanel.moreButton:action()
-    os.execute("start /b services.msc");
+    exSpawn("services.msc")
 end
 
 ----------------------------------------------------------------------------------
@@ -647,6 +659,7 @@ controlPanel.dialog:showxy(iup.RIGHT, iup.RIGHT)
 
 print(prompt.version)
 print(string.format(prompt.currentDir, os.currentdir()))
+print(prompt.newLine)
 controlPanel.initValues()
 controlPanel.setButtonStatus()
 
