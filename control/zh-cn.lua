@@ -12,6 +12,7 @@ lang.menu.viewService      = "查看服务(V)"
 lang.menu.uninstallService = "卸载服务(U)"
 
 lang.title.more        = '更多(M)'
+lang.menu.initBat      = "生成脚本(I)"
 lang.menu.database     = "数 据 库(D)"
 lang.menu.backup       = "备份禅道(B)"
 lang.menu.checkVersion = "检查更新(C)"
@@ -79,6 +80,10 @@ lang.prompt.tryToUninstallService = '正在努力移除%s服务......'
 lang.prompt.uninstallSuccessfully = '移除%s服务成功'
 lang.prompt.uninstallFailed       = '移除%s服务失败'
 lang.prompt.serviceUnfindable     = "%s服务未安装"
+
+-- Init bat.
+lang.prompt.initBatSuccessfully  = '成功生成批处理文件, 请到%s下查看。'
+lang.prompt.initBatFailed        = '执行失败。'
 
 -- Backup data.
 lang.prompt.mysqlNotRunning   = '未启动mysql，只备份文件数据。'

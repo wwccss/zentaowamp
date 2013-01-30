@@ -1,1 +1,0 @@
-start /b services.msc & echo ok > ok

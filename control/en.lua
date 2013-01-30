@@ -12,6 +12,7 @@ lang.menu.viewService      = "View Services(V)"
 lang.menu.uninstallService = "Uninstall Services(U)"
 
 lang.title.more        = 'More(M)'
+lang.menu.initBat      = "Init bat(I)"
 lang.menu.database     = "Database(D)"
 lang.menu.backup       = "Backup(B)"
 lang.menu.checkVersion = "Check for updates(C)"
@@ -78,6 +79,10 @@ lang.prompt.tryToUninstallService = 'Try to uninstall %s service......'
 lang.prompt.uninstallSuccessfully = 'Uninstall %s service successfully'
 lang.prompt.uninstallFailed       = 'Uninstall %s service failed'
 lang.prompt.serviceUnfindable     = "%s service is uninstalled"
+
+-- Init bat.
+lang.prompt.initBatSuccessfully = 'Init bat successfully! enter %s?'
+lang.prompt.initBatFailed       = 'Init failed!'
 
 -- Backup data.
 lang.prompt.mysqlNotRunning   = 'Mysql is stopped, so just backup data filem.'

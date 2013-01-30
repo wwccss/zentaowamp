@@ -14,52 +14,59 @@ initEncode()
 ----------------------------------------------------------------------------------
 -- Define const value.
 ----------------------------------------------------------------------------------
-MOUSE_LEFT    = 49
-MOUSE_PRESSED = 1
-MAX_PORT      = 65535
-HOST          = '127.0.0.1'
-SOCKET        = require("socket")
-VC_REDIST     = 'vcredist_x86.exe'
-BUTTON_SIZE   = "50x20"
-TMP_BAT       = 'tmp\\tmp.bat'
-DRIVE_LETTER  = string.lower(string.sub(os.currentdir(), 0, 1))
-BACKUP_CMD    = 'cd ..\\zentao\\bin & \\xampp\\php\\php.exe backup.php & cd ..\\..\\controlPanel'
-UPDATER_URL   = "http://www.zentao.net/updater-isLatest-%s-.json"
-VERSION       = 'controlPanel_1.0'
-PHP_BAT       = 'tmp\\php.bat'
-PMS_VERSION   = ''
-LANG_FILE     = 'tmp\\lang'
-OK_FILE       = 'tmp\\ok'
-TMP_FILE      = '\\xampp\\controlPanel\\tmp\\tmp'
+MOUSE_LEFT       = 49
+MOUSE_PRESSED    = 1
+MAX_PORT         = 65535
+HOST             = '127.0.0.1'
+SOCKET           = require("socket")
+VC_REDIST        = 'vcredist_x86.exe'
+BUTTON_SIZE      = "50x20"
+TMP_BAT          = 'tmp\\tmp.bat'
+DRIVE_LETTER     = string.lower(string.sub(os.currentdir(), 0, 1))
+BACKUP_FILE      = '\\xampp\\zentao\\bin\\backup.php'
+BACKUP_CMD       = 'cd ..\\zentao\\bin & \\xampp\\php\\php.exe backup.php & cd ..\\..\\controlPanel'
+UPDATER_URL      = "http://www.zentao.net/updater-isLatest-%s-.json"
+VERSION          = 'controlPanel_1.0'
+INIT_BAT         = "..\\zentao\\bin\\init.bat"
+INIT_SUCCESSCODE = 0
+PHP_EXE          = DRIVE_LETTER .. ':\\xampp\\php\\php.exe'
+PHP_BAT          = 'tmp\\php.bat'
+PMS_VERSION      = ''
+LANG_FILE        = 'tmp\\lang'
+OK_FILE          = 'tmp\\ok'
+TMP_FILE         = '\\xampp\\control\\tmp\\tmp'
 
 ----------------------------------------------------------------------------------
 -- Init apache and mysql table.
 ----------------------------------------------------------------------------------
+php    = {}
 apache = {}
 mysql  = {}
 zentao = {}
 
-apache.configFile  = "..\\apache\\conf\\httpd.conf" 
+php.configFile = "..\\php\\php.ini"
+
+apache.configFile  = "..\\apache\\conf\\httpd.conf"
 apache.serviceName = 'apachezt'
 apache.status      = 'stopped'
 apache.port        = 80
 apache.suggestPort = 88
 
-mysql.configFile       = "..\\mysql\\my.ini" 
-mysql.oldConfigFile    = "..\\mysql\\bin\\my.ini" 
+mysql.configFile       = "..\\mysql\\my.ini"
+mysql.oldConfigFile    = "..\\mysql\\bin\\my.ini"
 mysql.myConfig         = "..\\zentao\\config\\my.php"
 mysql.phpmyadminConfig = "..\\admin\\phpmyadmin\\config.inc.php"
 mysql.serviceName      = 'mysqlzt'
 mysql.status           = 'stopped'
-mysql.port             = 3306 
-mysql.suggestPort      = 3308 
+mysql.port             = 3306
+mysql.suggestPort      = 3308
 
 zentao.configFile      = "..\\zentao\\config\\config.php"
 
 ----------------------------------------------------------------------------------
 -- Rewrite ex.spawn method.
 ----------------------------------------------------------------------------------
-function exSpawn(command) 
+function exSpawn(command)
     os.remove(OK_FILE)
     command = command .. ' > ' .. TMP_FILE .. ' 2>&1 & echo ok > ' .. OK_FILE
     local batFile = io.open(TMP_BAT, 'w')
@@ -67,7 +74,7 @@ function exSpawn(command)
     batFile:close()
     ex.spawn{"wscript.exe", "spawn.vbs", TMP_BAT}
 
-    local okFile = io.open(OK_FILE, 'r') 
+    local okFile = io.open(OK_FILE, 'r')
     while not okFile do os.sleep(0.1) okFile = io.open(OK_FILE, 'r') end
     okFile:close()
     os.remove(OK_FILE)
@@ -75,14 +82,15 @@ function exSpawn(command)
 end
 
 ----------------------------------------------------------------------------------
---- Get the version of pms. 
+--- Get the version of pms.
 ----------------------------------------------------------------------------------
 function getPmsVersion()
     local file = io.open(zentao.configFile, 'r')
     if not file then return '' end
     for line in file:lines() do
-        if string.find(line, ">version") then 
+        if string.find(line, ">version") then
             line = (string.sub(line, string.find(line, "=") + 1, string.find(line, ";") - 1))
+            file:close()
             return string.gsub(line, "[%s*|'|\"]", '')
         end
     end
@@ -96,23 +104,24 @@ UPDATER_URL = string.format(UPDATER_URL, PMS_VERSION)
 function subString(string, startStr, endStr, notInclude)
     local i, j = string.find(string, startStr)
     local x, y = string.find(string, endStr)
-    if notInclude then 
+    if notInclude then
         startStr = string.gsub(startStr, '%%', '')
         endStr   = string.gsub(endStr, '%%', '')
-        return string.sub(string, i + #startStr, y - #endStr) 
+        return string.sub(string, i + #startStr, y - #endStr)
     end
 
     return string.sub(string, i, y)
 end
 
 ----------------------------------------------------------------------------------
--- Get and Set the language.  
+-- Get and Set the language.
 ----------------------------------------------------------------------------------
 -- Get Language for LANG file.
 function getLang()
     local langFile = io.open(LANG_FILE, 'r')
     if langFile == nil then return 'zh-cn' end
     if string.find(langFile:read('*a'), 'en') ~= nil then langFile:close() return 'en' end
+    langFile:close()
     return 'zh-cn'
 end
 
@@ -157,7 +166,7 @@ function checkMysqlConfig()
     for line in file:lines() do
         if string.find(line, ':/xampp') then
             s, e = string.find(line, ':/xampp')
-            if s then 
+            if s then
                 configDriveLetter = string.sub(line, s - 1, s - 1)
                 if string.lower(configDriveLetter) ~= DRIVE_LETTER then
                     line = string.gsub(line, configDriveLetter .. ':/xampp', DRIVE_LETTER .. ':/xampp')
@@ -177,12 +186,40 @@ function checkMysqlConfig()
 end
 checkMysqlConfig()
 
+function checkPhpConfig()
+    local file = io.open(php.configFile, 'r')
+
+    if not file then return end
+
+    local output = ''
+    for line in file:lines() do
+        if string.find(line, ':/xampp') then
+            s, e = string.find(line, ':/xampp')
+            if s then
+                configDriveLetter = string.sub(line, s - 1, s - 1)
+                if string.lower(configDriveLetter) ~= DRIVE_LETTER then
+                    line = string.gsub(line, configDriveLetter .. ':/xampp', DRIVE_LETTER .. ':/xampp')
+                end
+            end
+        elseif string.find(line, '/xampp') then
+            line = string.gsub(line, '/xampp', DRIVE_LETTER .. ':/xampp')
+        end
+
+        output = output .. line .. '\n'
+    end
+    file:close()
+
+    local file = io.open(php.configFile, 'w')
+    file:write(output)
+    file:close()
+end
+checkPhpConfig()
 
 ----------------------------------------------------------------------------------
 -- Copy the php.bat to %SYSTEM%\system32 path.
 ----------------------------------------------------------------------------------
 function copyPhpBat()
-    local phpBatContent = DRIVE_LETTER .. ':\\xampp\\php\\php.exe %*' 
+    local phpBatContent = DRIVE_LETTER .. ':\\xampp\\php\\php.exe %*'
     local phpBatFile = io.open(PHP_BAT, 'w')
     phpBatFile:write(phpBatContent)
     phpBatFile:close()
@@ -202,31 +239,32 @@ function processIsRunning(process)
 
     tasklist = file:read('*a')
     for s in string.gfind(tasklist, process) do processCount = processCount + 1 end
+    file:close()
 
     return processCount
 end
 
 ----------------------------------------------------------------------------------
--- If controlPanel is running, warning and exit
+-- If control is running, warning and exit
 ----------------------------------------------------------------------------------
-if(processIsRunning('controlPanel') > 1) then
+if(processIsRunning('control') > 1) then
     showPromptDialog(lang.prompt.panelIsRunning)
     os.exit()
 end
 
 ----------------------------------------------------------------------------------
--- Get and Set the config port.  
+-- Get and Set the config port.
 ----------------------------------------------------------------------------------
 function getConfigPort(serviceName)
     local configFile
     local matchString
 
-    if(serviceName == 'apache') then 
+    if(serviceName == 'apache') then
         configFile  = apache.configFile
         matchString = 'Listen'
     end
-    
-    if(serviceName == 'mysql')  then 
+
+    if(serviceName == 'mysql')  then
         configFile  = mysql.configFile
         matchString = 'port'
     end
@@ -235,14 +273,14 @@ function getConfigPort(serviceName)
     if(file == nil) then fileUnfindable(configFile) end
 
     for line in file:lines() do
-        if(string.find(line, matchString) ~= nil) then 
-            port = string.sub(line, string.find(line, '%d+')) 
+        if(string.find(line, matchString) ~= nil) then
+            port = string.sub(line, string.find(line, '%d+'))
             break
         end
     end
     file:close()
 
-    return port and port or 0 
+    return port and port or 0
 end
 
 -- File can't be found.
@@ -250,7 +288,7 @@ function fileUnfindable(file)
     local dlg = iup.messagedlg{dialogType = 'WARNING', title = lang.prompt.warning, value = string.format(lang.prompt.fileUnfindable, file), 'OK'}
     dlg:popup()
     dlg:destroy()
-    controlPanel.dialog.tray = "NO" 
+    controlPanel.dialog.tray = "NO"
     os.exit()
 end
 
@@ -259,29 +297,29 @@ function setConfigPort(serviceName, port)
     local configFile
     local matchString
 
-    if(serviceName == 'apache') then 
+    if(serviceName == 'apache') then
         configFile   = apache.configFile
         matchString1 = 'Listen'
         matchString2 = 'ServerName'
     end
-    if(serviceName == 'mysql')  then 
+    if(serviceName == 'mysql')  then
         updateConfig(mysql.myConfig, port)
         updateConfig(mysql.phpmyadminConfig, port)
         configFile   = mysql.configFile
         matchString1 = 'port'
     end
-    
+
     local file = io.open(configFile, 'r')
     if(file == nil) then return false end
     local output = ''
     for line in file:lines() do
-        if(string.find(line, matchString1) ~= nil or (matchString2 ~= nil and string.find(line, matchString2) ~= nil)) then 
-          line = string.gsub(line, string.sub(line, string.find(line, '%d+')), port) 
+        if(string.find(line, matchString1) ~= nil or (matchString2 ~= nil and string.find(line, matchString2) ~= nil)) then
+          line = string.gsub(line, string.sub(line, string.find(line, '%d+')), port)
         end
         output = output .. line .. "\n"
     end
     file:close()
-    
+
     local file = io.open(configFile, 'w')
     result = file:write(output)
     file:close()
@@ -294,13 +332,13 @@ function updateConfig(configFile, port)
     if(file == nil) then return false end
     local output = ''
     for line in file:lines() do
-        if(string.find(line, 'port') ~= nil) then 
-          line = string.gsub(line, string.sub(line, string.find(line, '%d+')), port) 
+        if(string.find(line, 'port') ~= nil) then
+          line = string.gsub(line, string.sub(line, string.find(line, '%d+')), port)
         end
         output = output .. line .. "\n"
     end
     file:close()
-    
+
     local file = io.open(configFile, 'w')
     result = file:write(output)
     file:close()
@@ -313,9 +351,9 @@ end
 ----------------------------------------------------------------------------------
 controlPanel = {}
 controlPanel.item = {}
-table.foreach(lang.menu, function(i, name) 
+table.foreach(lang.menu, function(i, name)
     key = 'K_' .. subString(name, '%(', '%)', true)
-    controlPanel.item[i] = iup.item{title = name, key = key} 
+    controlPanel.item[i] = iup.item{title = name, key = key}
 end)
 
 function controlPanel.item.viewService:action()
@@ -325,19 +363,19 @@ end
 -- Uninstall a service.
 function uninstallService(serviceName)
     print(string.format(lang.prompt.tryToUninstallService, serviceName))
-    if(getServiceStatus(serviceName) == 'running') then 
+    if(getServiceStatus(serviceName) == 'running') then
         print(string.format(lang.prompt.tryToStopServices, serviceName))
-        exSpawn('net stop ' .. serviceName) 
-        if(getServiceStatus(serviceName) == 'stopped') then 
+        exSpawn('net stop ' .. serviceName)
+        if(getServiceStatus(serviceName) == 'stopped') then
             print(string.format(lang.prompt.stopServiceSuccessfully , serviceName))
         else
             print(string.format(lang.prompt.stopServiceFailed, serviceName))
         end
     end
-    if(getServiceStatus(serviceName) == 'stopped') then 
-        exSpawn('sc delete ' .. serviceName) 
+    if(getServiceStatus(serviceName) == 'stopped') then
+        exSpawn('sc delete ' .. serviceName)
         if(getServiceStatus(serviceName) == 'failed') then
-            print(string.format(lang.prompt.uninstallSuccessfully, serviceName)) 
+            print(string.format(lang.prompt.uninstallSuccessfully, serviceName))
         end
     end
 
@@ -350,16 +388,33 @@ function controlPanel.item.uninstallService:action()
     if apache.status == 'failed' then
         print(string.format(lang.prompt.serviceUnfindable, apache.serviceName))
     else
-        apache.status = uninstallService(apache.serviceName) 
+        apache.status = uninstallService(apache.serviceName)
     end
 
-    if mysql.status  == 'failed' then 
+    if mysql.status  == 'failed' then
         print(string.format(lang.prompt.serviceUnfindable, mysql.serviceName), lang.prompt.newLine)
     else
-        mysql.status = uninstallService(mysql.serviceName) 
+        mysql.status = uninstallService(mysql.serviceName)
     end
 
     controlPanel.setButtonStatus()
+end
+
+function controlPanel.item.initBat:action()
+    exSpawn(INIT_BAT .. ' ' .. PHP_EXE)
+    exSpawn("echo %ERRORLEVEL%")
+    local file = io.open(TMP_FILE, 'r')
+    if(file == nil) then return showPromptDialog(lang.prompt.initFailed, lang.title.alarm) end
+
+    local result = file:read('*a')
+    if string.find(result, INIT_SUCCESSCODE) then 
+        local destDir = string.upper(DRIVE_LETTER) .. ':\\xampp\\zentao\\bin'
+        local initDlg = iup.Alarm(lang.title.alarm, string.format(lang.prompt.initBatSuccessfully, destDir), lang.button.ok, lang.button.cancel)
+        if io.open(BACKUP_FILE, 'r') then controlPanel.item.backup.active = 'yes' end
+        if initDlg == 1 then exSpawn('explorer ' .. destDir) end
+    else
+        showPromptDialog(lang.prompt.initBatFailed, lang.title.alarm) 
+    end
 end
 
 function controlPanel.item.database:action()
@@ -439,6 +494,7 @@ function changeButtonLang()
     controlPanel.item.viewService.title      = lang.menu.viewService
     controlPanel.item.uninstallService.title = lang.menu.uninstallService
 
+    controlPanel.item.initBat.title          = lang.menu.initBat
     controlPanel.item.database.title         = lang.menu.database
     controlPanel.item.backup.title           = lang.menu.backup
     controlPanel.item.checkVersion.title     = lang.menu.checkVersion
@@ -447,10 +503,10 @@ function changeButtonLang()
 
     controlPanel.item.officialSite.title = lang.menu.officialSite
     controlPanel.item.officialHelp.title = lang.menu.officialHelp
-    controlPanel.item.flowChart.title    = lang.menu.flowChart   
-    controlPanel.item.faq.title          = lang.menu.faq         
-    controlPanel.item.forum.title        = lang.menu.forum       
-    
+    controlPanel.item.flowChart.title    = lang.menu.flowChart
+    controlPanel.item.faq.title          = lang.menu.faq
+    controlPanel.item.forum.title        = lang.menu.forum
+
     controlPanel.dialog.title             = lang.title.controlPanel
     controlPanel.startButton.title        = lang.button.start
     controlPanel.accessButton.title       = lang.button.access
@@ -463,7 +519,7 @@ function controlPanel.item.officialSite:action()
 end
 
 function controlPanel.item.officialHelp:action()
-    if string.find(PMS_VERSION, 'pro') then 
+    if string.find(PMS_VERSION, 'pro') then
         exSpawn('start http://www.zentao.net/help-book-zentaoprohelp.html')
     else
         exSpawn('start http://www.zentao.net/help-book-zentaopmshelp.html')
@@ -491,7 +547,8 @@ controlPanel.menu = {}
 controlPanel.menu.service = iup.submenu{iup.menu{controlPanel.item.viewService, controlPanel.item.uninstallService}; title = lang.title.service, key = 'K_S'}
 
 controlPanel.menu.lang    = iup.submenu{iup.menu{controlPanel.item.zhcn, controlPanel.item.en}; title = lang.title.lang, key = 'K_L'}
-controlPanel.menu.more    = iup.submenu{iup.menu{controlPanel.item.database, controlPanel.item.backup, controlPanel.item.checkVersion, iup.separator{}, controlPanel.menu.lang}; title = lang.title.more, key = 'K_M'}
+controlPanel.menu.more    = iup.submenu{iup.menu{controlPanel.item.initBat, controlPanel.item.database, controlPanel.item.backup, controlPanel.item.checkVersion, iup.separator{}, controlPanel.menu.lang}; title = lang.title.more, key = 'K_M'}
+if not io.open(BACKUP_FILE, 'r') then controlPanel.item.backup.active = 'no' end
 
 controlPanel.menu.help    = iup.submenu{iup.menu{controlPanel.item.officialSite, controlPanel.item.officialHelp, iup.separator{}, controlPanel.item.flowChart, controlPanel.item.faq, controlPanel.item.forum}; title = lang.title.help, key = 'K_H'}
 
@@ -520,18 +577,18 @@ controlPanel.box = iup.vbox{iup.fill{}, controlPanel.buttonBox, controlPanel.out
 controlPanel.dialog = iup.dialog
 {
     menu = controlPanel.mainMenu,
-    controlPanel.box, 
+    controlPanel.box,
     title = lang.title.controlPanel,
-    tray = "YES", 
+    tray = "YES",
     traytip = lang.prompt.trayTip,
-    trayimage = controlPanel.trayImage, 
+    trayimage = controlPanel.trayImage,
     size='300x200',
     resize = 'NO',
     icon =controlPanel.trayImage
 }
 
 function controlPanel.dialog:close_cb()
-    controlPanel.dialog.tray = "NO" 
+    controlPanel.dialog.tray = "NO"
 end
 
 function controlPanel.dialog:show_cb(state)
@@ -541,8 +598,8 @@ end
 
 function controlPanel.dialog:trayclick_cb(b, press)
     if b == 1 and press == 1 then controlPanel.dialog:show() end
-    
-    if b == 3 and press == 1 then 
+
+    if b == 3 and press == 1 then
         local rightMenu = iup.menu{iup.item {title = lang.title.exit, action = function() controlPanel.dialog.tray = "NO" controlPanel.dialog:hide() end}}
         rightMenu:popup(iup.MOUSEPOS, iup.MOUSEPOS)
     end
@@ -557,20 +614,20 @@ function controlPanel.setButtonStatus()
         controlPanel.startButton.title  = lang.button.running
         controlPanel.startButton.active = 'NO'
 
-        controlPanel.accessButton.active = 'YES' 
+        controlPanel.accessButton.active = 'YES'
 
         controlPanel.stopButton.title  = lang.button.stop
         controlPanel.stopButton.active = 'YES'
     end
-    
+
     if apache.status == 'stopped' then controlPanel.accessButton.active = 'NO' end
-    
+
     if(apache.status == 'stopped' and mysql.status == 'stopped') or (apache.status == 'failed' and mysql.status == 'failed') then
         controlPanel.startButton.title  = lang.button.start
         controlPanel.startButton.active = 'YES'
-    
+
         controlPanel.accessButton.active = 'NO'
-    
+
         controlPanel.stopButton.title  = lang.button.stopped
         controlPanel.stopButton.active = 'NO'
     end
@@ -621,7 +678,7 @@ function controlPanel.startButton:action()
     if apache.status ~= 'running' then apache.suggestPort = getSuggestPort(apache.port) end
     if mysql.status  ~= 'running' then mysql.suggestPort  = getSuggestPort(mysql.port)  end
 
-    if apache.status ~= 'running' or mysql.status ~= 'running' then 
+    if apache.status ~= 'running' or mysql.status ~= 'running' then
         configPort()
         controlPanel.setButtonStatus()
     else
@@ -642,16 +699,16 @@ end
 -- Start service.
 function startService(serviceName, port)
     local serviceStatus = getServiceStatus(serviceName)
-    if serviceStatus == 'running' then 
-        print(string.format(lang.prompt.serviceIsRunning, serviceName, port)) 
+    if serviceStatus == 'running' then
+        print(string.format(lang.prompt.serviceIsRunning, serviceName, port))
     elseif serviceStatus == 'failed' then
         serviceStatus = installService(serviceName, port)
     elseif serviceStatus == 'stopped' then
         print(string.format(lang.prompt.serviceExists, serviceName), lang.prompt.tryToStart)
         exSpawn('net start ' .. serviceName)
         serviceStatus = getServiceStatus(serviceName)
-        if(serviceStatus == 'running') then 
-            print(string.format(lang.prompt.serviceIsRunning, serviceName, port)) 
+        if(serviceStatus == 'running') then
+            print(string.format(lang.prompt.serviceIsRunning, serviceName, port))
         elseif(serviceStatus == 'stopped') then
             if(uninstallService(serviceName) == 'failed') then serviceStatus = installService(serviceName, port) end
         end
@@ -670,8 +727,8 @@ function getServiceStatus(serviceName)
     content = file:read('*a')
     file:close()
 
-    if string.find(content, 'RUNNING') ~= nil then  
-        return 'running' 
+    if string.find(content, 'RUNNING') ~= nil then
+        return 'running'
     elseif string.find(content, 'STOPPED') ~= nil then
         return 'stopped'
     elseif string.find(content, '1060') ~= nil then
@@ -691,33 +748,34 @@ function installService(serviceName, port)
     local killProcess
     local installCommand
 
-    if(serviceName == apache.serviceName) then 
+    if(serviceName == apache.serviceName) then
         process        = 'httpd'
         killProcess    = "tskill " .. process
         installCommand = "..\\apache\\bin\\httpd -k install -n " .. apache.serviceName
     end
 
-    if(serviceName == mysql.serviceName)  then 
+    if(serviceName == mysql.serviceName)  then
         process        = 'mysqld'
         killProcess    = "tskill " .. process
         installCommand = "..\\mysql\\bin\\mysqld.exe --install " .. mysql.serviceName
     end
-    
+
     if(processIsRunning(process) >= 1) then exSpawn(killProcess) end
     c = SOCKET.connect(HOST, port)
-    if(c == nil) then 
+    if(c == nil) then
         print(string.format(lang.prompt.tryToInstallService, serviceName))
         os.remove(TMP_FILE)
         exSpawn(installCommand)
         local installResult = getInstallResult()
 
-        if installResult == 'installed' then 
+        if installResult == 'installed' then
             print(string.format(lang.prompt.installSuccessfully, serviceName))
-            exSpawn('net start ' .. serviceName) 
+            exSpawn('net start ' .. serviceName)
             serviceStatus = getServiceStatus(serviceName)
-            if(serviceStatus == 'running') then print(string.format(lang.prompt.serviceIsRunning, serviceName, port)) end 
+            if(serviceStatus == 'running') then print(string.format(lang.prompt.serviceIsRunning, serviceName, port)) end
+	    if(serviceStatus == 'stopped') then installVC() end
         elseif installResult == 'withoutVC' and serviceName == apache.serviceName then
-            installVC() 
+            installVC()
         elseif not installResult then
             print(string.format(lang.prompt.installFailed, serviceName))
             serviceStatus = 'failed'
@@ -739,15 +797,16 @@ function getInstallResult()
     local content = file:read('*a')
     if string.find(content, 'sxstrace')  then file:close() return 'withoutVC' end
     if string.find(content, 'installed') then file:close() return 'installed' end
+    file:close()
 
     return false
 end
 
 -- Install vc environment.
 function installVC()
-    local buttonPress = iup.Alarm(lang.prompt.common, lang.prompt.withoutVC, lang.prompt.install, lang.prompt.cancel)
+    local buttonPress = iup.Alarm(lang.title.alarm, lang.prompt.withoutVC, lang.button.install, lang.button.cancel)
     if buttonPress == 1 then exSpawn('start ' .. VC_REDIST) end
-    controlPanel.dialog.tray = "NO" 
+    controlPanel.dialog.tray = "NO"
     os.exit()
 end
 
@@ -760,15 +819,15 @@ function configPort()
     config.saveButton = iup.button{title = lang.button.save, size = BUTTON_SIZE}
 
     if apache.status ~= 'running' then
-        config.apacheLabel     = iup.label{title = string.format(lang.prompt.portIsConflict, apache.serviceName, apache.port) .. lang.prompt.suggestPort, expand="Yes"} 
+        config.apacheLabel     = iup.label{title = string.format(lang.prompt.portIsConflict, apache.serviceName, apache.port) .. lang.prompt.suggestPort, expand="Yes"}
         config.apachePortInput = iup.text{value = apache.suggestPort, filter = 'number', spin = 'YES', spinmax = MAX_PORT, nc = 5}
-        config.apacheBox       = iup.hbox{config.apacheLabel, config.apachePortInput} 
+        config.apacheBox       = iup.hbox{config.apacheLabel, config.apachePortInput}
     end
 
-    if mysql.status ~= 'running' then 
-        config.mysqlLabel     = iup.label{title = string.format(lang.prompt.portIsConflict, mysql.serviceName, mysql.port) .. lang.prompt.suggestPort, expand="Yes"} 
+    if mysql.status ~= 'running' then
+        config.mysqlLabel     = iup.label{title = string.format(lang.prompt.portIsConflict, mysql.serviceName, mysql.port) .. lang.prompt.suggestPort, expand="Yes"}
         config.mysqlPortInput = iup.text{value = mysql.suggestPort, filter = 'number', spin = 'YES', spinmax = MAX_PORT, nc = 5}
-        config.mysqlBox       = iup.hbox{config.mysqlLabel, config.mysqlPortInput} 
+        config.mysqlBox       = iup.hbox{config.mysqlLabel, config.mysqlPortInput}
     end
 
     ------------------------------------
@@ -778,41 +837,41 @@ function configPort()
         config.dialog.cursor = 'busy'
         local apachePort
         local mysqlPort
-   
+
         if config.apachePortInput ~= nil then
             apachePort = config.apachePortInput.value
-            if(SOCKET.connect(HOST, apachePort) == nil) then 
-               if(setConfigPort('apache', apachePort)) then 
+            if(SOCKET.connect(HOST, apachePort) == nil) then
+               if(setConfigPort('apache', apachePort)) then
                    uninstallService(apache.serviceName)
-                   apache.status = startService(apache.serviceName, apachePort) 
+                   apache.status = startService(apache.serviceName, apachePort)
                end
             end
         end
-        
+
         if config.mysqlPortInput ~= nil then
             mysqlPort = config.mysqlPortInput.value
-            if(SOCKET.connect(HOST, mysqlPort) == nil) then 
-               if(setConfigPort('mysql', mysqlPort)) then 
+            if(SOCKET.connect(HOST, mysqlPort) == nil) then
+               if(setConfigPort('mysql', mysqlPort)) then
                    uninstallService(mysql.serviceName)
-                   mysql.status = startService(mysql.serviceName, mysqlPort) 
+                   mysql.status = startService(mysql.serviceName, mysqlPort)
                end
             end
          end
-        
-        if apache.status ~= 'running' or mysql.status ~= 'running' then 
+
+        if apache.status ~= 'running' or mysql.status ~= 'running' then
             configPort()
         else
             print(lang.prompt.startSuccessfully)
             config.dialog.visible = 'NO'
         end
     end
-    
+
     config.dialog = iup.dialog
     {
         iup.vbox
         {
-            config.apacheBox, 
-            config.mysqlBox, 
+            config.apacheBox,
+            config.mysqlBox,
             iup.hbox
             {
                 iup.fill{},
@@ -823,7 +882,7 @@ function configPort()
         margin="10x10",
         gap="10",
         title = lang.title.configPort
-    }   
+    }
     config.dialog:popup()
 end
 
@@ -854,8 +913,8 @@ function stopService(serviceName)
     local serviceStatus = getServiceStatus(serviceName)
     if serviceStatus == 'failed'  then print(string.format(lang.prompt.serviceUnfindable, serviceName)) return serviceStatus end
     if serviceStatus == 'stopped' then print(string.format(lang.prompt.serviceIsStopped, serviceName))  return serviceStatus end
-    if serviceStatus == 'running' then 
-        exSpawn("net stop " .. serviceName) 
+    if serviceStatus == 'running' then
+        exSpawn("net stop " .. serviceName)
         serviceStatus = getServiceStatus(serviceName)
         if serviceStatus == 'stopped' then print(string.format(lang.prompt.stopServiceSuccessfully, serviceName)) end
     end

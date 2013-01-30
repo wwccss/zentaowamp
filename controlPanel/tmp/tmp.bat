@@ -1,1 +1,0 @@
-sc query mysqlzt > \xampp\controlPanel\tmp\tmp 2>&1 & echo ok > tmp\ok
