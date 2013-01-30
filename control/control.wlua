@@ -63,6 +63,11 @@ mysql.suggestPort      = 3308
 
 zentao.configFile      = "..\\zentao\\config\\config.php"
 
+function exitProcess()
+    os.remove(PROCESS_EXIT) 
+    os.exit() 
+end
+
 ----------------------------------------------------------------------------------
 -- Rewrite ex.spawn method.
 ----------------------------------------------------------------------------------
@@ -149,7 +154,7 @@ end
 ----------------------------------------------------------------------------------
 -- Adjust the xampp is under the root directory.
 ----------------------------------------------------------------------------------
-if not string.find(os.currentdir(), ':\\xampp') then showPromptDialog(lang.prompt.wrongPath) os.exit() end
+if not string.find(os.currentdir(), ':\\xampp') then showPromptDialog(lang.prompt.wrongPath) exitProcess() end
 
 ----------------------------------------------------------------------------------
 -- Check the my.ini of mysql insure the all the config path is absolute path.
@@ -247,10 +252,12 @@ end
 ----------------------------------------------------------------------------------
 -- If control is running, warning and exit
 ----------------------------------------------------------------------------------
-if(processIsRunning('control') > 1) then
-    showPromptDialog(lang.prompt.panelIsRunning)
-    os.exit()
-end
+PROCESS_EXIT = '.\\tmp\\exist'
+processFile  = io.open(PROCESS_EXIT, 'r')
+if processFile and processIsRunning('control.exe') > 1 then showPromptDlg(lang.prompt.processIsRunning) processFile:close() exitProcess() end
+processFile = io.open(PROCESS_EXIT, 'w')
+processFile:close()
+
 
 ----------------------------------------------------------------------------------
 -- Get and Set the config port.
@@ -289,7 +296,7 @@ function fileUnfindable(file)
     dlg:popup()
     dlg:destroy()
     controlPanel.dialog.tray = "NO"
-    os.exit()
+    exitProcess()
 end
 
 -- Set config port.
@@ -540,7 +547,7 @@ end
 
 function controlPanel.item.exit:action()
     controlPanel.dialog.tray = 'NO'
-    return iup.CLOSE
+    exitProcess()
 end
 
 controlPanel.menu = {}
@@ -807,7 +814,7 @@ function installVC()
     local buttonPress = iup.Alarm(lang.title.alarm, lang.prompt.withoutVC, lang.button.install, lang.button.cancel)
     if buttonPress == 1 then exSpawn('start ' .. VC_REDIST) end
     controlPanel.dialog.tray = "NO"
-    os.exit()
+    exitProcess()
 end
 
 ------------------------------------
