@@ -35,6 +35,7 @@ PMS_VERSION      = ''
 LANG_FILE        = 'tmp\\lang'
 OK_FILE          = 'tmp\\ok'
 TMP_FILE         = '\\xampp\\control\\tmp\\tmp'
+PROCESS_EXIT     = '.\\tmp\\exist'
 
 ----------------------------------------------------------------------------------
 -- Init apache and mysql table.
@@ -55,13 +56,14 @@ apache.suggestPort = 88
 mysql.configFile       = "..\\mysql\\my.ini"
 mysql.oldConfigFile    = "..\\mysql\\bin\\my.ini"
 mysql.myConfig         = "..\\zentao\\config\\my.php"
-mysql.phpmyadminConfig = "..\\admin\\phpmyadmin\\config.inc.php"
+mysql.phpmyadminConfig = "..\\phpmyadmin\\config.inc.php"
 mysql.serviceName      = 'mysqlzt'
 mysql.status           = 'stopped'
 mysql.port             = 3306
 mysql.suggestPort      = 3308
 
 zentao.configFile      = "..\\zentao\\config\\config.php"
+zentao.versionFile     = "..\\zentao\\VERSION"
 
 function exitProcess()
     os.remove(PROCESS_EXIT) 
@@ -90,16 +92,11 @@ end
 --- Get the version of pms.
 ----------------------------------------------------------------------------------
 function getPmsVersion()
-    local file = io.open(zentao.configFile, 'r')
+    local file = io.open(zentao.versionFile, 'r')
     if not file then return '' end
-    for line in file:lines() do
-        if string.find(line, ">version") then
-            line = (string.sub(line, string.find(line, "=") + 1, string.find(line, ";") - 1))
-            file:close()
-            return string.gsub(line, "[%s*|'|\"]", '')
-        end
-    end
+    return string.gsub(file:read('*a'), '\n', '')
 end
+
 PMS_VERSION = getPmsVersion()
 UPDATER_URL = string.format(UPDATER_URL, PMS_VERSION)
 
@@ -154,7 +151,7 @@ end
 ----------------------------------------------------------------------------------
 -- Adjust the xampp is under the root directory.
 ----------------------------------------------------------------------------------
-if not string.find(os.currentdir(), ':\\xampp') then showPromptDialog(lang.prompt.wrongPath) exitProcess() end
+if not string.find(os.currentdir(), ':\\xampp\\control') then showPromptDialog(lang.prompt.wrongPath) exitProcess() end
 
 ----------------------------------------------------------------------------------
 -- Check the my.ini of mysql insure the all the config path is absolute path.
@@ -252,9 +249,8 @@ end
 ----------------------------------------------------------------------------------
 -- If control is running, warning and exit
 ----------------------------------------------------------------------------------
-PROCESS_EXIT = '.\\tmp\\exist'
 processFile  = io.open(PROCESS_EXIT, 'r')
-if processFile and processIsRunning('control.exe') > 1 then showPromptDlg(lang.prompt.processIsRunning) processFile:close() exitProcess() end
+if processFile and processIsRunning('control.exe') > 1 then showPromptDialog(lang.prompt.panelIsRunning, '', lang.title.alarm) processFile:close() exitProcess() end
 processFile = io.open(PROCESS_EXIT, 'w')
 processFile:close()
 
@@ -305,45 +301,32 @@ function setConfigPort(serviceName, port)
     local matchString
 
     if(serviceName == 'apache') then
-        configFile   = apache.configFile
-        matchString1 = 'Listen'
-        matchString2 = 'ServerName'
+        return updateConfig(apache.configFile, apache.port, port)
+    else
+        updateConfig(mysql.myConfig, nil, port)
+        if not updateConfig(mysql.phpmyadminConfig, nil, port) then return false end
+        return updateConfig(mysql.configFile, mysql.port, port)
     end
-    if(serviceName == 'mysql')  then
-        updateConfig(mysql.myConfig, port)
-        updateConfig(mysql.phpmyadminConfig, port)
-        configFile   = mysql.configFile
-        matchString1 = 'port'
-    end
-
-    local file = io.open(configFile, 'r')
-    if(file == nil) then return false end
-    local output = ''
-    for line in file:lines() do
-        if(string.find(line, matchString1) ~= nil or (matchString2 ~= nil and string.find(line, matchString2) ~= nil)) then
-          line = string.gsub(line, string.sub(line, string.find(line, '%d+')), port)
-        end
-        output = output .. line .. "\n"
-    end
-    file:close()
-
-    local file = io.open(configFile, 'w')
-    result = file:write(output)
-    file:close()
-
-    return result
 end
 
-function updateConfig(configFile, port)
+function updateConfig(configFile, oldPort, newPort)
     local file = io.open(configFile, 'r')
     if(file == nil) then return false end
+
     local output = ''
-    for line in file:lines() do
-        if(string.find(line, 'port') ~= nil) then
-          line = string.gsub(line, string.sub(line, string.find(line, '%d+')), port)
+
+    if not oldPort then
+        for line in file:lines() do
+            if string.find(line, 'port') ~= nil then
+                line = string.gsub(line, string.sub(line, string.find(line, '%d+')), newPort)
+            end
+                output = output .. line .. "\n"
         end
-        output = output .. line .. "\n"
+    else
+        output = file:read('*a')
+        output = string.gsub(output, oldPort, newPort)
     end
+
     file:close()
 
     local file = io.open(configFile, 'w')
@@ -407,11 +390,20 @@ function controlPanel.item.uninstallService:action()
     controlPanel.setButtonStatus()
 end
 
+function getLocalIP()
+   exSpawn('ipconfig | findstr IP')
+   local file = io.open(TMP_FILE, 'r')
+   if not file then return HOST end
+   local content = file:read('*a')
+   _,_,ip = string.find(content, "(%d+%.%d+%.%d+%.%d+)")
+   return ip
+end
+
 function controlPanel.item.initBat:action()
-    exSpawn(INIT_BAT .. ' ' .. PHP_EXE)
+    exSpawn(INIT_BAT .. ' ' .. PHP_EXE .. ' ' .. 'http://' .. getLocalIP() .. ':' .. apache.port)
     exSpawn("echo %ERRORLEVEL%")
     local file = io.open(TMP_FILE, 'r')
-    if(file == nil) then return showPromptDialog(lang.prompt.initFailed, lang.title.alarm) end
+    if(file == nil) then return showPromptDialog(lang.prompt.initFailed, '', lang.title.alarm) end
 
     local result = file:read('*a')
     if string.find(result, INIT_SUCCESSCODE) then 
@@ -420,7 +412,7 @@ function controlPanel.item.initBat:action()
         if io.open(BACKUP_FILE, 'r') then controlPanel.item.backup.active = 'yes' end
         if initDlg == 1 then exSpawn('explorer ' .. destDir) end
     else
-        showPromptDialog(lang.prompt.initBatFailed, lang.title.alarm) 
+        showPromptDialog(lang.prompt.initBatFailed, '', lang.title.alarm) 
     end
 end
 
@@ -467,7 +459,7 @@ function controlPanel.item.checkVersion:action()
 
     result.data = json.decode(result.data)
     if result.data.latestNote == '' then
-        showPromptDialog(string.format(lang.prompt.isLatest), '', lang.prompt.common)
+        showPromptDialog(string.format(lang.prompt.isLatest), '', lang.title.alarm)
     else
         local note = encode.u82a(result.data.latestNote)
         local newVersionUrl = subString(note, 'http', 'html')
@@ -679,7 +671,7 @@ function controlPanel.startButton:action()
     print(lang.prompt.tryToStartServices)
     apache.port   = getConfigPort('apache')
     mysql.port    = getConfigPort('mysql')
-    updateConfig(mysql.myConfig, mysql.port)
+    updateConfig(mysql.myConfig, nil, mysql.port)
     apache.status = startService(apache.serviceName, apache.port)
     mysql.status  = startService(mysql.serviceName,  mysql.port)
     if apache.status ~= 'running' then apache.suggestPort = getSuggestPort(apache.port) end
