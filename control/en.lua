@@ -3,6 +3,16 @@ lang.title  = {}
 lang.button = {}
 lang.prompt = {}
 lang.menu = {}
+lang.url = {}
+
+-------------------------------------
+-- Url
+lang.url.officialSite   = "http://www.zentao.net/en"
+lang.url.proHelp        = "http://www.zentao.net/en/help-book-zentaoprohelp.html"
+lang.url.opensourceHelp = "http://www.zentao.net/en/help-book-zentaopmshelp.html"
+lang.url.flowChart      = "http://www.zentao.net/help-read-79236.html"
+lang.url.faq            = "http://www.zentao.net/ask-faq.html"
+lang.url.forum          = "http://www.zentao.net/en/forum"
 
 -------------------------------------
 -- Menu.
@@ -61,7 +71,9 @@ lang.prompt.newLine = "\n"
 lang.prompt.fileUnfindable = "Can't find %s"
 
 -- Install VC.
-lang.prompt.withoutVC = 'Without vcredist, Please install first.'
+lang.prompt.withoutVC2005Redistributable = "Need 'VC++ 2005 redistributable'£¬Please install first"
+lang.prompt.withoutVC2008Redistributable = "Need 'VC++ 2008 redistributable'£¬Please install first"
+
 
 -- Control panel version and current dir.
 lang.prompt.currentDir = 'Current Directory:%s'

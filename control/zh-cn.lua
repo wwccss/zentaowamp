@@ -3,6 +3,17 @@ lang.title  = {}
 lang.button = {}
 lang.prompt = {}
 lang.menu = {}
+lang.url = {}
+
+-------------------------------------
+-- Url
+lang.url.officialSite   = "http://www.zentao.net"
+lang.url.proHelp        = "http://www.zentao.net/help-book-zentaoprohelp.html"
+lang.url.opensourceHelp = "http://www.zentao.net/help-book-zentaopmshelp.html"
+lang.url.flowChart      = "http://www.zentao.net/help-read-79236.html"
+lang.url.faq            = "http://www.zentao.net/ask-faq.html"
+lang.url.forum          = "http://www.zentao.net/forum"
+-------------------------------------
 
 -------------------------------------
 -- Menu.
@@ -62,7 +73,8 @@ lang.prompt.newLine = "\n"
 lang.prompt.fileUnfindable = '找不到%s'
 
 -- Install VC.
-lang.prompt.withoutVC = '检测到没有VC环境，请先安装'
+lang.prompt.withoutVC2005Redistributable = '检测到没有VC++ 2005 redistributable环境，请先安装'
+lang.prompt.withoutVC2008Redistributable = '检测到没有VC++ 2008 redistributable环境，请先安装'
 
 -- Control panel version and current dir.
 lang.prompt.currentDir = '当前目录：%s'

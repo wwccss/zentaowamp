@@ -1,1 +1,1 @@
-sc query mysqlzt > \xampp\control\tmp\tmp 2>&1 & echo ok > tmp\ok
+sc query mysqlzt > \xampp\control\tmp\tmp0.86877040925321 2>&1 & echo ok > tmp\ok

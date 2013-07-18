@@ -11,70 +11,25 @@ local http  = require "socket.http"
 local initEncode = package.loadlib("encode.dll","luaopen_encode")
 initEncode()
 
-----------------------------------------------------------------------------------
--- Define const value.
-----------------------------------------------------------------------------------
-MOUSE_LEFT       = 49
-MOUSE_PRESSED    = 1
-MAX_PORT         = 65535
-HOST             = '127.0.0.1'
-SOCKET           = require("socket")
-VC_REDIST        = 'vcredist_x86.exe'
-BUTTON_SIZE      = "50x20"
-TMP_BAT          = 'tmp\\tmp.bat'
-DRIVE_LETTER     = string.lower(string.sub(os.currentdir(), 0, 1))
-BACKUP_FILE      = '\\xampp\\zentao\\bin\\backup.php'
-BACKUP_CMD       = 'cd ..\\zentao\\bin & \\xampp\\php\\php.exe backup.php & cd ..\\..\\controlPanel'
-UPDATER_URL      = "http://www.zentao.net/updater-isLatest-%s-.json"
-VERSION          = 'controlPanel_1.0'
-INIT_BAT         = "..\\zentao\\bin\\init.bat"
-INIT_SUCCESSCODE = 0
-PHP_EXE          = DRIVE_LETTER .. ':\\xampp\\php\\php.exe'
-PHP_BAT          = 'tmp\\php.bat'
-PMS_VERSION      = ''
-LANG_FILE        = 'tmp\\lang'
-OK_FILE          = 'tmp\\ok'
-TMP_FILE         = '\\xampp\\control\\tmp\\tmp'
-PROCESS_EXIT     = '.\\tmp\\exist'
+dofile('config.lua')
 
 ----------------------------------------------------------------------------------
--- Init apache and mysql table.
+-- Exit process
 ----------------------------------------------------------------------------------
-php    = {}
-apache = {}
-mysql  = {}
-zentao = {}
-
-php.configFile = "..\\php\\php.ini"
-
-apache.configFile  = "..\\apache\\conf\\httpd.conf"
-apache.serviceName = 'apachezt'
-apache.status      = 'stopped'
-apache.port        = 80
-apache.suggestPort = 88
-
-mysql.configFile       = "..\\mysql\\my.ini"
-mysql.oldConfigFile    = "..\\mysql\\bin\\my.ini"
-mysql.myConfig         = "..\\zentao\\config\\my.php"
-mysql.phpmyadminConfig = "..\\phpmyadmin\\config.inc.php"
-mysql.serviceName      = 'mysqlzt'
-mysql.status           = 'stopped'
-mysql.port             = 3306
-mysql.suggestPort      = 3308
-
-zentao.configFile      = "..\\zentao\\config\\config.php"
-zentao.versionFile     = "..\\zentao\\VERSION"
-
 function exitProcess()
-    os.remove(PROCESS_EXIT) 
-    os.exit() 
+    if(TMP_FILE) then os.remove(TMP_FILE) end
+    os.remove(PROCESS_EXIT)
+    os.exit()
 end
 
 ----------------------------------------------------------------------------------
 -- Rewrite ex.spawn method.
 ----------------------------------------------------------------------------------
+math.randomseed(os.time());
 function exSpawn(command)
     os.remove(OK_FILE)
+    if(TMP_FILE) then os.remove(TMP_FILE) end
+    TMP_FILE = TMP_DIR .. 'tmp' .. math.random()
     command = command .. ' > ' .. TMP_FILE .. ' 2>&1 & echo ok > ' .. OK_FILE
     local batFile = io.open(TMP_BAT, 'w')
     batFile:write(command)
@@ -406,13 +361,13 @@ function controlPanel.item.initBat:action()
     if(file == nil) then return showPromptDialog(lang.prompt.initFailed, '', lang.title.alarm) end
 
     local result = file:read('*a')
-    if string.find(result, INIT_SUCCESSCODE) then 
+    if string.find(result, INIT_SUCCESSCODE) then
         local destDir = string.upper(DRIVE_LETTER) .. ':\\xampp\\zentao\\bin'
         local initDlg = iup.Alarm(lang.title.alarm, string.format(lang.prompt.initBatSuccessfully, destDir), lang.button.ok, lang.button.cancel)
         if io.open(BACKUP_FILE, 'r') then controlPanel.item.backup.active = 'yes' end
         if initDlg == 1 then exSpawn('explorer ' .. destDir) end
     else
-        showPromptDialog(lang.prompt.initBatFailed, '', lang.title.alarm) 
+        showPromptDialog(lang.prompt.initBatFailed, '', lang.title.alarm)
     end
 end
 
@@ -514,27 +469,27 @@ function changeButtonLang()
 end
 
 function controlPanel.item.officialSite:action()
-    exSpawn('start http://www.zentao.net')
+    exSpawn('start ' .. lang.url.officialSite)
 end
 
 function controlPanel.item.officialHelp:action()
     if string.find(PMS_VERSION, 'pro') then
-        exSpawn('start http://www.zentao.net/help-book-zentaoprohelp.html')
+        exSpawn('start ' .. lang.url.proHelp)
     else
-        exSpawn('start http://www.zentao.net/help-book-zentaopmshelp.html')
+        exSpawn('start ' .. lang.url.opensourceHelp)
     end
 end
 
 function controlPanel.item.flowChart:action()
-    exSpawn('start http://www.zentao.net/help-read-79236.html')
+    exSpawn('start ' .. lang.url.flowChart)
 end
 
 function controlPanel.item.faq:action()
-    exSpawn('start http://www.zentao.net/ask-faq.html')
+    exSpawn('start ' .. lang.url.faq)
 end
 
 function controlPanel.item.forum:action()
-    exSpawn('start http://www.zentao.net/forum')
+    exSpawn('start ' .. lang.url.forum)
 end
 
 function controlPanel.item.exit:action()
@@ -720,7 +675,6 @@ end
 
 -- Get service status.
 function getServiceStatus(serviceName)
-    os.remove(TMP_FILE)
     exSpawn('sc query ' .. serviceName)
     local file = io.open(TMP_FILE, 'r')
     content = file:read('*a')
@@ -763,7 +717,6 @@ function installService(serviceName, port)
     c = SOCKET.connect(HOST, port)
     if(c == nil) then
         print(string.format(lang.prompt.tryToInstallService, serviceName))
-        os.remove(TMP_FILE)
         exSpawn(installCommand)
         local installResult = getInstallResult()
 
@@ -788,6 +741,16 @@ function installService(serviceName, port)
     return serviceStatus
 end
 
+----------------------------------------------------------------------------------
+-- Install VC
+----------------------------------------------------------------------------------
+function installVC()
+    local buttonPress = iup.Alarm(lang.title.alarm, lang.prompt.withoutVC2008Redistributable, lang.button.install, lang.button.cancel)
+    if buttonPress == 1 then exSpawn('start ' .. VC_REDIST_2008) end
+    controlPanel.dialog.tray = "NO"
+    exitProcess()
+end
+
 -- Adjust if need vc environment.
 function getInstallResult()
     local file = io.open(TMP_FILE, 'r')
@@ -799,14 +762,6 @@ function getInstallResult()
     file:close()
 
     return false
-end
-
--- Install vc environment.
-function installVC()
-    local buttonPress = iup.Alarm(lang.title.alarm, lang.prompt.withoutVC, lang.button.install, lang.button.cancel)
-    if buttonPress == 1 then exSpawn('start ' .. VC_REDIST) end
-    controlPanel.dialog.tray = "NO"
-    exitProcess()
 end
 
 ------------------------------------
@@ -925,7 +880,7 @@ end
 -- When click officialSite button.
 ----------------------------------------------------------------------------------
 function controlPanel.officialSiteButton:action()
-    exSpawn('start http://www.zentao.net')
+    exSpawn('start ' .. lang.url.officialSite)
 end
 
 ----------------------------------------------------------------------------------

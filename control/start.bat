@@ -4,9 +4,6 @@ cd /d %~dp0control
 net start
 if %ERRORLEVEL% == 1 goto withoutNet
 
-wscript test.vbs
-if %ERRORLEVEL% == 9009 goto withoutVB
-
 reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Products" /s | find "Microsoft Visual C++ 2005 Redistributable" 
 if %ERRORLEVEL% == 1 goto installVC2005
 
@@ -30,12 +27,9 @@ if %ERRORLEVEL% == 0 goto rootStart
 if %ERRORLEVEL% == 0 goto rootStart
 
 :withoutNet
-	echo "Without net command..."
-	pause
-        exit
-
-:withoutVB
-	echo "Without wscript command..."
+	echo "Without net command..., starting /xampp/services/install.bat"
+        cd /d %~dp0services
+        .\install.bat
 	pause
         exit
 
