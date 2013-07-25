@@ -7,8 +7,9 @@ include '../../lib/zfile/zfile.class.php';
 $file = new zfile();
 
 /* set xampp package and 7-zip command. */
-if(count($argv) != 2) die("php build.php sourceDir.\n");
+if(count($argv) != 3) die("php build.php sourceDir product=zentao|xirang.\n");
 $sourceDir  = $argv[1];
+$product    = $argv[2];
 $xampp      = $sourceDir . '\xampp';
 $phpmyadmin = $sourceDir . '\phpmyadmin';
 $output     = $sourceDir . '\release';
@@ -233,15 +234,18 @@ $file->removeDir('./xampp/phpmyadmin/doc');
 $file->batchRemoveFile('./xampp/phpmyadmin/Documentation*');
 
 /* Process the svn. */
-$file->copyDir($buildDir . '/svn/silksvn/', './xampp/silksvn');
-$file->mkdir('./xampp/zentao/module/svn/ext/config');
-$file->copyFile($buildDir . '/svn/svn.php', './xampp/zentao/module/svn/ext/config/svn.php');
+if($product == 'zentao')
+{
+    $file->copyDir($buildDir . '/svn/silksvn/', './xampp/silksvn');
+    $file->mkdir('./xampp/zentao/module/svn/ext/config');
+    $file->copyFile($buildDir . '/svn/svn.php', './xampp/zentao/module/svn/ext/config/svn.php');
+}
 
 /* Copy index.php. */
 $file->copyFile($buildDir . '/index.php', './xampp/htdocs/index.php');
 
 /* Copy ioncube loader. */
-$file->copyFile($buildDir . '/ioncube_loader_win_5.4.dll', './xampp/php/ext/ioncube_loader_win_5.4.dll');
+$file->copyFile($buildDir . '/php_ioncube.dll', './xampp/php/ext/php_ioncube.dll');
 
 /* Copy opcache so file. */
 $file->copyFile($buildDir . '/php_opcache.dll', './xampp/php/ext/php_opcache.dll');
