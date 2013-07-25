@@ -1,0 +1,8 @@
+;!@Install@!UTF-8!
+
+Title="禅道控制面板"
+BeginPrompt="您要执行 禅道控制面板 嗎？"
+RunProgram="controlPanel\start.bat"
+
+;!@InstallEnd@!
+
