@@ -209,6 +209,7 @@ $file->rename('./xampp/php/libsasl.dll.bak',  './xampp/php/libsasl.dll');
 
 /* Process php ini file. */
 $file->copyFile($buildDir . '/php.ini', './xampp/php/php.ini');
+$file->copyFile($buildDir . '/php.ini', './xampp/php/php.raw.ini');
 
 /* Process php's ext directory. */
 $file->rename('./xampp/php/ext', './xampp/php/extold');

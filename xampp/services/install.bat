@@ -15,7 +15,7 @@ if %ERRORLEVEL% == 0 goto normalStart
 
 :normalStart
   echo First I need set the path for php and mysql
-  ..\php\php.exe .\set.php
+  ..\php\php.exe -c ..\php\php.raw.ini set.php
 
   echo Installing apache 2.4 as service...
   ..\apache\bin\httpd -k install -n apachezt
