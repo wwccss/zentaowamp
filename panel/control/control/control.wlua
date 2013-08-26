@@ -273,8 +273,9 @@ function updateConfig(configFile, oldPort, newPort)
 
     if not oldPort then
         for line in file:lines() do
-            if string.find(line, 'port') ~= nil then
-                line = string.gsub(line, string.sub(line, string.find(line, '%d+')), newPort)
+            startIndex = string.find(line, 'port')
+            if startIndex ~= nil then
+                line = string.gsub(line, string.sub(line, string.find(line, '%d+', startIndex)), newPort)
             end
                 output = output .. line .. "\n"
         end

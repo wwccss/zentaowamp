@@ -7,12 +7,12 @@ lang.url = {}
 
 -------------------------------------
 -- Url
-lang.url.officialSite   = "http://www.xirang.net"
-lang.url.proHelp        = "http://www.xirang.net/help-book-zentaoprohelp.html"
-lang.url.opensourceHelp = "http://www.xirang.net/help-book-zentaopmshelp.html"
-lang.url.flowChart      = "http://www.xirang.net/help-read-79236.html"
-lang.url.faq            = "http://www.xirang.net/ask-faq.html"
-lang.url.forum          = "http://www.xirang.net/forum"
+lang.url.officialSite   = "http://www.xirang.biz"
+lang.url.proHelp        = "http://www.xirang.biz/help-book-zentaoprohelp.html"
+lang.url.opensourceHelp = "http://www.xirang.biz/help-book-zentaopmshelp.html"
+lang.url.flowChart      = "http://www.xirang.biz/help-read-79236.html"
+lang.url.faq            = "http://www.xirang.biz/ask-faq.html"
+lang.url.forum          = "http://www.xirang.biz/forum"
 -------------------------------------
 
 -------------------------------------
@@ -58,7 +58,7 @@ lang.button.install = '∞≤◊∞'
 -------------------------------------
 -- Dialog title.
 -------------------------------------
-lang.title.controlPanel       = 'œ¢»¿ºØ≥…‘À––ª∑æ≥'
+lang.title.controlPanel       = 'œ¢»¿ºØ≥…‘À––ª∑æ≥ V1.1'
 lang.title.configPort         = '∑˛ŒÒ∂Àø⁄≈‰÷√'
 lang.title.alarm              = 'Ã· æ'
 lang.title.warning            = 'æØ∏Ê'
@@ -78,7 +78,7 @@ lang.prompt.withoutVC2008Redistributable = 'ºÏ≤‚µΩ√ª”–VC++ 2008 redistributableª
 
 -- Control panel version and current dir.
 lang.prompt.currentDir = 'µ±«∞ƒø¬º£∫%s'
-lang.prompt.version    = 'œ¢»¿øÿ÷∆√Ê∞Â1.0∞Ê±æ'
+lang.prompt.version    = 'œ¢»¿øÿ÷∆√Ê∞Â1.1∞Ê±æ'
 lang.prompt.trayTip    = lang.prompt.version
 
 -- Xampp is not under root directory.

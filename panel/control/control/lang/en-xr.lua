@@ -7,12 +7,12 @@ lang.url = {}
 
 -------------------------------------
 -- Url
-lang.url.officialSite   = "http://www.zentao.net/en"
-lang.url.proHelp        = "http://www.zentao.net/en/help-book-zentaoprohelp.html"
-lang.url.opensourceHelp = "http://www.zentao.net/en/help-book-zentaopmshelp.html"
-lang.url.flowChart      = "http://www.zentao.net/help-read-79236.html"
-lang.url.faq            = "http://www.zentao.net/ask-faq.html"
-lang.url.forum          = "http://www.zentao.net/en/forum"
+lang.url.officialSite   = "http://www.xirang.biz/en"
+lang.url.proHelp        = "http://www.xirang.biz/en/help-book-zentaoprohelp.html"
+lang.url.opensourceHelp = "http://www.xirang.biz/en/help-book-zentaopmshelp.html"
+lang.url.flowChart      = "http://www.xirang.biz/help-read-79236.html"
+lang.url.faq            = "http://www.xirang.biz/ask-faq.html"
+lang.url.forum          = "http://www.xirang.biz/en/forum"
 
 -------------------------------------
 -- Menu.
@@ -56,7 +56,7 @@ lang.button.install = 'Install'
 -------------------------------------
 -- Dialog title.
 -------------------------------------
-lang.title.controlPanel       = 'ZenTao Integrated Run Environment'
+lang.title.controlPanel       = 'ZenTao Integrated Run Environment V1.1'
 lang.title.configPort         = 'Port configure'
 lang.title.alarm              = 'Prompt'
 lang.title.warning            = 'Warning'
@@ -77,7 +77,7 @@ lang.prompt.withoutVC2008Redistributable = "Need 'VC++ 2008 redistributable'£¬Pl
 
 -- Control panel version and current dir.
 lang.prompt.currentDir = 'Current Directory:%s'
-lang.prompt.version    = 'ZenTao Control Panel Version 1.0'
+lang.prompt.version    = 'ZenTao Control Panel Version 1.1'
 lang.prompt.trayTip    = lang.prompt.version
 
 -- Xampp is not under root directory.
