@@ -7,7 +7,10 @@
 $phpConf    = '../php/php.ini';
 $mysqlConf  = '../mysql/my.ini';
 $apacheConf = '../apache/conf/httpd.conf';
-$zentaoConf = '../zentao/config/my.php';
+$product    = '';
+$product    = is_dir('../zentao') ? 'zentao' : $product;
+$product    = is_dir('../xirang') ? 'xirang' : $product;
+$productConf= $product ? "../$product/config/my.php" : '';
 $pmaConf    = '../phpmyadmin/config.inc.php';
 
 /* Replace drivers for php and mysql. */
@@ -24,7 +27,7 @@ $mysqlPort  = setMySQLPort($usedPorts, 3308);
 if($mysqlPort)
 {
     echo "Mysql is using $mysqlPort port.\n";
-    setZenTaoConf($mysqlPort);
+    setProductConf($mysqlPort);
     setPMAConf($mysqlPort);
 }
 else
@@ -151,12 +154,14 @@ function getUsedPorts()
 }
 
 /* Set mysql port for my.php. */
-function setZenTaoConf($mysqlPort)
+function setProductConf($mysqlPort)
 {
-    global $zentaoConf;
-    $lines = file_get_contents($zentaoConf);
+    global $productConf;
+    if(!$productConf) return false;
+
+    $lines = file_get_contents($productConf);
     $lines = preg_replace("/=\s'[0-9]{1,}'/", "= '$mysqlPort'", $lines);
-    file_put_contents($zentaoConf, $lines);
+    file_put_contents($productConf, $lines);
 }
 
 /* Set mysql port for phpmyadmin. */
