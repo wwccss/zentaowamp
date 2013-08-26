@@ -251,6 +251,11 @@ if($product == 'zentao')
     $file->mkdir('./xampp/zentao/module/svn/ext/config');
     $file->copyFile($buildDir . '/svn/svn.php', './xampp/zentao/module/svn/ext/config/svn.php');
 }
+else
+{
+    $file->removeDir('./xampp/silksvn/');
+    $file->removeDir('./xampp/zentao/');
+}
 
 /* Copy index.php. */
 $indexFile = "index.$product.php";
@@ -267,4 +272,4 @@ $file->copyFile($buildDir . '/php_opcache.dll', './xampp/php/ext/php_opcache.dll
 $file->copyDir($buildDir . '/services', './xampp/services');
 
 /* Copy the readme.txt. */
-$file->copyFile($buildDir . '/readme.txt', './xampp/readme.txt');
+$file->copyFile($buildDir . "/readme.$product.txt", './xampp/readme.txt');
