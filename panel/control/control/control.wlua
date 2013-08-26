@@ -47,7 +47,7 @@ end
 --- Get the version of pms.
 ----------------------------------------------------------------------------------
 function getPmsVersion()
-    local file = io.open(zentao.versionFile, 'r')
+    local file = io.open(system.versionFile, 'r')
     if not file then return '' end
     return string.gsub(file:read('*a'), '\n', '')
 end
@@ -59,6 +59,7 @@ UPDATER_URL = string.format(UPDATER_URL, PMS_VERSION)
 -- Sub string between start string and end string.
 ----------------------------------------------------------------------------------
 function subString(string, startStr, endStr, notInclude)
+    if string == '' then return '' end
     local i, j = string.find(string, startStr)
     local x, y = string.find(string, endStr)
     if notInclude then
@@ -272,8 +273,9 @@ function updateConfig(configFile, oldPort, newPort)
 
     if not oldPort then
         for line in file:lines() do
-            if string.find(line, 'port') ~= nil then
-                line = string.gsub(line, string.sub(line, string.find(line, '%d+')), newPort)
+            startIndex = string.find(line, 'port')
+            if startIndex ~= nil then
+                line = string.gsub(line, string.sub(line, string.find(line, '%d+', startIndex)), newPort)
             end
                 output = output .. line .. "\n"
         end
@@ -362,7 +364,7 @@ function controlPanel.item.initBat:action()
 
     local result = file:read('*a')
     if string.find(result, INIT_SUCCESSCODE) then
-        local destDir = string.upper(DRIVE_LETTER) .. ':\\xampp\\zentao\\bin'
+        local destDir = string.upper(DRIVE_LETTER) .. ':\\xampp\\' .. CONTROL_TYPE .. '\\bin'
         local initDlg = iup.Alarm(lang.title.alarm, string.format(lang.prompt.initBatSuccessfully, destDir), lang.button.ok, lang.button.cancel)
         if io.open(BACKUP_FILE, 'r') then controlPanel.item.backup.active = 'yes' end
         if initDlg == 1 then exSpawn('explorer ' .. destDir) end
@@ -388,7 +390,7 @@ function controlPanel.item.backup:action()
     exSpawn(BACKUP_CMD)
     print(lang.title.backupSuccessfully)
 
-    local destDir = string.upper(DRIVE_LETTER) .. ':\\xampp\\zentao\\backup\\' .. os.date("%Y%m")
+    local destDir = string.upper(DRIVE_LETTER) .. ':\\xampp\\' .. CONTROL_TYPE .. '\\backup\\' .. os.date("%Y%m")
     local backupDlg = iup.Alarm(lang.title.backupSuccessfully, string.format(lang.prompt.backupAlarm, destDir), lang.button.ok, lang.button.cancel)
     if backupDlg == 1 then exSpawn('explorer ' .. destDir) end
 
@@ -407,10 +409,10 @@ end
 
 function controlPanel.item.checkVersion:action()
     local result = httpRequest(UPDATER_URL)
-    if table.getn(result) == 0  or not pcall(json.decode, table.concat(result)) then showPromptDialog(string.format(lang.prompt.cannotGetUpdater, zentao.configFile)) return false end
+    if table.getn(result) == 0  or not pcall(json.decode, table.concat(result)) then showPromptDialog(string.format(lang.prompt.cannotGetUpdater, system.configFile)) return false end
     result = json.decode(table.concat(result))
 
-    if result.status ~= 'success' then showPromptDialog(string.format(lang.prompt.cannotGetUpdater, zentao.configFile)) return end
+    if result.status ~= 'success' then showPromptDialog(string.format(lang.prompt.cannotGetUpdater, system.configFile)) return end
 
     result.data = json.decode(result.data)
     if result.data.latestNote == '' then
@@ -442,24 +444,15 @@ end
 function changeButtonLang()
     controlPanel.menu.service.title = lang.title.service
     controlPanel.menu.more.title    = lang.title.more
-    controlPanel.menu.help.title    = lang.title.help
-    controlPanel.item.exit.title    = lang.menu.exit
+    if controlPanel.menu.help then controlPanel.menu.help.title = lang.title.help end
 
-    controlPanel.item.viewService.title      = lang.menu.viewService
-    controlPanel.item.uninstallService.title = lang.menu.uninstallService
+    table.foreach(lang.menu, function(i, name)
+        if name ~= '' then
+            controlPanel.item[i].title = lang.menu[i]
+        end
+    end)
 
-    controlPanel.item.initBat.title          = lang.menu.initBat
-    controlPanel.item.database.title         = lang.menu.database
-    controlPanel.item.backup.title           = lang.menu.backup
-    controlPanel.item.checkVersion.title     = lang.menu.checkVersion
-
-    controlPanel.menu.lang.title             = lang.title.lang
-
-    controlPanel.item.officialSite.title = lang.menu.officialSite
-    controlPanel.item.officialHelp.title = lang.menu.officialHelp
-    controlPanel.item.flowChart.title    = lang.menu.flowChart
-    controlPanel.item.faq.title          = lang.menu.faq
-    controlPanel.item.forum.title        = lang.menu.forum
+    controlPanel.menu.lang.title = lang.title.lang
 
     controlPanel.dialog.title             = lang.title.controlPanel
     controlPanel.startButton.title        = lang.button.start
@@ -497,6 +490,12 @@ function controlPanel.item.exit:action()
     exitProcess()
 end
 
+table.foreach(lang.menu, function(i, name)
+    if name == '' then
+        controlPanel.item[i] = nil
+    end
+end)
+
 controlPanel.menu = {}
 controlPanel.menu.service = iup.submenu{iup.menu{controlPanel.item.viewService, controlPanel.item.uninstallService}; title = lang.title.service, key = 'K_S'}
 
@@ -505,6 +504,7 @@ controlPanel.menu.more    = iup.submenu{iup.menu{controlPanel.item.initBat, cont
 if not io.open(BACKUP_FILE, 'r') then controlPanel.item.backup.active = 'no' end
 
 controlPanel.menu.help    = iup.submenu{iup.menu{controlPanel.item.officialSite, controlPanel.item.officialHelp, iup.separator{}, controlPanel.item.flowChart, controlPanel.item.faq, controlPanel.item.forum}; title = lang.title.help, key = 'K_H'}
+if lang.title.help == '' then controlPanel.menu.help = nil  end
 
 controlPanel.mainMenu     = iup.menu{controlPanel.menu.service, controlPanel.menu.more, controlPanel.menu.help, controlPanel.item.exit}
 

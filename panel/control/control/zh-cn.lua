@@ -8,11 +8,11 @@ lang.url = {}
 -------------------------------------
 -- Url
 lang.url.officialSite   = "http://www.zentao.net"
-lang.url.proHelp        = "http://www.zentao.net/help-book-zentaoprohelp.html"
-lang.url.opensourceHelp = "http://www.zentao.net/help-book-zentaopmshelp.html"
-lang.url.flowChart      = "http://www.zentao.net/help-read-79236.html"
-lang.url.faq            = "http://www.zentao.net/ask-faq.html"
-lang.url.forum          = "http://www.zentao.net/forum"
+lang.url.proHelp        = ""
+lang.url.opensourceHelp = ""
+lang.url.flowChart      = ""
+lang.url.faq            = ""
+lang.url.forum          = ""
 -------------------------------------
 
 -------------------------------------
@@ -23,32 +23,32 @@ lang.menu.viewService      = "查看服务(V)"
 lang.menu.uninstallService = "卸载服务(U)"
 
 lang.title.more        = '更多(M)'
-lang.menu.initBat      = "生成脚本(I)"
-lang.menu.database     = "数 据 库(D)"
-lang.menu.backup       = "备份禅道(B)"
-lang.menu.checkVersion = "检查更新(C)"
+lang.menu.initBat      = ""
+lang.menu.database     = ""
+lang.menu.backup       = ""
+lang.menu.checkVersion = ""
 lang.title.lang        = '语    言(L)'
 lang.menu.zhcn         = '中文(Z)'
 lang.menu.en           = 'English(E)'
 
-lang.title.help        = '帮助(H)'
-lang.menu.officialSite = "禅道官网(O)"
-lang.menu.officialHelp = '帮助文档(D)'
-lang.menu.flowChart    = "流 程 图(C)"
-lang.menu.faq          = "常见问题(F)"
-lang.menu.forum        = "官方论坛(T)"
+lang.title.help        = ''
+lang.menu.officialSite = ""
+lang.menu.officialHelp = ''
+lang.menu.flowChart    = ""
+lang.menu.faq          = ""
+lang.menu.forum        = ""
 
 lang.menu.exit         = '退出(X)'
 
 -------------------------------------
 -- Buttons.
 -------------------------------------
-lang.button.start        = "启动禅道"
+lang.button.start        = "启动"
 lang.button.running      = '运行中...'
-lang.button.access       = "访问禅道"
-lang.button.stop         = "停止禅道"
+lang.button.access       = "访问"
+lang.button.stop         = "停止"
 lang.button.stopped      = '已停止'
-lang.button.officialSite = '禅道官网'
+lang.button.officialSite = '官网'
 
 lang.button.ok      = '确定'
 lang.button.cancel  = '取消'
@@ -99,20 +99,20 @@ lang.prompt.initBatFailed        = '执行失败。'
 
 -- Backup data.
 lang.prompt.mysqlNotRunning   = '未启动mysql，只备份文件数据。'
-lang.prompt.backuping         = '正在备份禅道...'
+lang.prompt.backuping         = '正在备份...'
 lang.prompt.backupAlarm       = "成功备份到%s目录, 是否进入该目录查看？"
 
 -- Check new version.
 lang.button.getNewVersion    = '获取新版本'
 lang.prompt.cannotGetUpdater = '获取不到服务器信息, 网络错误或配置文件%s版本号配置错误。'
-lang.prompt.isLatest         = '您现在的禅道版本已经是最新版本！'
+lang.prompt.isLatest         = '您现在的版本已经是最新版本！'
 
 -- Start ZenTao.
 lang.prompt.tryToStartServices   = '正在努力启动服务中......'
 lang.prompt.tryToInstallService  = '正在努力安装%s服务......'
 lang.prompt.installSuccessfully  = '安装%s服务成功'
 lang.prompt.serviceIsRunning     = '%s服务正常运行中, 端口号:%d'
-lang.prompt.startSuccessfully    = '禅道已经正常启动，点击“访问禅道”按钮进行访问'
+lang.prompt.startSuccessfully    = '系统已经正常启动，点击“访问”按钮进行访问'
 lang.prompt.startFailed          = '启动%s失败'
 lang.prompt.installFailed        = '安装%s服务失败'
 lang.prompt.tryToStart           = '正在尝试启动......'
@@ -123,7 +123,7 @@ lang.prompt.serviceExists        = '%s服务已经存在'
 lang.prompt.tryToStopServices       = '正在努力停止服务中......'
 lang.prompt.stopServiceSuccessfully = '%s服务停止成功'
 lang.prompt.stopServiceFailed       = '%s服务停止失败'
-lang.prompt.stopSuccessfully        = '禅道已经停止，点击“启动禅道”按钮启动禅道'
+lang.prompt.stopSuccessfully        = '系统已经停止，点击“启动”按钮启动系统'
 lang.prompt.serviceIsStopped        = '%s服务已经停止'
 
 -- Port is conflict.

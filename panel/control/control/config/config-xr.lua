@@ -1,6 +1,7 @@
 ----------------------------------------------------------------------------------
 -- Define const value.
 ----------------------------------------------------------------------------------
+CONTROL_TYPE     = 'xirang'
 MOUSE_LEFT       = 49
 MOUSE_PRESSED    = 1
 MAX_PORT         = 65535
@@ -11,11 +12,11 @@ VC_REDIST_2008   = 'vcredist_x86.exe'
 BUTTON_SIZE      = "50x20"
 TMP_BAT          = 'tmp\\tmp.bat'
 DRIVE_LETTER     = string.lower(string.sub(os.currentdir(), 0, 1))
-BACKUP_FILE      = '\\xampp\\zentao\\bin\\php\\backup.php'
-BACKUP_CMD       = 'cd ..\\zentao\\bin\\php & \\xampp\\php\\php.exe backup.php & cd ..\\..\\..\\control'
-UPDATER_URL      = "http://www.zentao.net/updater-isLatest-%s-.json"
+BACKUP_FILE      = '\\xampp\\xirang\\bin\\php\\backup.php'
+BACKUP_CMD       = 'cd ..\\xirang\\bin\\php & \\xampp\\php\\php.exe backup.php & cd ..\\..\\..\\control'
+UPDATER_URL      = "http://www.xirang.net/updater-isLatest-%s-.json"
 VERSION          = 'controlPanel_1.0'
-INIT_BAT         = "..\\zentao\\bin\\init.bat"
+INIT_BAT         = "..\\xirang\\bin\\init.bat"
 INIT_SUCCESSCODE = 0
 PHP_EXE          = DRIVE_LETTER .. ':\\xampp\\php\\php.exe'
 PHP_BAT          = 'tmp\\php.bat'
@@ -31,7 +32,7 @@ PROCESS_EXIT     = '.\\tmp\\exist'
 php    = {}
 apache = {}
 mysql  = {}
-zentao = {}
+system = {}
 
 php.configFile = "..\\php\\php.ini"
 
@@ -43,13 +44,13 @@ apache.suggestPort = 88
 
 mysql.configFile       = "..\\mysql\\my.ini"
 mysql.oldConfigFile    = "..\\mysql\\bin\\my.ini"
-mysql.myConfig         = "..\\zentao\\config\\my.php"
+mysql.myConfig         = "..\\xirang\\config\\my.php"
 mysql.phpmyadminConfig = "..\\phpmyadmin\\config.inc.php"
 mysql.serviceName      = 'mysqlzt'
 mysql.status           = 'stopped'
 mysql.port             = 3306
 mysql.suggestPort      = 3308
 
-zentao.configFile      = "..\\zentao\\config\\config.php"
-zentao.versionFile     = "..\\zentao\\VERSION"
+system.configFile      = "..\\xirang\\config\\config.php"
+system.versionFile     = "..\\xirang\\VERSION"
 
