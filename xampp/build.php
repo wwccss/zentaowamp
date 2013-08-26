@@ -2,12 +2,19 @@
 $buildDir = dirname(__FILE__);
 chdir($buildDir);
 
-/* include the file class. */
-include '../../lib/zfile/zfile.class.php';
+/* If zfile.class.php not found, try to download it from github. */
+if(!is_file('zfile.class.php')) 
+{
+    $zfile = 'https://raw.github.com/easysoft/zentaopms/master/lib/zfile/zfile.class.php';
+    file_put_contents('zfile.class.php', file_get_contents($zfile));
+}
+
+/* Include the file class. */
+include './zfile.class.php';
 $file = new zfile();
 
 /* set xampp package and 7-zip command. */
-if(count($argv) != 3) die("php build.php sourceDir product=zentao|xirang.\n");
+if(count($argv) != 3) die("php build.php sourceDir product=zentao|xirang|common.\n");
 $sourceDir  = $argv[1];
 $product    = $argv[2];
 $xampp      = $sourceDir . '\xampp';
@@ -28,8 +35,12 @@ $file->removeDir('./xampp/mailtodisk');
 $file->removeDir('./xampp/perl');
 $file->removeDir('./xampp/sendmail');
 $file->removeDir('./xampp/security');
-$file->batchRemoveFile('./xampp/tmp/*');
 $file->removeDir('./xampp/webdav');
+$file->removeDir('./xampp/FileZillaFTP');
+$file->removeDir('./xampp/MercuryMail');
+$file->removeDir('./xampp/webalizer');
+$file->removeDir('./xampp/tomcat');
+$file->batchRemoveFile('./xampp/tmp/*');
 $file->batchRemoveFile('./xampp/*.txt');
 $file->batchRemoveFile('./xampp/*.bat');
 $file->batchRemoveFile('./xampp/*.exe');
@@ -93,7 +104,7 @@ $file->copyFile('./xampp/apache/binold/msvcr100.dll',      './xampp/apache/bin/m
 $file->removeDir('./xampp/apache/binold');
 
 /* Process the apache's config file. */
-$file->copyFile($buildDir . '/httpd.conf', './xampp/apache/conf/httpd.conf');
+$file->copyFile($buildDir . "/httpd.$product.conf", './xampp/apache/conf/httpd.conf');
 
 /* Remove useless config files. */
 $file->removeDir('./xampp/apache/conf/ssl.crl');
@@ -242,7 +253,9 @@ if($product == 'zentao')
 }
 
 /* Copy index.php. */
-$file->copyFile($buildDir . '/index.php', './xampp/htdocs/index.php');
+$indexFile = "index.$product.php";
+$remoteIndexFile = "https://raw.github.com/easysoft/zentaolamp/master/$indexFile";
+file_put_contents('./xampp/htdocs/index.php', file_get_contents($remoteIndexFile));
 
 /* Copy ioncube loader. */
 $file->copyFile($buildDir . '/php_ioncube.dll', './xampp/php/ext/php_ioncube.dll');
