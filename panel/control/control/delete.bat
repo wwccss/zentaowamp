@@ -7,5 +7,6 @@ del wsrlua.exe
 rd /S /Q config
 rd /S /Q lang 
 del /Q tmp
+del /Q log
 cd ../../
 
