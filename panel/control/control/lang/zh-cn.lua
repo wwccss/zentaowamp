@@ -78,7 +78,7 @@ lang.prompt.withoutVC2008Redistributable = '¼ì²âµ½Ã»ÓÐVC++ 2008 redistributable»
 
 -- Control panel version and current dir.
 lang.prompt.currentDir = 'µ±Ç°Ä¿Â¼£º%s'
-lang.prompt.version    = 'ìøµÀ¿ØÖÆÃæ°å1.0°æ±¾'
+lang.prompt.panel      = 'ìøµÀ¿ØÖÆÃæ°å %s'
 lang.prompt.trayTip    = lang.prompt.version
 
 -- Xampp is not under root directory.

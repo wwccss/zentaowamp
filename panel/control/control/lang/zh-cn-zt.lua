@@ -58,7 +58,7 @@ lang.button.install = '°²×°'
 -------------------------------------
 -- Dialog title.
 -------------------------------------
-lang.title.controlPanel       = 'ìøµÀ¼¯³ÉÔËĞĞ»·¾³ V1.1'
+lang.title.controlPanel       = 'ìøµÀ¼¯³ÉÔËĞĞ»·¾³'
 lang.title.configPort         = '·şÎñ¶Ë¿ÚÅäÖÃ'
 lang.title.alarm              = 'ÌáÊ¾'
 lang.title.warning            = '¾¯¸æ'
@@ -78,7 +78,7 @@ lang.prompt.withoutVC2008Redistributable = '¼ì²âµ½Ã»ÓĞVC++ 2008 redistributable»
 
 -- Control panel version and current dir.
 lang.prompt.currentDir = 'µ±Ç°Ä¿Â¼£º%s'
-lang.prompt.version    = 'ìøµÀ¿ØÖÆÃæ°å1.1°æ±¾'
+lang.prompt.panel      = 'ìøµÀ¿ØÖÆÃæ°å %s'
 lang.prompt.trayTip    = lang.prompt.version
 
 -- Xampp is not under root directory.

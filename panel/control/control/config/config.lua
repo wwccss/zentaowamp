@@ -15,7 +15,7 @@ DRIVE_LETTER     = string.lower(string.sub(os.currentdir(), 0, 1))
 BACKUP_FILE      = '\\xampp\\zentao\\bin\\php\\backup.php'
 BACKUP_CMD       = 'cd ..\\zentao\\bin\\php & \\xampp\\php\\php.exe backup.php & cd ..\\..\\..\\control'
 UPDATER_URL      = "http://www.zentao.net/updater-isLatest-%s-.json"
-VERSION          = 'controlPanel_1.0'
+VERSION          = '1.1'
 INIT_BAT         = "..\\zentao\\bin\\init.bat"
 INIT_SUCCESSCODE = 0
 PHP_EXE          = DRIVE_LETTER .. ':\\xampp\\php\\php.exe'
@@ -25,6 +25,7 @@ LANG_FILE        = 'tmp\\lang'
 OK_FILE          = 'tmp\\ok'
 TMP_DIR          = '\\xampp\\control\\tmp\\'
 PROCESS_EXIT     = '.\\tmp\\exist'
+SOFT_VERSIONS    = 'tmp\\versions'
 
 ----------------------------------------------------------------------------------
 -- Init apache and mysql table.

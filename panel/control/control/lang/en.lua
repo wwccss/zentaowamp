@@ -77,7 +77,7 @@ lang.prompt.withoutVC2008Redistributable = "Need 'VC++ 2008 redistributable'£¬Pl
 
 -- Control panel version and current dir.
 lang.prompt.currentDir = 'Current Directory:%s'
-lang.prompt.version    = 'ZenTao Control Panel Version 1.0'
+lang.prompt.panel      = 'ZenTao Control Panel Version %s'
 lang.prompt.trayTip    = lang.prompt.version
 
 -- Xampp is not under root directory.

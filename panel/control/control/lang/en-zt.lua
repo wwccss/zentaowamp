@@ -56,7 +56,7 @@ lang.button.install = 'Install'
 -------------------------------------
 -- Dialog title.
 -------------------------------------
-lang.title.controlPanel       = 'ZenTao Integrated Run Environment V1.1'
+lang.title.controlPanel       = 'ZenTao Integrated Run Environment'
 lang.title.configPort         = 'Port configure'
 lang.title.alarm              = 'Prompt'
 lang.title.warning            = 'Warning'
@@ -77,7 +77,7 @@ lang.prompt.withoutVC2008Redistributable = "Need 'VC++ 2008 redistributable'£¬Pl
 
 -- Control panel version and current dir.
 lang.prompt.currentDir = 'Current Directory:%s'
-lang.prompt.version    = 'ZenTao Control Panel Version 1.1'
+lang.prompt.panel      = 'ZenTao Control Panel Version %s'
 lang.prompt.trayTip    = lang.prompt.version
 
 -- Xampp is not under root directory.

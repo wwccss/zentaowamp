@@ -23,6 +23,16 @@ function exitProcess()
 end
 
 ----------------------------------------------------------------------------------
+-- Log output and command.
+----------------------------------------------------------------------------------
+function log(content)
+  local logFile = 'log\\' .. os.date('%Y-%m-%d') .. '.txt'
+  local file = io.open(logFile, 'a+')
+  file:write(os.date('%H:%M:%S ') .. content .. '\n')
+  file:close();
+end
+
+----------------------------------------------------------------------------------
 -- Rewrite ex.spawn method.
 ----------------------------------------------------------------------------------
 math.randomseed(os.time());
@@ -35,6 +45,7 @@ function exSpawn(command)
     batFile:write(command)
     batFile:close()
     ex.spawn{"wscript.exe", "spawn.vbs", TMP_BAT}
+    log(command)
 
     local okFile = io.open(OK_FILE, 'r')
     while not okFile do os.sleep(0.1) okFile = io.open(OK_FILE, 'r') end
@@ -601,8 +612,44 @@ function print(...)
             str = tostring(v)
         end
     end
---    str = os.date() .. ' ' .. str
+    log(str)
     controlPanel.output.append = tostring(str) .. "\n"
+end
+
+----------------------------------------------------------------------------------
+-- print version of php/apache/mysql/phpmyadmin
+----------------------------------------------------------------------------------
+function printVersion(soft)
+    local file
+    local command
+    local start
+    local versionInfo
+    if(soft == 'php')    then command = PHP_EXE .. ' --version' end
+    if(soft == 'apache') then command = APACHE_EXE .. ' -v' end
+    if(soft == 'mysql')  then command = MYSQL_EXE .. ' --version' end
+   
+    if(soft == 'phpmyadmin') then 
+        file = io.open(PHPMYADMIN_README, 'r') 
+        for line in file:lines() do 
+            if(string.find(line, 'Version')) then versionInfo = string.format(lang.version[soft], line) end
+        end
+    else
+        exSpawn(command)
+        file = io.open(TMP_FILE, 'r')
+
+        for line in file:lines() do 
+            versionInfo = string.format(lang.version[soft], line)
+            if(soft == 'mysql') then
+                start       = string.find(line, ' ')
+                versionInfo = string.format(lang.version[soft], string.sub(line, start))
+            end
+            break
+        end
+    end
+    file:close()
+    file = io.open(SOFT_VERSIONS, 'a+')
+    file:write(versionInfo .. '\n')
+    print(versionInfo)
 end
 
 ----------------------------------------------------------------------------------
@@ -888,7 +935,19 @@ end
 ----------------------------------------------------------------------------------
 controlPanel.dialog:showxy(iup.RIGHT, iup.RIGHT)
 
-print(lang.prompt.version)
+print(string.format(lang.prompt.panel, VERSION))
+
+local file = io.open(SOFT_VERSIONS, 'r')
+if file then
+    print(file:read('*a'))  
+    file:close()
+else
+    printVersion('php')
+    printVersion('apache')
+    printVersion('mysql')
+    printVersion('phpmyadmin')
+end
+
 print(string.format(lang.prompt.currentDir, os.currentdir()))
 print(lang.prompt.newLine)
 controlPanel.initValues()
