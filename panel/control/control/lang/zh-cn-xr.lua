@@ -58,7 +58,7 @@ lang.button.install = '°²×°'
 -------------------------------------
 -- Dialog title.
 -------------------------------------
-lang.title.controlPanel       = 'Ï¢ÈÀ¼¯³ÉÔËÐÐ»·¾³ V1.1'
+lang.title.controlPanel       = 'Ï¢ÈÀ¼¯³ÉÔËÐÐ»·¾³'
 lang.title.configPort         = '·þÎñ¶Ë¿ÚÅäÖÃ'
 lang.title.alarm              = 'ÌáÊ¾'
 lang.title.warning            = '¾¯¸æ'
@@ -78,7 +78,7 @@ lang.prompt.withoutVC2008Redistributable = '¼ì²âµ½Ã»ÓÐVC++ 2008 redistributable»
 
 -- Control panel version and current dir.
 lang.prompt.currentDir = 'µ±Ç°Ä¿Â¼£º%s'
-lang.prompt.version    = 'Ï¢ÈÀ¿ØÖÆÃæ°å1.1°æ±¾'
+lang.prompt.panel      = 'ìøµÀ¿ØÖÆÃæ°å %s'
 lang.prompt.trayTip    = lang.prompt.version
 
 -- Xampp is not under root directory.
@@ -130,3 +130,8 @@ lang.prompt.serviceIsStopped        = '%s·þÎñÒÑ¾­Í£Ö¹'
 lang.prompt.portIsConflict = '%s%d¶Ë¿Ú³åÍ»'
 lang.prompt.suggestPort    = '£¬½¨ÒéÊ¹ÓÃ£º'
 
+lang.version = {}
+lang.version.php        = 'php°æ±¾£º%s'
+lang.version.apache     = 'apache°æ±¾£º%s'
+lang.version.mysql      = 'mysql°æ±¾£º%s'
+lang.version.phpmyadmin = 'phpmyadmin°æ±¾£º%s'

@@ -77,7 +77,7 @@ lang.prompt.withoutVC2008Redistributable = "Need 'VC++ 2008 redistributable'£¬Pl
 
 -- Control panel version and current dir.
 lang.prompt.currentDir = 'Current Directory:%s'
-lang.prompt.version    = 'ZenTao Control Panel Version 1.0'
+lang.prompt.panel      = 'ZenTao Control Panel Version %s'
 lang.prompt.trayTip    = lang.prompt.version
 
 -- Xampp is not under root directory.
@@ -128,3 +128,9 @@ lang.prompt.serviceIsStopped        = '%s service is stopped'
 -- Port is conflict.
 lang.prompt.portIsConflict = 'The port of %s%d is conflict'
 lang.prompt.suggestPort    = '£¬suggested port:'
+
+lang.version = {}
+lang.version.php        = 'php Version£º%s'
+lang.version.apache     = 'apache Version£º%s'
+lang.version.mysql      = 'mysql Version£º%s'
+lang.version.phpmyadmin = 'phpmyadmin Version£º%s'

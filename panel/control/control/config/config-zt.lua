@@ -1,30 +1,34 @@
 ----------------------------------------------------------------------------------
 -- Define const value.
 ----------------------------------------------------------------------------------
-CONTROL_TYPE     = 'zentao'
-MOUSE_LEFT       = 49
-MOUSE_PRESSED    = 1
-MAX_PORT         = 65535
-HOST             = '127.0.0.1'
-SOCKET           = require("socket")
-VC_REDIST_2005   = 'vcredist_x86_sp1.exe'
-VC_REDIST_2008   = 'vcredist_x86.exe'
-BUTTON_SIZE      = "50x20"
-TMP_BAT          = 'tmp\\tmp.bat'
-DRIVE_LETTER     = string.lower(string.sub(os.currentdir(), 0, 1))
-BACKUP_FILE      = '\\xampp\\zentao\\bin\\php\\backup.php'
-BACKUP_CMD       = 'cd ..\\zentao\\bin\\php & \\xampp\\php\\php.exe backup.php & cd ..\\..\\..\\control'
-UPDATER_URL      = "http://www.zentao.net/updater-isLatest-%s-.json"
-VERSION          = 'controlPanel_1.0'
-INIT_BAT         = "..\\zentao\\bin\\init.bat"
-INIT_SUCCESSCODE = 0
-PHP_EXE          = DRIVE_LETTER .. ':\\xampp\\php\\php.exe'
-PHP_BAT          = 'tmp\\php.bat'
-PMS_VERSION      = ''
-LANG_FILE        = 'tmp\\lang'
-OK_FILE          = 'tmp\\ok'
-TMP_DIR          = '\\xampp\\control\\tmp\\'
-PROCESS_EXIT     = '.\\tmp\\exist'
+CONTROL_TYPE      = 'zentao'
+MOUSE_LEFT        = 49
+MOUSE_PRESSED     = 1
+MAX_PORT          = 65535
+HOST              = '127.0.0.1'
+SOCKET            = require("socket")
+VC_REDIST_2005    = 'vcredist_x86_sp1.exe'
+VC_REDIST_2008    = 'vcredist_x86.exe'
+BUTTON_SIZE       = "50x20"
+TMP_BAT           = 'tmp\\tmp.bat'
+DRIVE_LETTER      = string.lower(string.sub(os.currentdir(), 0, 1))
+BACKUP_FILE       = '\\xampp\\zentao\\bin\\php\\backup.php'
+BACKUP_CMD        = 'cd ..\\zentao\\bin\\php & \\xampp\\php\\php.exe backup.php & cd ..\\..\\..\\control'
+UPDATER_URL       = "http://www.zentao.net/updater-isLatest-%s-.json"
+VERSION           = '1.1'
+INIT_BAT          = "..\\zentao\\bin\\init.bat"
+INIT_SUCCESSCODE  = 0
+PHP_EXE           = DRIVE_LETTER .. ':\\xampp\\php\\php.exe'
+APACHE_EXE        = DRIVE_LETTER .. ':\\xampp\\apache\\bin\\httpd.exe'
+MYSQL_EXE         = DRIVE_LETTER .. ':\\xampp\\mysql\\bin\\mysql.exe'
+PHPMYADMIN_README = DRIVE_LETTER .. ':\\xampp\\phpmyadmin\\README'
+PHP_BAT           = 'tmp\\php.bat'
+PMS_VERSION       = ''
+LANG_FILE         = 'tmp\\lang'
+OK_FILE           = 'tmp\\ok'
+TMP_DIR           = '\\xampp\\control\\tmp\\'
+PROCESS_EXIT      = '.\\tmp\\exist'
+SOFT_VERSIONS     = 'tmp\\versions'
 
 ----------------------------------------------------------------------------------
 -- Init apache and mysql table.
