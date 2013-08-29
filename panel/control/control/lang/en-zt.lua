@@ -128,3 +128,9 @@ lang.prompt.serviceIsStopped        = '%s service is stopped'
 -- Port is conflict.
 lang.prompt.portIsConflict = 'The port of %s%d is conflict'
 lang.prompt.suggestPort    = '£¬suggested port:'
+
+lang.version = {}
+lang.version.php        = 'php Version£º%s'
+lang.version.apache     = 'apache Version£º%s'
+lang.version.mysql      = 'mysql Version£º%s'
+lang.version.phpmyadmin = 'phpmyadmin Version£º%s'

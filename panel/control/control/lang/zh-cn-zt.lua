@@ -130,3 +130,8 @@ lang.prompt.serviceIsStopped        = '%s服务已经停止'
 lang.prompt.portIsConflict = '%s%d端口冲突'
 lang.prompt.suggestPort    = '，建议使用：'
 
+lang.version = {}
+lang.version.php        = 'php版本：%s'
+lang.version.apache     = 'apache版本：%s'
+lang.version.mysql      = 'mysql版本：%s'
+lang.version.phpmyadmin = 'phpmyadmin版本：%s'
