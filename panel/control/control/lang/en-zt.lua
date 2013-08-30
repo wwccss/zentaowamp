@@ -7,12 +7,12 @@ lang.url = {}
 
 -------------------------------------
 -- Url
-lang.url.officialSite   = "http://www.zentao.net/en/"
-lang.url.proHelp        = ""
-lang.url.opensourceHelp = ""
-lang.url.flowChart      = ""
-lang.url.faq            = ""
-lang.url.forum          = ""
+lang.url.officialSite   = "http://www.zentao.net/en"
+lang.url.proHelp        = "http://www.zentao.net/en/help-book-zentaoprohelp.html"
+lang.url.opensourceHelp = "http://www.zentao.net/en/help-book-zentaopmshelp.html"
+lang.url.flowChart      = "http://www.zentao.net/help-read-79236.html"
+lang.url.faq            = "http://www.zentao.net/ask-faq.html"
+lang.url.forum          = "http://www.zentao.net/en/forum"
 
 -------------------------------------
 -- Menu.
@@ -22,20 +22,20 @@ lang.menu.viewService      = "View Services(V)"
 lang.menu.uninstallService = "Uninstall Services(U)"
 
 lang.title.more        = 'More(M)'
-lang.menu.initBat      = ""
-lang.menu.database     = ""
-lang.menu.backup       = ""
-lang.menu.checkVersion = ""
+lang.menu.initBat      = "Init bat(I)"
+lang.menu.database     = "Database(D)"
+lang.menu.backup       = "Backup(B)"
+lang.menu.checkVersion = "Check for updates(C)"
 lang.title.lang        = 'Language(L)'
 lang.menu.zhcn         = 'ÖÐÎÄ(Z)'
 lang.menu.en           = 'English(E)'
 
-lang.title.help        = ''
-lang.menu.officialSite = ""
-lang.menu.officialHelp = ''
-lang.menu.flowChart    = ""
-lang.menu.faq          = ""
-lang.menu.forum        = ""
+lang.title.help        = 'Help(H)'
+lang.menu.officialSite = "Official site(O)"
+lang.menu.officialHelp = 'Official documents(D)'
+lang.menu.flowChart    = "Flow Chart(C)"
+lang.menu.faq          = "FAQ(F)"
+lang.menu.forum        = "Forum(T)"
 
 lang.menu.exit         = 'Exit(X)'
 -------------------------------------
@@ -77,14 +77,14 @@ lang.prompt.withoutVC2008Redistributable = "Need 'VC++ 2008 redistributable'£¬Pl
 
 -- Control panel version and current dir.
 lang.prompt.currentDir = 'Current Directory:%s'
-lang.prompt.version    = 'ZenTao Control Panel Version 1.0'
+lang.prompt.panel      = 'ZenTao Control Panel Version %s'
 lang.prompt.trayTip    = lang.prompt.version
 
 -- Xampp is not under root directory.
 lang.prompt.wrongPath = "Please extract the xampp to root directory, example:D:\\xampp"
 
 -- Control Panel is running.
-lang.prompt.panelIsRunning = 'Control panel is running'
+lang.prompt.panelIsRunning = 'ZenTao control panel is running'
 
 -- Uninstall service.
 lang.prompt.tryToUninstallService = 'Try to uninstall %s service......'
@@ -111,7 +111,7 @@ lang.prompt.tryToStartServices   = 'Try to start services......'
 lang.prompt.tryToInstallService  = 'Try to install %s service......'
 lang.prompt.installSuccessfully  = 'Install %s service successfully.'
 lang.prompt.serviceIsRunning     = '%s service is running, port:%d'
-lang.prompt.startSuccessfully    = 'Servieces is running, click "access" button to access.'
+lang.prompt.startSuccessfully    = 'ZenTao is running, click "access" button to access ZenTao.'
 lang.prompt.startFailed          = 'Start %s failed'
 lang.prompt.installFailed        = 'Install %s service failed'
 lang.prompt.tryToStart           = 'Try to start......'
@@ -122,9 +122,15 @@ lang.prompt.serviceExists        = '%s service exists'
 lang.prompt.tryToStopServices       = 'Try to stop services......'
 lang.prompt.stopServiceSuccessfully = 'stop %s service successfully'
 lang.prompt.stopServiceFailed       = 'stop %s service failed'
-lang.prompt.stopSuccessfully        = 'Services is stopped, click "start" button to restart.'
+lang.prompt.stopSuccessfully        = 'ZenTao is stopped, click "start" button to restart ZenTao.'
 lang.prompt.serviceIsStopped        = '%s service is stopped'
 
 -- Port is conflict.
 lang.prompt.portIsConflict = 'The port of %s%d is conflict'
 lang.prompt.suggestPort    = '£¬suggested port:'
+
+lang.version = {}
+lang.version.php        = 'php Version£º%s'
+lang.version.apache     = 'apache Version£º%s'
+lang.version.mysql      = 'mysql Version£º%s'
+lang.version.phpmyadmin = 'phpmyadmin Version£º%s'

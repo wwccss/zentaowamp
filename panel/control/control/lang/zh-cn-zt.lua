@@ -8,11 +8,11 @@ lang.url = {}
 -------------------------------------
 -- Url
 lang.url.officialSite   = "http://www.zentao.net"
-lang.url.proHelp        = ""
-lang.url.opensourceHelp = ""
-lang.url.flowChart      = ""
-lang.url.faq            = ""
-lang.url.forum          = ""
+lang.url.proHelp        = "http://www.zentao.net/help-book-zentaoprohelp.html"
+lang.url.opensourceHelp = "http://www.zentao.net/help-book-zentaopmshelp.html"
+lang.url.flowChart      = "http://www.zentao.net/help-read-79236.html"
+lang.url.faq            = "http://www.zentao.net/ask-faq.html"
+lang.url.forum          = "http://www.zentao.net/forum"
 -------------------------------------
 
 -------------------------------------
@@ -23,32 +23,32 @@ lang.menu.viewService      = "²é¿´·şÎñ(V)"
 lang.menu.uninstallService = "Ğ¶ÔØ·şÎñ(U)"
 
 lang.title.more        = '¸ü¶à(M)'
-lang.menu.initBat      = ""
-lang.menu.database     = ""
-lang.menu.backup       = ""
-lang.menu.checkVersion = ""
+lang.menu.initBat      = "Éú³É½Å±¾(I)"
+lang.menu.database     = "Êı ¾İ ¿â(D)"
+lang.menu.backup       = "±¸·İìøµÀ(B)"
+lang.menu.checkVersion = "¼ì²é¸üĞÂ(C)"
 lang.title.lang        = 'Óï    ÑÔ(L)'
 lang.menu.zhcn         = 'ÖĞÎÄ(Z)'
 lang.menu.en           = 'English(E)'
 
-lang.title.help        = ''
-lang.menu.officialSite = ""
-lang.menu.officialHelp = ''
-lang.menu.flowChart    = ""
-lang.menu.faq          = ""
-lang.menu.forum        = ""
+lang.title.help        = '°ïÖú(H)'
+lang.menu.officialSite = "ìøµÀ¹ÙÍø(O)"
+lang.menu.officialHelp = '°ïÖúÎÄµµ(D)'
+lang.menu.flowChart    = "Á÷ ³Ì Í¼(C)"
+lang.menu.faq          = "³£¼ûÎÊÌâ(F)"
+lang.menu.forum        = "¹Ù·½ÂÛÌ³(T)"
 
 lang.menu.exit         = 'ÍË³ö(X)'
 
 -------------------------------------
 -- Buttons.
 -------------------------------------
-lang.button.start        = "Æô¶¯"
+lang.button.start        = "Æô¶¯ìøµÀ"
 lang.button.running      = 'ÔËĞĞÖĞ...'
-lang.button.access       = "·ÃÎÊ"
-lang.button.stop         = "Í£Ö¹"
+lang.button.access       = "·ÃÎÊìøµÀ"
+lang.button.stop         = "Í£Ö¹ìøµÀ"
 lang.button.stopped      = 'ÒÑÍ£Ö¹'
-lang.button.officialSite = '¹ÙÍø'
+lang.button.officialSite = 'ìøµÀ¹ÙÍø'
 
 lang.button.ok      = 'È·¶¨'
 lang.button.cancel  = 'È¡Ïû'
@@ -78,7 +78,7 @@ lang.prompt.withoutVC2008Redistributable = '¼ì²âµ½Ã»ÓĞVC++ 2008 redistributable»
 
 -- Control panel version and current dir.
 lang.prompt.currentDir = 'µ±Ç°Ä¿Â¼£º%s'
-lang.prompt.version    = 'ìøµÀ¿ØÖÆÃæ°å1.0°æ±¾'
+lang.prompt.panel      = 'ìøµÀ¿ØÖÆÃæ°å %s'
 lang.prompt.trayTip    = lang.prompt.version
 
 -- Xampp is not under root directory.
@@ -99,20 +99,20 @@ lang.prompt.initBatFailed        = 'Ö´ĞĞÊ§°Ü¡£'
 
 -- Backup data.
 lang.prompt.mysqlNotRunning   = 'Î´Æô¶¯mysql£¬Ö»±¸·İÎÄ¼şÊı¾İ¡£'
-lang.prompt.backuping         = 'ÕıÔÚ±¸·İ...'
+lang.prompt.backuping         = 'ÕıÔÚ±¸·İìøµÀ...'
 lang.prompt.backupAlarm       = "³É¹¦±¸·İµ½%sÄ¿Â¼, ÊÇ·ñ½øÈë¸ÃÄ¿Â¼²é¿´£¿"
 
 -- Check new version.
 lang.button.getNewVersion    = '»ñÈ¡ĞÂ°æ±¾'
 lang.prompt.cannotGetUpdater = '»ñÈ¡²»µ½·şÎñÆ÷ĞÅÏ¢, ÍøÂç´íÎó»òÅäÖÃÎÄ¼ş%s°æ±¾ºÅÅäÖÃ´íÎó¡£'
-lang.prompt.isLatest         = 'ÄúÏÖÔÚµÄ°æ±¾ÒÑ¾­ÊÇ×îĞÂ°æ±¾£¡'
+lang.prompt.isLatest         = 'ÄúÏÖÔÚµÄìøµÀ°æ±¾ÒÑ¾­ÊÇ×îĞÂ°æ±¾£¡'
 
 -- Start ZenTao.
 lang.prompt.tryToStartServices   = 'ÕıÔÚÅ¬Á¦Æô¶¯·şÎñÖĞ......'
 lang.prompt.tryToInstallService  = 'ÕıÔÚÅ¬Á¦°²×°%s·şÎñ......'
 lang.prompt.installSuccessfully  = '°²×°%s·şÎñ³É¹¦'
 lang.prompt.serviceIsRunning     = '%s·şÎñÕı³£ÔËĞĞÖĞ, ¶Ë¿ÚºÅ:%d'
-lang.prompt.startSuccessfully    = 'ÏµÍ³ÒÑ¾­Õı³£Æô¶¯£¬µã»÷¡°·ÃÎÊ¡±°´Å¥½øĞĞ·ÃÎÊ'
+lang.prompt.startSuccessfully    = 'ìøµÀÒÑ¾­Õı³£Æô¶¯£¬µã»÷¡°·ÃÎÊìøµÀ¡±°´Å¥½øĞĞ·ÃÎÊ'
 lang.prompt.startFailed          = 'Æô¶¯%sÊ§°Ü'
 lang.prompt.installFailed        = '°²×°%s·şÎñÊ§°Ü'
 lang.prompt.tryToStart           = 'ÕıÔÚ³¢ÊÔÆô¶¯......'
@@ -123,10 +123,15 @@ lang.prompt.serviceExists        = '%s·şÎñÒÑ¾­´æÔÚ'
 lang.prompt.tryToStopServices       = 'ÕıÔÚÅ¬Á¦Í£Ö¹·şÎñÖĞ......'
 lang.prompt.stopServiceSuccessfully = '%s·şÎñÍ£Ö¹³É¹¦'
 lang.prompt.stopServiceFailed       = '%s·şÎñÍ£Ö¹Ê§°Ü'
-lang.prompt.stopSuccessfully        = 'ÏµÍ³ÒÑ¾­Í£Ö¹£¬µã»÷¡°Æô¶¯¡±°´Å¥Æô¶¯ÏµÍ³'
+lang.prompt.stopSuccessfully        = 'ìøµÀÒÑ¾­Í£Ö¹£¬µã»÷¡°Æô¶¯ìøµÀ¡±°´Å¥Æô¶¯ìøµÀ'
 lang.prompt.serviceIsStopped        = '%s·şÎñÒÑ¾­Í£Ö¹'
 
 -- Port is conflict.
 lang.prompt.portIsConflict = '%s%d¶Ë¿Ú³åÍ»'
 lang.prompt.suggestPort    = '£¬½¨ÒéÊ¹ÓÃ£º'
 
+lang.version = {}
+lang.version.php        = 'php°æ±¾£º%s'
+lang.version.apache     = 'apache°æ±¾£º%s'
+lang.version.mysql      = 'mysql°æ±¾£º%s'
+lang.version.phpmyadmin = 'phpmyadmin°æ±¾£º%s'
