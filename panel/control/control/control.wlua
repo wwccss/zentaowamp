@@ -271,6 +271,10 @@ function setConfigPort(serviceName, port)
         return updateConfig(apache.configFile, apache.port, port)
     else
         updateConfig(mysql.myConfig, nil, port)
+        updateConfig(mysql.storyConfig, nil, port)
+        updateConfig(mysql.taskConfig, nil, port)
+        updateConfig(mysql.testConfig, nil, port)
+        updateConfig(mysql.proConfig, nil, port)
         if not updateConfig(mysql.phpmyadminConfig, nil, port) then return false end
         return updateConfig(mysql.configFile, mysql.port, port)
     end
