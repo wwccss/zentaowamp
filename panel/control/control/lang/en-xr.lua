@@ -7,12 +7,12 @@ lang.url = {}
 
 -------------------------------------
 -- Url
-lang.url.officialSite   = "http://www.xirang.biz/en"
-lang.url.proHelp        = "http://www.xirang.biz/en/help-book-zentaoprohelp.html"
-lang.url.opensourceHelp = "http://www.xirang.biz/en/help-book-zentaopmshelp.html"
-lang.url.flowChart      = "http://www.xirang.biz/help-read-79236.html"
-lang.url.faq            = "http://www.xirang.biz/ask-faq.html"
-lang.url.forum          = "http://www.xirang.biz/en/forum"
+lang.url.officialSite   = "http://www.chanzhi.org/en"
+lang.url.proHelp        = "http://www.chanzhi.org/en/help-book-zentaoprohelp.html"
+lang.url.opensourceHelp = "http://www.chanzhi.org/en/help-book-zentaopmshelp.html"
+lang.url.flowChart      = "http://www.chanzhi.org/help-read-79236.html"
+lang.url.faq            = "http://www.chanzhi.org/ask-faq.html"
+lang.url.forum          = "http://www.chanzhi.org/en/forum"
 
 -------------------------------------
 -- Menu.
