@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------------
 -- Define const value.
 ----------------------------------------------------------------------------------
-CONTROL_TYPE      = 'xirang'
+CONTROL_TYPE      = 'chanzhi'
 MOUSE_LEFT        = 49
 MOUSE_PRESSED     = 1
 MAX_PORT          = 65535
@@ -12,11 +12,11 @@ VC_REDIST_2008    = 'vcredist_x86.exe'
 BUTTON_SIZE       = "50x20"
 TMP_BAT           = 'tmp\\tmp.bat'
 DRIVE_LETTER      = string.lower(string.sub(os.currentdir(), 0, 1))
-BACKUP_FILE       = '\\xampp\\xirang\\bin\\php\\backup.php'
-BACKUP_CMD        = 'cd ..\\xirang\\bin\\php & \\xampp\\php\\php.exe backup.php & cd ..\\..\\..\\control'
-UPDATER_URL       = "http://www.xirang.net/updater-isLatest-%s-.json"
+BACKUP_FILE       = '\\xampp\\chanzhi\\bin\\php\\backup.php'
+BACKUP_CMD        = 'cd ..\\chanzhi\\bin\\php & \\xampp\\php\\php.exe backup.php & cd ..\\..\\..\\control'
+UPDATER_URL       = "http://www.chanzhi.net/updater-isLatest-%s-.json"
 VERSION           = '1.1'
-INIT_BAT          = "..\\xirang\\bin\\init.bat"
+INIT_BAT          = "..\\chanzhi\\bin\\init.bat"
 INIT_SUCCESSCODE  = 0
 PHP_EXE           = DRIVE_LETTER .. ':\\xampp\\php\\php.exe'
 APACHE_EXE        = DRIVE_LETTER .. ':\\xampp\\apache\\bin\\httpd.exe'
@@ -48,13 +48,13 @@ apache.suggestPort = 88
 
 mysql.configFile       = "..\\mysql\\my.ini"
 mysql.oldConfigFile    = "..\\mysql\\bin\\my.ini"
-mysql.myConfig         = "..\\xirang\\config\\my.php"
+mysql.myConfig         = "..\\chanzhi\\config\\my.php"
 mysql.phpmyadminConfig = "..\\phpmyadmin\\config.inc.php"
 mysql.serviceName      = 'mysqlzt'
 mysql.status           = 'stopped'
 mysql.port             = 3306
 mysql.suggestPort      = 3308
 
-system.configFile      = "..\\xirang\\config\\config.php"
-system.versionFile     = "..\\xirang\\VERSION"
+system.configFile      = "..\\chanzhi\\config\\config.php"
+system.versionFile     = "..\\chanzhi\\VERSION"
 
