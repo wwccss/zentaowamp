@@ -274,3 +274,8 @@ $file->copyDir($buildDir . '/services', './xampp/services');
 
 /* Copy the readme.txt. */
 $file->copyFile($buildDir . "/readme.$product.txt", './xampp/readme.txt');
+
+/* Remove useless dir. */
+$file->removeDir('anonymous');
+$file->removeDir('SCRATCH');
+$file->removeDir('src');
