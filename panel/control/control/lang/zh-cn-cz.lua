@@ -8,10 +8,17 @@ lang.url = {}
 -------------------------------------
 -- Url
 lang.url.officialSite   = "http://www.chanzhi.org"
+<<<<<<< HEAD:panel/control/control/lang/zh-cn-cz.lua
 lang.url.proHelp        = "http://www.chanzhi.org"
 lang.url.opensourceHelp = "http://www.chanzhi.org/help-book-chanzhieps.html"
 lang.url.flowChart      = "http://www.chanzhi.org/help-read-79236.html"
 lang.url.faq            = "http://www.chanzhi.org/forum-board-5.html"
+=======
+lang.url.proHelp        = "http://www.chanzhi.org/help-book-zentaoprohelp.html"
+lang.url.opensourceHelp = "http://www.chanzhi.org/help-book-zentaopmshelp.html"
+lang.url.flowChart      = "http://www.chanzhi.org/help-read-79236.html"
+lang.url.faq            = "http://www.chanzhi.org/ask-faq.html"
+>>>>>>> b2d5e7aee511ceb6ad1056a5fbc4dea53b66f227:panel/control/control/lang/zh-cn-xr.lua
 lang.url.forum          = "http://www.chanzhi.org/forum"
 -------------------------------------
 

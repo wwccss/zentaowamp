@@ -14,7 +14,7 @@ include './zfile.class.php';
 $file = new zfile();
 
 /* set xampp package and 7-zip command. */
-if(count($argv) != 3) die("php build.php sourceDir product=zentao|xirang|common.\n");
+if(count($argv) != 3) die("php build.php sourceDir product=zentao|chanzhi|common.\n");
 $sourceDir  = $argv[1];
 $product    = $argv[2];
 $xampp      = $sourceDir . '\xampp';

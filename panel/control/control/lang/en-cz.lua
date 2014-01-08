@@ -7,12 +7,21 @@ lang.url = {}
 
 -------------------------------------
 -- Url
+<<<<<<< HEAD:panel/control/control/lang/en-cz.lua
 lang.url.officialSite   = "http://www.chanzhi.org"
 lang.url.proHelp        = "http://www.chanzhi.org"
 lang.url.opensourceHelp = "http://www.chanzhi.org/help-book-chanzhieps.html"
 lang.url.flowChart      = "http://www.chanzhi.org/help-read-79236.html"
 lang.url.faq            = "http://www.chanzhi.org/forum-board-5.html"
 lang.url.forum          = "http://www.chanzhi.org/forum"
+=======
+lang.url.officialSite   = "http://www.chanzhi.org/en"
+lang.url.proHelp        = "http://www.chanzhi.org/en/help-book-zentaoprohelp.html"
+lang.url.opensourceHelp = "http://www.chanzhi.org/en/help-book-zentaopmshelp.html"
+lang.url.flowChart      = "http://www.chanzhi.org/help-read-79236.html"
+lang.url.faq            = "http://www.chanzhi.org/ask-faq.html"
+lang.url.forum          = "http://www.chanzhi.org/en/forum"
+>>>>>>> b2d5e7aee511ceb6ad1056a5fbc4dea53b66f227:panel/control/control/lang/en-xr.lua
 
 -------------------------------------
 -- Menu.
