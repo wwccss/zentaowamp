@@ -117,6 +117,8 @@ lang.prompt.installFailed        = 'Install %s service failed'
 lang.prompt.tryToStart           = 'Try to start......'
 lang.prompt.unknownServiceStatus = 'Unknow service status'
 lang.prompt.serviceExists        = '%s service exists'
+lang.prompt.wrongConfig          = '%s£ºwrong configuration'
+lang.prompt.wrongConfigPrompt    = 'Enter the directory of config file?'
 
 -- Stop ZenTao.
 lang.prompt.tryToStopServices       = 'Try to stop services......'

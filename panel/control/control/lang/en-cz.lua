@@ -7,12 +7,12 @@ lang.url = {}
 
 -------------------------------------
 -- Url
-lang.url.officialSite   = "http://www.chanzhi.org/en"
-lang.url.proHelp        = "http://www.chanzhi.org/en/help-book-zentaoprohelp.html"
-lang.url.opensourceHelp = "http://www.chanzhi.org/en/help-book-zentaopmshelp.html"
+lang.url.officialSite   = "http://www.chanzhi.org"
+lang.url.proHelp        = "http://www.chanzhi.org"
+lang.url.opensourceHelp = "http://www.chanzhi.org/help-book-chanzhieps.html"
 lang.url.flowChart      = "http://www.chanzhi.org/help-read-79236.html"
-lang.url.faq            = "http://www.chanzhi.org/ask-faq.html"
-lang.url.forum          = "http://www.chanzhi.org/en/forum"
+lang.url.faq            = "http://www.chanzhi.org/forum-board-5.html"
+lang.url.forum          = "http://www.chanzhi.org/forum"
 
 -------------------------------------
 -- Menu.
@@ -25,7 +25,7 @@ lang.title.more        = 'More(M)'
 lang.menu.initBat      = "Init bat(I)"
 lang.menu.database     = "Database(D)"
 lang.menu.backup       = "Backup(B)"
-lang.menu.checkVersion = "Check for updates(C)"
+lang.menu.checkVersion = ""
 lang.title.lang        = 'Language(L)'
 lang.menu.zhcn         = 'ÖÐÎÄ(Z)'
 lang.menu.en           = 'English(E)'
@@ -33,7 +33,7 @@ lang.menu.en           = 'English(E)'
 lang.title.help        = 'Help(H)'
 lang.menu.officialSite = "Official site(O)"
 lang.menu.officialHelp = 'Official documents(D)'
-lang.menu.flowChart    = "Flow Chart(C)"
+lang.menu.flowChart    = ""
 lang.menu.faq          = "FAQ(F)"
 lang.menu.forum        = "Forum(T)"
 
@@ -46,7 +46,7 @@ lang.button.running      = 'Running...'
 lang.button.access       = "Access"
 lang.button.stop         = "Stop"
 lang.button.stopped      = 'stoped'
-lang.button.officialSite = 'zentao.net'
+lang.button.officialSite = 'chanzhi.org'
 
 lang.button.ok      = 'Ok'
 lang.button.cancel  = 'cancel'
@@ -117,6 +117,8 @@ lang.prompt.installFailed        = 'Install %s service failed'
 lang.prompt.tryToStart           = 'Try to start......'
 lang.prompt.unknownServiceStatus = 'Unknow service status'
 lang.prompt.serviceExists        = '%s service exists'
+lang.prompt.wrongConfig          = '%s: wrong configuration'
+lang.prompt.wrongConfigPrompt    = 'Enter the directory of config file?'
 
 -- Stop ZenTao.
 lang.prompt.tryToStopServices       = 'Try to stop services......'

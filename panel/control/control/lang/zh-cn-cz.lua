@@ -8,10 +8,10 @@ lang.url = {}
 -------------------------------------
 -- Url
 lang.url.officialSite   = "http://www.chanzhi.org"
-lang.url.proHelp        = "http://www.chanzhi.org/help-book-zentaoprohelp.html"
-lang.url.opensourceHelp = "http://www.chanzhi.org/help-book-zentaopmshelp.html"
+lang.url.proHelp        = "http://www.chanzhi.org"
+lang.url.opensourceHelp = "http://www.chanzhi.org/help-book-chanzhieps.html"
 lang.url.flowChart      = "http://www.chanzhi.org/help-read-79236.html"
-lang.url.faq            = "http://www.chanzhi.org/ask-faq.html"
+lang.url.faq            = "http://www.chanzhi.org/forum-board-5.html"
 lang.url.forum          = "http://www.chanzhi.org/forum"
 -------------------------------------
 
@@ -26,7 +26,7 @@ lang.title.more        = '更多(M)'
 lang.menu.initBat      = "生成脚本(I)"
 lang.menu.database     = "数 据 库(D)"
 lang.menu.backup       = "备份蝉知(B)"
-lang.menu.checkVersion = "检查更新(C)"
+lang.menu.checkVersion = ""
 lang.title.lang        = '语    言(L)'
 lang.menu.zhcn         = '中文(Z)'
 lang.menu.en           = 'English(E)'
@@ -118,6 +118,8 @@ lang.prompt.installFailed        = '安装%s服务失败'
 lang.prompt.tryToStart           = '正在尝试启动......'
 lang.prompt.unknownServiceStatus = '未知的服务状态'
 lang.prompt.serviceExists        = '%s服务已经存在'
+lang.prompt.wrongConfig          = '%s配置文件错误'
+lang.prompt.wrongConfigPrompt    = '打开配置文件所在目录?'
 
 -- Stop ZenTao.
 lang.prompt.tryToStopServices       = '正在努力停止服务中......'
