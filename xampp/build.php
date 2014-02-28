@@ -240,7 +240,6 @@ $file->copyFile($buildDir . '/phpmyadmin.php', './xampp/phpmyadmin/config.inc.ph
 $file->removeDir('./xampp/phpmyadmin/themes/original/');
 $file->removeDir('./xampp/phpmyadmin/examples/');
 $file->removeDir('./xampp/phpmyadmin/js/openlayers/');
-$file->removeDir('./xampp/phpmyadmin/libraries/tcpdf/');
 $file->removeDir('./xampp/phpmyadmin/doc');
 $file->removeDir('./xampp/phpmyadmin/doc');
 $file->batchRemoveFile('./xampp/phpmyadmin/Documentation*');
