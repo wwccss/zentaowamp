@@ -44,7 +44,7 @@ function exSpawn(command)
     local batFile = io.open(TMP_BAT, 'w')
     batFile:write(command)
     batFile:close()
-    ex.spawn{"wscript.exe", "spawn.vbs", TMP_BAT}
+    ex.spawn{"chp.exe", TMP_BAT}
     log(command)
 
     local okFile = io.open(OK_FILE, 'r')
@@ -774,9 +774,18 @@ function installService(serviceName, port)
         if installResult == 'installed' then
             print(string.format(lang.prompt.installSuccessfully, serviceName))
             exSpawn('net start ' .. serviceName)
+
+            local file = io.open(TMP_FILE, 'r')
+            if file then local content = file:read('*a') end
+
             serviceStatus = getServiceStatus(serviceName)
             if(serviceStatus == 'running') then print(string.format(lang.prompt.serviceIsRunning, serviceName, port)) end
-	    if(serviceStatus == 'stopped') then installVC() end
+	    if(serviceStatus == 'stopped') then
+              local destDir = string.upper(DRIVE_LETTER) .. ':\\xampp\\' 
+              if serviceName == 'apachezt' then destDir = destDir .. 'apache' else destDir = destDir .. 'mysql' end
+              local errorDlg = iup.Alarm(string.format(lang.prompt.wrongConfig, serviceName), content .. "\n" .. lang.prompt.wrongConfigPrompt, lang.button.ok, lang.button.cancel)
+              if errorDlg == 1 then exSpawn('explorer ' .. destDir) exitProcess() end
+            end
         elseif installResult == 'withoutVC' and serviceName == apache.serviceName then
             installVC()
         elseif not installResult then

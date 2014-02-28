@@ -118,6 +118,8 @@ lang.prompt.installFailed        = '安装%s服务失败'
 lang.prompt.tryToStart           = '正在尝试启动......'
 lang.prompt.unknownServiceStatus = '未知的服务状态'
 lang.prompt.serviceExists        = '%s服务已经存在'
+lang.prompt.wrongConfig          = '%s配置文件错误'
+lang.prompt.wrongConfigPrompt    = '打开配置文件所在目录?'
 
 -- Stop ZenTao.
 lang.prompt.tryToStopServices       = '正在努力停止服务中......'
