@@ -156,12 +156,29 @@ function getUsedPorts()
 /* Set mysql port for my.php. */
 function setProductConf($mysqlPort)
 {
-    global $productConf;
+    global $productConf, $product;
     if(!$productConf) return false;
+	
+	if($product == 'zentao')
+	{
+		$productConfs['zentao'] = $productConf;
+		$productConfs['pro']    = "../zentaopro/config/my.php";
+		$productConfs['story']  = "../zentaostory/config/my.php";
+		$productConfs['test']   = "../zentaotest/config/my.php";
+		$productConfs['task']   = "../zentaotask/config/my.php";
 
-    $lines = file_get_contents($productConf);
-    $lines = preg_replace("/=\s'[0-9]{1,}'/", "= '$mysqlPort'", $lines);
-    file_put_contents($productConf, $lines);
+	}
+	else
+	{
+		$productConfs[$product] = $productConf;
+	}
+
+	foreach($productConfs as $productConf)
+	{
+		$lines = file_get_contents($productConf);
+		$lines = preg_replace("/=\s'[0-9]{1,}'/", "= '$mysqlPort'", $lines);
+		file_put_contents($productConf, $lines);
+	}
 }
 
 /* Set mysql port for phpmyadmin. */
