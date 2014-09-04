@@ -119,7 +119,8 @@ procedure InstallVC2008();
 const
     ONE_DAY_MILLION_SECONDS = 24 * 60 * 60 * 1000;
     ONE_DAY_SECONDS         = 24 * 60 * 60;
-    CONFIG_FILE             = 'config.json';
+    CONFIG_USER_FILE        = 'config.user.json';
+    CONFIG_FILE             = 'config.ini';
     DEBUG_MODE              = 0;
     READ_BYTES              = 2048;
 
@@ -955,7 +956,7 @@ begin
     Result := False;
     config   := TJSONConfig.Create(nil);
     try
-        config.FileName := CONFIG_FILE;
+        config.FileName := CONFIG_USER_FILE;
 
         lastLoginTime := config.GetValue('/LastRunTime', 0);
 
