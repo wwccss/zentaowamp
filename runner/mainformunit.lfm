@@ -4369,7 +4369,7 @@ object MainForm: TMainForm
     Width = 530
     Anchors = [akTop, akLeft, akRight, akBottom]
     Font.CharSet = GB2312_CHARSET
-    Font.Height = -17
+    Font.Height = -15
     Font.Name = '微软雅黑'
     Font.Pitch = fpVariable
     Font.Quality = fqDraft

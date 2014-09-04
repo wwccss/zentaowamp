@@ -9,6 +9,9 @@
       <Title Value="zentaorunner"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
+      <XPManifest>
+        <ExecutionLevel Value="2"/>
+      </XPManifest>
       <Icon Value="0"/>
     </General>
     <i18n>
@@ -18,7 +21,8 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="2"/>
-      <StringTable ProductName="禅道集成运行环境" ProductVersion="1.2"/>
+      <RevisionNr Value="1"/>
+      <StringTable ProductName="禅道集成运行环境" ProductVersion="1.2.1"/>
     </VersionInfo>
     <BuildModes Count="2">
       <Item1 Name="Default" Default="True"/>
@@ -72,7 +76,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="4">
+    <Units Count="5">
       <Unit0>
         <Filename Value="zentaorunner.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -96,6 +100,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="langunit"/>
       </Unit3>
+      <Unit4>
+        <Filename Value="inifileunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="inifileunit"/>
+      </Unit4>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
