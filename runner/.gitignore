@@ -56,7 +56,7 @@ zentao.lps
 
 
 #exclude executable output in windows
-*.exe
+zentaorunner.exe
 
 #node modules
 node_modules
