@@ -19,6 +19,7 @@ uses
     fpjson,
     jsonparser,
     langunit,
+    inifileunit,
     SysUtils;
 
 type
@@ -74,6 +75,8 @@ type
         InitBat     : string;
         BinPath     : string;
         BackupFile  : string;
+        ID          : string;
+        Title       : string;
     end;
 
 function GetVersion(soft: string; display: Boolean = False): string;
@@ -124,26 +127,13 @@ const
     DEBUG_MODE              = 0;
     READ_BYTES              = 2048;
 
-    PRODUCT_TYPE      = 'zentao';
-    MOUSE_LEFT        = 49;
-    MOUSE_PRESSED     = 1;
     MAX_PORT          = 65535;
     HOST              = '127.0.0.1';
     VC_REDIST_2005    = 'vcredist_x86_sp1.exe';
     VC_REDIST_2008    = 'vcredist_x86.exe';
     VC_DETECTOR       = 'vc2008_detector.bat';
-    TMP_BAT           = 'tmp\tmp.bat';
-    BACKUP_FILE       = '\xampp\zentao\bin\php\backup.php';
-    UPDATER_URL       = 'http://www.zentao.net/updater-isLatest-%s-.json';
     VERSION           = '1.2';
     INIT_SUCCESSCODE  = '0';
-    PHP_BAT           = 'tmp\php.bat';
-    PMS_VERSION       = '';
-    LANG_FILE         = 'tmp\lang';
-    OK_FILE           = 'tmp\ok';
-    TMP_DIR           = '\xampp\control\tmp\';
-    PROCESS_EXIT      = '.\tmp\exist';
-    SOFT_VERSIONS     = 'tmp\versions';
 
 var
     os         : OsEnvironment;
@@ -152,8 +142,9 @@ var
     mysql      : MysqlConfig;
     phpmyadmin : PhpmyadminConfig;
     product    : ProductSystemConfig;
-    config     : TJSONConfig;
+    userConfig : TJSONConfig;
     isFirstRun : boolean;
+    config     : TIniFile;
 
 implementation
 
@@ -254,6 +245,8 @@ var
     i           : integer;
 begin
     Result := False;
+    if product.InitBat = '' then Exit;
+
     ExcuteCommand(product.InitBat + ' ' + php.Exe + ' http://' + GetLocalIP + ':' + IntToStr(apache.Port)).Free;
     outputLines := ExcuteShell('echo %ERRORLEVEL%');
     if outputLines.Count > 0 then begin
@@ -568,7 +561,7 @@ begin
                 apache.Port := apache.Port + 1;
             end;
 
-            config.SetValue('apache/port', apache.port);
+            userconfig.SetValue('apache/port', apache.port);
 
             Print(GetLang('message/portChanged', '已更换端口...'));
         end
@@ -591,7 +584,7 @@ begin
                 mysql.Port := mysql.Port + 1;
             end;
 
-            config.SetValue('mysql/port', mysql.port);
+            userconfig.SetValue('mysql/port', mysql.port);
 
             Print(GetLang('message/portChanged', '已更换端口...'));
         end
@@ -670,7 +663,7 @@ var
     text    : string;
     output  : TStringList;
 begin
-    Result := config.GetValue(soft + '/version', '');
+    Result := userconfig.GetValue(soft + '/version', '');
     if Result = '' then
     begin
         if soft = 'php' then
@@ -708,7 +701,7 @@ begin
             output.Free;
         end;
 
-        config.SetValue(soft + '/version', Result)
+        userconfig.SetValue(soft + '/version', Result)
     end;
 
     if display then
@@ -738,7 +731,7 @@ begin
     apache.ServiceName     := 'apachezt';
     apache.Status          := GetServiceStatus(apache.ServiceName);
     apache.Port            := GetConfigPort(apache.ServiceName);
-    apache.SuggestPort     := config.GetValue('apache/suggestPort', 88);
+    apache.SuggestPort     := userconfig.GetValue('apache/suggestPort', 88);
     apache.Version         := GetVersion('apache', True);
 
     // mysql
@@ -750,21 +743,32 @@ begin
     mysql.ServiceName      := 'mysqlzt';
     mysql.Status           := GetServiceStatus(mysql.ServiceName);
     mysql.Port             := GetConfigPort(mysql.ServiceName);
-    mysql.SuggestPort      := config.GetValue('mysql/suggestPort', 3308);
+    mysql.SuggestPort      := userconfig.GetValue('mysql/suggestPort', 3308);
     mysql.Version          := GetVersion('mysql', True);
 
     // phpmyadmin
     phpmyadmin.Readme      := os.Drive + '\xampp\phpmyadmin\README';
     phpmyadmin.Version     := GetVersion('phpmyadmin', True);
 
+
     // product, like zentao or chanzhi
-    product.ConfigFile     := os.Drive + '\xampp\zentao\config\config.php';
-    product.VersionFile    := os.Drive + '\xampp\zentao\VERSION';
+    product.ID             := config.Get('product/id', 'zentao');
+    product.ConfigFile     := os.Drive + '\xampp\' + product.ID + '\' + config.Get('product/config', 'config\config.php');
+    product.VersionFile    := os.Drive + '\xampp\' + product.ID + '\VERSION';
     product.Version        := GetProductVersion;
-    product.UpdaterUrl     := Format(UPDATER_URL, [product.Version]);
-    product.InitBat        := os.Drive + '\xampp\zentao\bin\init.bat';
-    product.BinPath        := os.Drive + '\xampp\zentao\bin\';
-    product.BackupFile     := os.Drive + BACKUP_FILE;
+    product.BinPath        := os.Drive + '\xampp\' + product.ID + '\bin\';
+
+    product.InitBat        := config.Get('product/initbat');
+    if product.InitBat <> '' then begin
+        product.InitBat := os.Drive + '\xampp\' + product.ID + '\' + product.InitBat;
+    end;
+
+    product.BackupFile     := config.Get('product/backfile');
+    if product.BackupFile <> '' then begin
+        product.BackupFile := os.Drive + '\xampp\' + product.ID + '\' + product.BackupFile;
+    end;
+
+    product.Title          := config.Get('product/title');
 
     FixConfigPath;
 
@@ -799,10 +803,10 @@ begin
     ConsoleLn('> GetConfigPort');
     if serviceName = apache.ServiceName then begin
         configFile := apache.configFile;
-        Result := config.GetValue('apache/port', 80);
+        Result := userconfig.GetValue('apache/port', 80);
     end else if serviceName = mysql.ServiceName then begin
         configFile := mysql.configFile;
-        Result := config.GetValue('mysql/port', 3306);
+        Result := userconfig.GetValue('mysql/port', 3306);
     end;
 
     fileLines := TStringList.Create;
@@ -918,12 +922,14 @@ end;
 
 function BackupZentao(): string;
 begin
+    if product.BackupFile = '' then Exit;
+
     PrintLn;
-    PrintLn(GetLang('message/bakuping', '正在备份禅道......'));
+    PrintLn(GetLang('message/bakuping', '正在备份......'));
     ExcuteCommand(php.Exe + ' ' + product.BackupFile);
     Print(GetLang('message/bakupSuccess', '备份成功。'));
 
-    Result := UpperCase(os.Drive) + '\xampp\' + PRODUCT_TYPE + '\backup\' + Formatdatetime('yyyymm', Date);
+    Result := UpperCase(os.Drive) + '\xampp\' + product.ID + '\backup\' + Formatdatetime('yyyymm', Date);
 end;
 
 { Print message on main form }
@@ -953,12 +959,15 @@ function LoadConfig(): boolean;
 var
     lastLoginTime: TDateTime;
 begin
-    Result := False;
-    config   := TJSONConfig.Create(nil);
-    try
-        config.FileName := CONFIG_USER_FILE;
+    { Load system config }
+    config := TIniFile.Create(CONFIG_FILE);
 
-        lastLoginTime := config.GetValue('/LastRunTime', 0);
+    Result := False;
+    userconfig   := TJSONConfig.Create(nil);
+    try
+        userconfig.FileName := CONFIG_USER_FILE;
+
+        lastLoginTime := userconfig.GetValue('/LastRunTime', 0);
 
         if lastLoginTime > 0 then
         begin
@@ -975,18 +984,19 @@ begin
     ConsoleLn('SaveConfig');
     Result := False;
     try
-        config.SetValue('/LastRunTime', Now);
-        config.SetValue('/language', language);
-        config.Flush;
+        userconfig.SetValue('/LastRunTime', Now);
+        userconfig.SetValue('/language', language);
+        userconfig.Flush;
         Result := True;
     finally
-        if destroy then config.Free;
+        if destroy then userconfig.Free;
     end;
 end;
 
 procedure ExitZentao();
 begin
     SaveConfig(True);
+    Config.Free;
 end;
 
 { Display debug info into console window. }
@@ -1033,7 +1043,7 @@ begin
     end
     else
     begin
-        Result := Format(formatStr, [1, 2, 0, 0]);
+        Result := Format(formatStr, [1, 2, 2, 0]);
     end;
 end;
 

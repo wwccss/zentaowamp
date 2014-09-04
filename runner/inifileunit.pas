@@ -71,7 +71,7 @@ begin
             begin
                 line := Trim(fileLines[i]);
 
-                if Pos(';', line) = 1 then continue;
+                if (Pos(';', line) = 1) or (Pos('#', line) = 1) then continue;
 
                 if sectionRegex.Exec(line) then begin
                     section := sectionRegex.Match[1];

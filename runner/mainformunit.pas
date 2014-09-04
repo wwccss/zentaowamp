@@ -88,6 +88,8 @@ end;
 
 procedure TMainForm.MenuItemInitBatClick(Sender: TObject);
 begin
+    if product.InitBat = '' then Exit;
+
     if InitBat then begin
         if mrYes = MessageDlg(Format(GetLang('message/initBatSuccessfully', '成功生成批处理文件，是否到%s目录下查看？'), [product.BinPath]), mtConfirmation, [mbYes, mbNo], 0) then begin
             ExcuteCommand('explorer ' + product.BinPath, False, False);
@@ -102,7 +104,7 @@ begin
     if (apache.Status = 'running') and (mysql.Status = 'running') then begin
         OpenUrl('http://' + HOST + ':' + IntToStr(apache.port) + '/phpmyadmin');
     end else begin
-        ShowMessage(GetLang('message/stopSuccessfully', '禅道已经停止，点击“启动禅道”按钮来启动禅道。'));
+        ShowMessage(GetLang('message/stopSuccessfully', '服务已经停止，点击“启动”按钮来启动服务。'));
     end;
 end;
 
@@ -110,6 +112,11 @@ procedure TMainForm.MenuItemBackupClick(Sender: TObject);
 var
     deskDir: string;
 begin
+    if product.BackupFile = '' then begin
+        ShowMessage(GetLang('message/nobackupfile', '备份功能此版本不可用'));
+        Exit;
+    end;
+
     if mysql.Status <> 'running' then begin
         ShowMessage(GetLang('message/mysqlNotRunning', '未启动mysql，只备份文件数据。'));
     end;
@@ -152,12 +159,12 @@ procedure TMainForm.FormCreate(Sender: TObject);
 begin
     FirstShow := True;
     LoadConfig;
-    ChangeLanguage(config.GetValue('/language', 'zh_cn'));
+    SetLanguage;
 
-    PrintLn(Format(GetLang('message/zentaoControl', '禅道控制面板 %s'), [GetBuildVersion]));
+    PrintLn(product.Title + Format(GetLang('message/zentaoControl', '控制面板 %s'), [GetBuildVersion]));
 
     if Pos(':\xampp\', LowerCase(Application.ExeName)) <> 2 then begin
-        ShowMessage(GetLang('UI/wrongPath', '请将禅道一键安装包解压到根目录, 例如：D:\xampp'));
+        ShowMessage(GetLang('UI/wrongPath', '请将一键安装包解压到根目录, 例如：D:\xampp'));
         Close;
     end;
 
@@ -168,6 +175,10 @@ begin
     end;
 
     InitZentao();
+
+    MenuItemInitBat.Enabled := product.InitBat <> '';
+    MenuItemBackup.Enabled := product.BackupFile <> '';
+    MenuItemFlowChart.Visible := product.ID = 'zentao';
 
     if DEBUG_MODE > 0 then begin
         MenuItemRunCommands.Visible := True;
@@ -186,6 +197,7 @@ procedure TMainForm.FormShow(Sender: TObject);
 begin
     if FirstShow then begin
         FirstShow := False;
+        ChangeLanguage(userconfig.GetValue('/language', 'zh_cn'));
     end;
 end;
 
@@ -207,7 +219,7 @@ end;
 
 procedure TMainForm.MenuItemOfficialHelpClick(Sender: TObject);
 begin
-    OpenUrl('http://www.zentao.net/book/zentaopmshelp.html');
+    OpenUrl(config.Get('product/helpdocument', 'http://www.cnezsoft.com/'));
 end;
 
 procedure TMainForm.MenuItemFlowChartClick(Sender: TObject);
@@ -217,12 +229,12 @@ end;
 
 procedure TMainForm.MenuItemFaqClick(Sender: TObject);
 begin
-    OpenUrl('http://www.zentao.net/ask-faq.html');
+    OpenUrl(config.Get('product/feedback', 'http://www.cnezsoft.com/'));
 end;
 
 procedure TMainForm.MenuItemForumClick(Sender: TObject);
 begin
-    OpenUrl('http://www.zentao.net/forum');
+    OpenUrl(config.Get('product/forum', 'http://www.cnezsoft.com/'));
 end;
 
 procedure TMainForm.MenuItemViewServiceClick(Sender: TObject);
@@ -240,7 +252,7 @@ begin
     ButtonStop.Enabled := False;
     ButtonStop.Caption := GetLang('UI/stopped', '已停止');
     ButtonRun.Enabled := True;
-    ButtonRun.Caption := GetLang('UI/startZentao', '启动禅道');
+    ButtonRun.Caption := GetLang('UI/startZentao', '启动') + product.Title;
 end;
 
 procedure TMainForm.ButtonStopClick(Sender: TObject);
@@ -253,7 +265,7 @@ begin
         ButtonStop.Enabled := False;
         ButtonStop.Caption := GetLang('UI/stopped', '已停止');
         ButtonRun.Enabled := True;
-        ButtonRun.Caption := GetLang('UI/startZentao', '启动禅道');
+        ButtonRun.Caption := GetLang('UI/startZentao', '启动') + product.Title;
     end else begin
         ButtonVisit.Enabled := True;
         ButtonStop.Enabled := True;
@@ -280,7 +292,7 @@ begin
         ButtonStop.Enabled := False;
         ButtonStop.Caption := GetLang('UI/stopped', '已停止');
         ButtonRun.Enabled := True;
-        ButtonRun.Caption := GetLang('UI/startZentao', '启动禅道');
+        ButtonRun.Caption := GetLang('UI/startZentao', '启动') + product.Title;
     end;
     Cursor := crDefault;
 end;
@@ -292,7 +304,7 @@ end;
 
 procedure TMainForm.ButtonZtOfficalClick(Sender: TObject);
 begin
-    OpenUrl('http://www.zentao.net/');
+    OpenUrl(config.Get('product/official', 'http://www.cnezsoft.com/'));
 end;
 
 procedure TMainForm.ChangeLangMenuItemClick(Sender: TObject);
@@ -308,7 +320,7 @@ procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
     ExitZentao;
     if not ButtonRun.Enabled then begin
-        ShowMessage(GetLang('message/exitAppTip', '退出后禅道服务会在后台继续运行，要停止禅道服务请重新打开此程序进行操作。'));
+        ShowMessage(GetLang('message/exitAppTip', '退出后服务会在后台继续运行，要停止服务请重新打开此程序进行操作。'));
     end;
 end;
 
@@ -323,19 +335,21 @@ procedure TMainForm.ChangeLanguage(langSetting: string);
 begin
     SetLanguage(langSetting);
 
+    Caption := product.Title + GetLang('ui/title', '集成运行环境') + ' ' + GetBuildVersion;
+
     MenuItemService.Caption := GetLang('menu/service', '服务');
     MenuItemViewService.Caption := GetLang('menu/viewService', '查看服务');
     MenuItemUninstallService.Caption := GetLang('menu/uninstallService', '卸载服务');
     MenuItemMore.Caption := GetLang('menu/more', '更多');
     MenuItemInitBat.Caption := GetLang('menu/initBat', '生成脚本');
     MenuItemDatabase.Caption := GetLang('menu/database', '数 据 库');
-    MenuItemBackup.Caption := GetLang('menu/backup', '备份禅道');
+    MenuItemBackup.Caption := GetLang('menu/backup', '备份') + product.Title;
     MenuItemLang.Caption := GetLang('menu/lang', '语言');
     MenuItemZhcn.Caption := GetLang('menu/zhcn', '中文简体');
     MenuItemZhtw.Caption := GetLang('menu/zhtw', '中文繁体');
     MenuItemEn.Caption := GetLang('menu/en', 'English');
     MenuItemHelp.Caption := GetLang('menu/help', '帮助');
-    MenuItemOfficialSite.Caption := GetLang('menu/officialSite', '禅道官网');
+    MenuItemOfficialSite.Caption := product.Title + GetLang('menu/officialSite', '官网');
     MenuItemOfficialHelp.Caption := GetLang('menu/officialHelp', '帮助文档');
     MenuItemFlowChart.Caption := GetLang('menu/flowChart', '流 程 图');
     MenuItemFaq.Caption := GetLang('menu/faq', '常见问题');
@@ -343,8 +357,8 @@ begin
     MenuItemExit.Caption := GetLang('menu/exit', '退出');
     MenuItemRunCommands.Caption := GetLang('menu/runCommands', '执行命令');
 
-    ButtonVisit.Caption := GetLang('UI/visitZentao', '访问禅道');
-    ButtonZtOffical.Caption := GetLang('UI/zentaoOfficial', '禅道官网');
+    ButtonVisit.Caption := GetLang('UI/visitZentao', '访问') + product.Title;
+    ButtonZtOffical.Caption :=  product.Title + GetLang('UI/zentaoOfficial', '官网');
     if ButtonStop.Enabled then begin
         ButtonStop.Caption := GetLang('UI/stop', ButtonStop.Caption);
     end else begin
