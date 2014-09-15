@@ -730,8 +730,8 @@ begin
     apache.ConfigFile      := os.Drive + '\xampp\apache\conf\httpd.conf';
     apache.ServiceName     := 'apachezt';
     apache.Status          := GetServiceStatus(apache.ServiceName);
-    apache.Port            := GetConfigPort(apache.ServiceName);
-    apache.SuggestPort     := userconfig.GetValue('apache/suggestPort', 88);
+    apache.Port            := userconfig.GetValue('apache/port', 80);
+    apache.SuggestPort     := GetConfigPort(apache.ServiceName);
     apache.Version         := GetVersion('apache', True);
 
     // mysql
@@ -742,8 +742,8 @@ begin
     mysql.PhpmyadminConfig := os.Drive + '\xampp\phpmyadmin\config.inc.php';
     mysql.ServiceName      := 'mysqlzt';
     mysql.Status           := GetServiceStatus(mysql.ServiceName);
-    mysql.Port             := GetConfigPort(mysql.ServiceName);
-    mysql.SuggestPort      := userconfig.GetValue('mysql/suggestPort', 3308);
+    mysql.Port             := userconfig.GetValue('mysql/port', 3306);
+    mysql.SuggestPort      := GetConfigPort(mysql.ServiceName);
     mysql.Version          := GetVersion('mysql', True);
 
     // phpmyadmin
@@ -986,6 +986,8 @@ begin
     try
         userconfig.SetValue('/LastRunTime', Now);
         userconfig.SetValue('/language', language);
+        userconfig.SetValue('apache/port', apache.port);
+        userconfig.SetValue('mysql/port', mysql.port);
         userconfig.Flush;
         Result := True;
     finally

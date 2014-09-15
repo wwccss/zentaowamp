@@ -9,7 +9,7 @@ uses
     StdCtrls,
     LCLIntf, ExtCtrls,
     langunit,
-    zentaounit, process, ServiceManager;
+    zentaounit, process, ServiceManager, ConfigPortDialogUnit;
 
 type
 
@@ -22,6 +22,8 @@ type
         ButtonZtOffical : TButton;
         MainMenu        : TMainMenu;
         MemoMessager    : TMemo;
+        MenuItem1: TMenuItem;
+        MenuItem2: TMenuItem;
         MenuItemService       : TMenuItem;
         MenuItemZhcn: TMenuItem;
         MenuItem11      : TMenuItem;
@@ -54,6 +56,7 @@ type
         procedure FormShow(Sender: TObject);
         procedure FormWindowStateChange(Sender: TObject);
         procedure MenuItem10Click(Sender: TObject);
+        procedure MenuItem2Click(Sender: TObject);
         procedure MenuItemOfficialHelpClick(Sender: TObject);
         procedure MenuItemFlowChartClick(Sender: TObject);
         procedure MenuItemFaqClick(Sender: TObject);
@@ -217,6 +220,11 @@ begin
     CheckProductVersion;
 end;
 
+procedure TMainForm.MenuItem2Click(Sender: TObject);
+begin
+    ConfigPortDialog.ShowModal();
+end;
+
 procedure TMainForm.MenuItemOfficialHelpClick(Sender: TObject);
 begin
     OpenUrl(config.Get('product/helpdocument', 'http://www.cnezsoft.com/'));
@@ -338,6 +346,7 @@ begin
     Caption := product.Title + GetLang('ui/title', '集成运行环境') + ' ' + GetBuildVersion;
 
     MenuItemService.Caption := GetLang('menu/service', '服务');
+    MenuItem2.Caption := GetLang('menu/configPort', '配置默认端口');
     MenuItemViewService.Caption := GetLang('menu/viewService', '查看服务');
     MenuItemUninstallService.Caption := GetLang('menu/uninstallService', '卸载服务');
     MenuItemMore.Caption := GetLang('menu/more', '更多');

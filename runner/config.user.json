@@ -1,0 +1,1 @@
+{ "php" : { "version" : "PHP 5.4.19 (cli) (built: Aug 21 2013 01:12:03) " }, "apache" : { "version" : "Server version: Apache\/2.4.4 (Win32)", "port" : 82 }, "mysql" : { "version" : "F:\\xampp\\mysql\\bin\\mysql.exe  Ver 14.14 Distrib 5.5.32, for Win32 (x86)" }, "phpmyadmin" : { "version" : "Version 4.0.8" }, "LastRunTime" : 4.18975787204282E+004, "language" : "zh_cn" }

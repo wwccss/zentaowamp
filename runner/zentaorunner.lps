@@ -4,17 +4,15 @@
     <PathDelim Value="\"/>
     <Version Value="9"/>
     <BuildModes Active="Default"/>
-    <Units Count="16">
+    <Units Count="17">
       <Unit0>
         <Filename Value="zentaorunner.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="zentaorunner"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="26" Y="10"/>
-        <UsageCount Value="103"/>
-        <Loaded Value="True"/>
+        <CursorPos X="40" Y="5"/>
+        <UsageCount Value="110"/>
       </Unit0>
       <Unit1>
         <Filename Value="mainformunit.pas"/>
@@ -26,9 +24,9 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="320"/>
-        <CursorPos X="91" Y="338"/>
-        <UsageCount Value="103"/>
+        <TopLine Value="1"/>
+        <CursorPos X="13" Y="11"/>
+        <UsageCount Value="110"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
@@ -38,244 +36,253 @@
         <UnitName Value="zentaounit"/>
         <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1029"/>
-        <CursorPos X="25" Y="1038"/>
-        <UsageCount Value="102"/>
+        <TopLine Value="728"/>
+        <CursorPos X="32" Y="735"/>
+        <UsageCount Value="109"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
         <Filename Value="langunit.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="langunit"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="30" Y="73"/>
-        <UsageCount Value="36"/>
+        <UsageCount Value="43"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
         <Filename Value="inifileunit.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="inifileunit"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="42"/>
         <CursorPos X="22" Y="48"/>
-        <UsageCount Value="26"/>
+        <UsageCount Value="33"/>
         <Loaded Value="True"/>
       </Unit4>
       <Unit5>
-        <Filename Value="D:\Applications\lazarus\lcl\forms.pp"/>
-        <UnitName Value="Forms"/>
+        <Filename Value="configportdialogunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ConfigPortDialog"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="ConfigPortDialogUnit"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="15"/>
-        <CursorPos X="11" Y="21"/>
-        <UsageCount Value="18"/>
+        <TopLine Value="1"/>
+        <CursorPos X="50" Y="6"/>
+        <UsageCount Value="23"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit5>
       <Unit6>
+        <Filename Value="D:\Applications\lazarus\lcl\forms.pp"/>
+        <UnitName Value="Forms"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="594"/>
+        <CursorPos X="23" Y="608"/>
+        <UsageCount Value="19"/>
+        <Loaded Value="True"/>
+      </Unit6>
+      <Unit7>
         <Filename Value="D:\Applications\lazarus\fpc\2.6.4\source\packages\fcl-base\src\custapp.pp"/>
         <UnitName Value="CustApp"/>
         <WindowIndex Value="0"/>
         <TopLine Value="68"/>
         <CursorPos X="22" Y="81"/>
         <UsageCount Value="18"/>
-      </Unit6>
-      <Unit7>
+      </Unit7>
+      <Unit8>
         <Filename Value="D:\Applications\lazarus\fpc\2.6.4\source\packages\fcl-process\src\process.pp"/>
         <UnitName Value="process"/>
         <WindowIndex Value="0"/>
         <TopLine Value="163"/>
         <CursorPos X="43" Y="179"/>
         <UsageCount Value="15"/>
-      </Unit7>
-      <Unit8>
+      </Unit8>
+      <Unit9>
         <Filename Value="D:\Applications\lazarus\fpc\2.6.4\source\rtl\win\sockets.pp"/>
         <UnitName Value="Sockets"/>
         <WindowIndex Value="0"/>
         <TopLine Value="131"/>
         <CursorPos X="10" Y="145"/>
         <UsageCount Value="6"/>
-      </Unit8>
-      <Unit9>
+      </Unit9>
+      <Unit10>
         <Filename Value="D:\Applications\lazarus\fpc\2.6.4\source\rtl\inc\socketsh.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="147"/>
         <CursorPos X="11" Y="161"/>
         <UsageCount Value="6"/>
-      </Unit9>
-      <Unit10>
+      </Unit10>
+      <Unit11>
         <Filename Value="D:\Applications\lazarus\fpc\2.6.4\source\rtl\inc\ctypes.pp"/>
         <UnitName Value="ctypes"/>
         <WindowIndex Value="0"/>
         <TopLine Value="35"/>
         <CursorPos X="30" Y="49"/>
         <UsageCount Value="11"/>
-      </Unit10>
-      <Unit11>
+      </Unit11>
+      <Unit12>
         <Filename Value="D:\Applications\lazarus\fpc\2.6.4\source\packages\regexpr\src\regexpr.pas"/>
         <UnitName Value="RegExpr"/>
         <WindowIndex Value="0"/>
         <TopLine Value="490"/>
         <CursorPos X="31" Y="497"/>
         <UsageCount Value="17"/>
-      </Unit11>
-      <Unit12>
+      </Unit12>
+      <Unit13>
         <Filename Value="D:\Applications\lazarus\lcl\include\winapih.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="191"/>
         <CursorPos X="10" Y="196"/>
         <UsageCount Value="13"/>
-      </Unit12>
-      <Unit13>
+      </Unit13>
+      <Unit14>
         <Filename Value="D:\Applications\lazarus\lcl\dialogs.pp"/>
         <UnitName Value="Dialogs"/>
         <WindowIndex Value="0"/>
         <TopLine Value="701"/>
         <CursorPos X="37" Y="715"/>
         <UsageCount Value="20"/>
-      </Unit13>
-      <Unit14>
+      </Unit14>
+      <Unit15>
         <Filename Value="D:\Applications\lazarus\fpc\2.6.4\source\rtl\objpas\sysutils\datih.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="128"/>
         <CursorPos X="10" Y="142"/>
         <UsageCount Value="11"/>
-      </Unit14>
-      <Unit15>
+      </Unit15>
+      <Unit16>
         <Filename Value="D:\Applications\lazarus\fpc\2.6.4\source\rtl\objpas\sysutils\sysstrh.inc"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="110"/>
-        <CursorPos X="1" Y="124"/>
-        <UsageCount Value="16"/>
+        <CursorPos X="24" Y="114"/>
+        <UsageCount Value="19"/>
         <Loaded Value="True"/>
-      </Unit15>
+      </Unit16>
     </Units>
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="28" HistoryIndex="27">
       <Position1>
-        <Filename Value="zentaounit.pas"/>
-        <Caret Line="98" Column="38" TopLine="82"/>
+        <Filename Value="inifileunit.pas"/>
+        <Caret Line="14" Column="12" TopLine="10"/>
       </Position1>
       <Position2>
-        <Filename Value="zentaounit.pas"/>
-        <Caret Line="8" Column="44" TopLine="1"/>
+        <Filename Value="inifileunit.pas"/>
+        <Caret Line="37" Column="21" TopLine="24"/>
       </Position2>
       <Position3>
-        <Filename Value="mainformunit.pas"/>
-        <Caret Line="306" Column="36" TopLine="79"/>
+        <Filename Value="inifileunit.pas"/>
+        <Caret Line="52" Column="44" TopLine="38"/>
       </Position3>
       <Position4>
-        <Filename Value="zentaounit.pas"/>
-        <Caret Line="19" Column="40" TopLine="8"/>
+        <Filename Value="inifileunit.pas"/>
+        <Caret Line="41" Column="43" TopLine="24"/>
       </Position4>
       <Position5>
-        <Filename Value="zentaounit.pas"/>
-        <Caret Line="341" Column="110" TopLine="328"/>
+        <Filename Value="inifileunit.pas"/>
+        <Caret Line="56" Column="37" TopLine="42"/>
       </Position5>
       <Position6>
-        <Filename Value="zentaounit.pas"/>
-        <Caret Line="351" Column="114" TopLine="333"/>
+        <Filename Value="mainformunit.pas"/>
+        <Caret Line="13" Column="20" TopLine="1"/>
       </Position6>
       <Position7>
         <Filename Value="zentaounit.pas"/>
-        <Caret Line="381" Column="121" TopLine="368"/>
+        <Caret Line="173" Column="18" TopLine="167"/>
       </Position7>
       <Position8>
-        <Filename Value="langunit.pas"/>
-        <Caret Line="31" Column="32" TopLine="31"/>
+        <Filename Value="zentaounit.pas"/>
+        <Caret Line="756" Column="49" TopLine="743"/>
       </Position8>
       <Position9>
         <Filename Value="zentaounit.pas"/>
-        <Caret Line="418" Column="95" TopLine="405"/>
+        <Caret Line="800" Column="23" TopLine="783"/>
       </Position9>
       <Position10>
         <Filename Value="zentaounit.pas"/>
-        <Caret Line="472" Column="97" TopLine="458"/>
+        <Caret Line="955" Column="9" TopLine="941"/>
       </Position10>
       <Position11>
-        <Filename Value="zentaorunner.lpr"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="zentaounit.pas"/>
+        <Caret Line="959" Column="30" TopLine="945"/>
       </Position11>
       <Position12>
-        <Filename Value="zentaorunner.lpr"/>
-        <Caret Line="20" Column="1" TopLine="1"/>
+        <Filename Value="zentaounit.pas"/>
+        <Caret Line="979" Column="28" TopLine="962"/>
       </Position12>
       <Position13>
-        <Filename Value="inifileunit.pas"/>
-        <Caret Line="14" Column="12" TopLine="10"/>
+        <Filename Value="zentaounit.pas"/>
+        <Caret Line="977" Column="16" TopLine="963"/>
       </Position13>
       <Position14>
-        <Filename Value="inifileunit.pas"/>
-        <Caret Line="37" Column="21" TopLine="24"/>
+        <Filename Value="mainformunit.pas"/>
+        <Caret Line="149" Column="17" TopLine="146"/>
       </Position14>
       <Position15>
-        <Filename Value="inifileunit.pas"/>
-        <Caret Line="52" Column="44" TopLine="38"/>
+        <Filename Value="mainformunit.pas"/>
+        <Caret Line="113" Column="5" TopLine="109"/>
       </Position15>
       <Position16>
-        <Filename Value="inifileunit.pas"/>
-        <Caret Line="41" Column="43" TopLine="24"/>
+        <Filename Value="mainformunit.pas"/>
+        <Caret Line="91" Column="15" TopLine="86"/>
       </Position16>
       <Position17>
-        <Filename Value="inifileunit.pas"/>
-        <Caret Line="56" Column="37" TopLine="42"/>
+        <Filename Value="mainformunit.pas"/>
+        <Caret Line="113" Column="5" TopLine="106"/>
       </Position17>
       <Position18>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="13" Column="20" TopLine="1"/>
+        <Caret Line="330" Column="23" TopLine="164"/>
       </Position18>
       <Position19>
         <Filename Value="zentaounit.pas"/>
-        <Caret Line="173" Column="18" TopLine="167"/>
+        <Caret Line="557" Column="28" TopLine="557"/>
       </Position19>
       <Position20>
         <Filename Value="zentaounit.pas"/>
-        <Caret Line="756" Column="49" TopLine="743"/>
+        <Caret Line="747" Column="48" TopLine="723"/>
       </Position20>
       <Position21>
         <Filename Value="zentaounit.pas"/>
-        <Caret Line="800" Column="23" TopLine="783"/>
+        <Caret Line="736" Column="49" TopLine="722"/>
       </Position21>
       <Position22>
-        <Filename Value="zentaounit.pas"/>
-        <Caret Line="955" Column="9" TopLine="941"/>
+        <Filename Value="mainformunit.pas"/>
+        <Caret Line="2" Column="36" TopLine="1"/>
       </Position22>
       <Position23>
-        <Filename Value="zentaounit.pas"/>
-        <Caret Line="959" Column="30" TopLine="945"/>
+        <Filename Value="mainformunit.pas"/>
+        <Caret Line="225" Column="26" TopLine="211"/>
       </Position23>
       <Position24>
-        <Filename Value="zentaounit.pas"/>
-        <Caret Line="979" Column="28" TopLine="962"/>
+        <Filename Value="configportdialogunit.pas"/>
+        <Caret Line="13" Column="27" TopLine="9"/>
       </Position24>
       <Position25>
-        <Filename Value="zentaounit.pas"/>
-        <Caret Line="977" Column="16" TopLine="963"/>
+        <Filename Value="configportdialogunit.pas"/>
+        <Caret Line="43" Column="18" TopLine="17"/>
       </Position25>
       <Position26>
-        <Filename Value="mainformunit.pas"/>
-        <Caret Line="149" Column="17" TopLine="146"/>
+        <Filename Value="configportdialogunit.pas"/>
+        <Caret Line="32" Column="78" TopLine="19"/>
       </Position26>
       <Position27>
-        <Filename Value="mainformunit.pas"/>
-        <Caret Line="113" Column="5" TopLine="109"/>
+        <Filename Value="configportdialogunit.pas"/>
+        <Caret Line="37" Column="37" TopLine="29"/>
       </Position27>
       <Position28>
-        <Filename Value="mainformunit.pas"/>
-        <Caret Line="91" Column="15" TopLine="86"/>
+        <Filename Value="configportdialogunit.pas"/>
+        <Caret Line="9" Column="47" TopLine="1"/>
       </Position28>
-      <Position29>
-        <Filename Value="mainformunit.pas"/>
-        <Caret Line="113" Column="5" TopLine="106"/>
-      </Position29>
-      <Position30>
-        <Filename Value="mainformunit.pas"/>
-        <Caret Line="180" Column="37" TopLine="343"/>
-      </Position30>
     </JumpHistory>
   </ProjectSession>
   <EditorMacros Count="0"/>
