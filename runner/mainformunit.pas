@@ -162,7 +162,7 @@ procedure TMainForm.FormCreate(Sender: TObject);
 begin
     FirstShow := True;
     LoadConfig;
-    SetLanguage;
+    SetLanguage('zh_cn', false, os.Location);
 
     PrintLn(product.Title + Format(GetLang('message/zentaoControl', '控制面板 %s'), [GetBuildVersion]));
 

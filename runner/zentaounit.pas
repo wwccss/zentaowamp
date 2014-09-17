@@ -24,9 +24,12 @@ uses
 
 type
     OsEnvironment = record
-        Exe      : string;
-        Drive    : string;
-        Location : string;
+        Exe            : string;
+        Drive          : string;
+        Location       : string;
+        ConfigFile     : string;
+        UserConfigFile : string;
+        IsInXAMPP      : boolean;
     end;
 
     PhpConfig = record
@@ -124,6 +127,7 @@ const
     ONE_DAY_SECONDS         = 24 * 60 * 60;
     CONFIG_USER_FILE        = 'config.user.json';
     CONFIG_FILE             = 'config.ini';
+    APP_DIR                 = 'runner';
     DEBUG_MODE              = 0;
     READ_BYTES              = 2048;
 
@@ -156,7 +160,7 @@ var
     i           : integer;
 begin
     Result := False;
-    outputLines := ExcuteCommand(VC_DETECTOR);
+    outputLines := ExcuteCommand(os.Location + VC_DETECTOR);
     for i := 0 to (outputLines.Count - 1) do
     begin
         if Pos('INSTALLED', outputLines[i]) > 0 then begin
@@ -168,7 +172,7 @@ end;
 
 procedure InstallVC2008();
 begin
-    ExcuteCommand(VC_REDIST_2008, False, False);
+    ExcuteCommand(os.Location + VC_REDIST_2008, False, False);
 end;
 
 { Fix config path }
@@ -714,11 +718,6 @@ end;
 procedure InitZentao();
 begin
     isFirstRun := True;
-
-    // os
-    os.Exe                 := Application.ExeName;
-    os.Location            := Application.Location;
-    os.Drive               := Copy(os.Location, 0, 2);
     
     // php
     php.Exe                := os.Drive + '\xampp\php\php.exe';
@@ -749,7 +748,6 @@ begin
     // phpmyadmin
     phpmyadmin.Readme      := os.Drive + '\xampp\phpmyadmin\README';
     phpmyadmin.Version     := GetVersion('phpmyadmin', True);
-
 
     // product, like zentao or chanzhi
     product.ID             := config.Get('product/id', 'zentao');
@@ -959,13 +957,24 @@ function LoadConfig(): boolean;
 var
     lastLoginTime: TDateTime;
 begin
+    // os
+    os.Exe                                     := Application.ExeName;
+    os.Location                                := Application.Location;
+    os.Drive                                   := Copy(os.Location, 0, 2);//F:\xampp\runner\
+    os.IsInXAMPP                               := (os.Location = (os.Drive + '\xampp\'));
+    os.ConfigFile                              := CONFIG_FILE;
+    if os.IsInXAMPP then os.ConfigFile     := APP_DIR + '\' + os.ConfigFile;
+    os.UserConfigFile                          := CONFIG_USER_FILE;
+    if os.IsInXAMPP then os.UserConfigFile := APP_DIR + '\' + os.UserConfigFile;
+    if os.IsInXAMPP then os.Location       := os.Location + '\runner\';
+
     { Load system config }
-    config := TIniFile.Create(CONFIG_FILE);
+    config := TIniFile.Create(os.ConfigFile);
 
     Result := False;
     userconfig   := TJSONConfig.Create(nil);
     try
-        userconfig.FileName := CONFIG_USER_FILE;
+        userconfig.FileName := os.UserConfigFile;
 
         lastLoginTime := userconfig.GetValue('/LastRunTime', 0);
 

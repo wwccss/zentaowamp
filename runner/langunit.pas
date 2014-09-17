@@ -7,8 +7,8 @@ interface
 uses
     Classes, SysUtils, regexpr;
 
-procedure SetLanguage(langSetting: string = 'zh_cn'; force: Boolean = False);
-procedure LoadLang(langSetting: string = 'zh_cn');
+procedure SetLanguage(langSetting: string = 'zh_cn'; force: Boolean = False; dir: string = '');
+procedure LoadLang(langSetting: string = 'zh_cn'; dir: string = '');
 function GetLang(key: string; defaultValue: string = ''): string;overload;
 function GetLang(section: string; key: string; defaultValue: string): string;overload;
 
@@ -16,20 +16,22 @@ const
     LANG_DIR = 'languages';
 
 var
-    lang: TStringList;
-    language: string;
-    langName: string;
+    lang     : TStringList;
+    language : string;
+    langName : string;
+    langDir  : string;
 
 implementation
 
-procedure SetLanguage(langSetting: string = 'zh_cn'; force: Boolean = False);
+procedure SetLanguage(langSetting: string = 'zh_cn'; force: Boolean = False; dir: string = '');
 begin
+    if dir <> '' then langDir := dir + LANG_DIR;
     if (langSetting <> language) or force then begin
         LoadLang(langSetting);
     end;
 end;
 
-procedure LoadLang(langSetting: string = 'zh_cn');
+procedure LoadLang(langSetting: string = 'zh_cn'; dir: string = '');
 var
     langFile                     : TStringList;
     i                            : integer;
@@ -45,7 +47,7 @@ begin
 
     langFile := TStringList.Create;
     try
-        langFile.LoadFromFile(LANG_DIR + '/' + language + '.ini');
+        langFile.LoadFromFile(langDir + '/' + language + '.ini');
         if langFile.Count > 0 then begin
             lang.Clear;
             sectionRegex              := TRegExpr.Create;

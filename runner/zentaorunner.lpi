@@ -109,6 +109,7 @@
         <Filename Value="configportdialogunit.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ConfigPortDialog"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="ConfigPortDialogUnit"/>
       </Unit5>
