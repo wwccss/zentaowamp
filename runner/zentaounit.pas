@@ -966,7 +966,7 @@ begin
     if os.IsInXAMPP then os.ConfigFile     := APP_DIR + '\' + os.ConfigFile;
     os.UserConfigFile                          := CONFIG_USER_FILE;
     if os.IsInXAMPP then os.UserConfigFile := APP_DIR + '\' + os.UserConfigFile;
-    if os.IsInXAMPP then os.Location       := os.Location + '\runner\';
+    if os.IsInXAMPP then os.Location       := os.Location + 'runner\';
 
     { Load system config }
     config := TIniFile.Create(os.ConfigFile);
