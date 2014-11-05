@@ -24,6 +24,7 @@ type
         MemoMessager    : TMemo;
         MenuItem1: TMenuItem;
         MenuItem2: TMenuItem;
+        MenuItemXampp: TMenuItem;
         MenuItemService       : TMenuItem;
         MenuItemZhcn: TMenuItem;
         MenuItem11      : TMenuItem;
@@ -68,6 +69,7 @@ type
         procedure MenuItemDatabaseClick(Sender: TObject);
         procedure MenuItemBackupClick(Sender: TObject);
         procedure MenuItemRunCommandsClick(Sender: TObject);
+        procedure MenuItemXamppClick(Sender: TObject);
         procedure TrayIcon1Click(Sender: TObject);
     private
         { private declarations }
@@ -147,6 +149,11 @@ begin
         outputLines.Free;
         PrintLn('* ' + GetLang('message/commandComplete', '命令执行完毕。'));
     end;
+end;
+
+procedure TMainForm.MenuItemXamppClick(Sender: TObject);
+begin
+    OpenUrl('http://www.apachefriends.org/en/xampp.html');
 end;
 
 procedure TMainForm.TrayIcon1Click(Sender: TObject);
@@ -307,7 +314,7 @@ end;
 
 procedure TMainForm.ButtonVisitClick(Sender: TObject);
 begin
-    OpenUrl('http://' + HOST + ':' + IntToStr(apache.port));
+    OpenUrl('http://' + HOST + ':' + IntToStr(apache.port) + '/' + config.Get('product/main', ''));
 end;
 
 procedure TMainForm.ButtonZtOfficalClick(Sender: TObject);
