@@ -265,7 +265,7 @@ begin
     Result := False;
     if product.InitBat = '' then Exit;
 
-    ExcuteCommand(product.InitBat + ' ' + php.Exe + ' http://' + GetLocalIP + ':' + IntToStr(apache.Port)).Free;
+    ExcuteCommand(product.InitBat + ' ' + php.Exe + ' http://' + GetLocalIP + ':' + IntToStr(apache.Port) + '/' + product.id + '/').Free;
     outputLines := ExcuteShell('echo %ERRORLEVEL%');
     if outputLines.Count > 0 then begin
         if outputLines[0] = INIT_SUCCESSCODE then begin
