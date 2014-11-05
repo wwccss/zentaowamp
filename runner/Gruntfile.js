@@ -11,7 +11,7 @@ module.exports = function(grunt)
             {
                 expand: true,
                 src: 'zentaorunner.exe',
-                dest: 'F:\\xampp\\runner'
+                dest: 'D:\\xampp'
             }
         },
 
@@ -33,7 +33,7 @@ module.exports = function(grunt)
         {
             runexe:
             {
-                command: 'F:\\xampp\\runner\\zentaorunner.exe',
+                command: 'D:\\xampp\\zentaorunner.exe',
                 stdout: false,
                 stderr: false
             }
