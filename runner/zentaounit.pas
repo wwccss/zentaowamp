@@ -53,7 +53,7 @@ type
         Exe               : string;
         ConfigFile        : string;
         OldConfigFile     : string;
-        MyConfig          : string;
+        // MyConfig          : string;
         StoryConfig       : string;
         TaskConfig        : string;
         TestConfig        : string;
@@ -71,15 +71,21 @@ type
     end;
 
     ProductSystemConfig = record
-        Version     : string;
-        ConfigFile  : string;
-        VersionFile : string;
-        UpdaterUrl  : string;
-        InitBat     : string;
-        BinPath     : string;
-        BackupFile  : string;
-        ID          : string;
-        Title       : string;
+        Version        : string;
+        ConfigFile     : string;
+        MyConfig       : string;
+        VersionFile    : string;
+        UpdaterUrl     : string;
+        InitBat        : string;
+        BinPath        : string;
+        BackupFile     : string;
+        ID             : string;
+        Title          : string;
+        Pro            : string;
+        ProVersion     : string;
+        ProMyConfig    : string;
+        ProConfigFile  : string;
+        ProVersionFile : string;
     end;
 
 function GetVersion(soft: string; display: Boolean = False): string;
@@ -113,7 +119,7 @@ function BooleanStr(bool:boolean; trueText: string = 'true'; falseText: string =
 function GetConfigPort(serviceName: string): Integer;
 function SetConfigPort(serviceName: string): boolean;
 function UpdateConfigPort(serviceName: string; configFile: string): boolean;
-function GetProductVersion(): string;
+function GetProductVersion(versionFile: string = ''): string;
 function CheckProductVersion(): string;
 function HttpGet(url: string): string;
 function GetLocalIP(): string;
@@ -128,7 +134,7 @@ const
     CONFIG_USER_FILE        = 'config.user.json';
     CONFIG_FILE             = 'config.ini';
     APP_DIR                 = 'runner';
-    DEBUG_MODE              = 0;
+    DEBUG_MODE              = 2;
     READ_BYTES              = 2048;
 
     MAX_PORT          = 65535;
@@ -182,6 +188,8 @@ var
     regex       : TRegExpr;
     i           : integer;
 begin
+    ConsoleLn('> FixConfigPath');
+
     fileLines := TStringList.Create;
     regex := TRegExpr.Create;
     regex.Expression := '(\w*\s*=\s*"?\.?;?)(\w:)(\/xampp\/.*)';
@@ -192,22 +200,28 @@ begin
     //     ExcuteCommand('copy ' + mysql.OldConfigFile + ' ' + mysql.ConfigFile).Free;
     // finally
     // end;
-    fileLines.LoadFromFile(mysql.ConfigFile);
 
+    ConsoleLn('  fix mysql config file: ' + mysql.ConfigFile);
+    fileLines.LoadFromFile(mysql.ConfigFile);
     for i := 0 to (fileLines.Count - 1) do
     begin
         if regex.Exec(fileLines[i]) then begin
+            Console('    ' + fileLines[i]);
             fileLines[i] := regex.Match[1] + os.Drive + regex.Match[3];
+            ConsoleLn(' -> ' + fileLines[i]);
         end;
     end;
     fileLines.SaveToFile(mysql.ConfigFile);
 
     // fix php config path
+    ConsoleLn('  fix php config file: ' + php.ConfigFile);
     fileLines.LoadFromFile(php.ConfigFile);
     for i := 0 to (fileLines.Count - 1) do
     begin
         if regex.Exec(fileLines[i]) then begin
+            Console('    ' + fileLines[i]);
             fileLines[i] := regex.Match[1] + os.Drive + regex.Match[3];
+            ConsoleLn(' -> ' + fileLines[i]);
         end;
     end;
     fileLines.SaveToFile(php.ConfigFile);
@@ -722,7 +736,6 @@ begin
     // php
     php.Exe                := os.Drive + '\xampp\php\php.exe';
     php.ConfigFile         := os.Drive + '\xampp\php\php.ini';
-    php.Version            := GetVersion('php', True);
 
     // apache
     apache.Exe             := os.Drive + '\xampp\apache\bin\httpd.exe';
@@ -731,19 +744,17 @@ begin
     apache.Status          := GetServiceStatus(apache.ServiceName);
     apache.Port            := userconfig.GetValue('apache/port', 80);
     apache.SuggestPort     := GetConfigPort(apache.ServiceName);
-    apache.Version         := GetVersion('apache', True);
 
     // mysql
     mysql.Exe              := os.Drive + '\xampp\mysql\bin\mysql.exe';
     mysql.OldConfigFile    := os.Drive + '\xampp\mysql\bin\my.ini';
     mysql.ConfigFile       := os.Drive + '\xampp\mysql\my.ini';
-    mysql.MyConfig         := os.Drive + '\xampp\zentao\config\my.php';
+    
     mysql.PhpmyadminConfig := os.Drive + '\xampp\phpmyadmin\config.inc.php';
     mysql.ServiceName      := 'mysqlzt';
     mysql.Status           := GetServiceStatus(mysql.ServiceName);
     mysql.Port             := userconfig.GetValue('mysql/port', 3306);
     mysql.SuggestPort      := GetConfigPort(mysql.ServiceName);
-    mysql.Version          := GetVersion('mysql', True);
 
     // phpmyadmin
     phpmyadmin.Readme      := os.Drive + '\xampp\phpmyadmin\README';
@@ -755,6 +766,14 @@ begin
     product.VersionFile    := os.Drive + '\xampp\' + product.ID + '\VERSION';
     product.Version        := GetProductVersion;
     product.BinPath        := os.Drive + '\xampp\' + product.ID + '\bin\';
+    product.Pro            := config.Get('product/proversion', '');
+    product.MyConfig       := os.Drive + '\xampp\' + product.ID + '\' + config.Get('product/myconfig', 'config\my.php');
+    if product.Pro <> '' then begin
+        product.ProConfigFile     := os.Drive + '\xampp\' + product.Pro + '\' + config.Get('product/config', 'config\config.php');
+        product.ProVersionFile    := os.Drive + '\xampp\' + product.Pro + '\VERSION';
+        product.ProMyConfig       := os.Drive + '\xampp\' + product.Pro + '\' + config.Get('product/myconfig', 'config\my.php');
+        product.ProVersion        := GetProductVersion(product.ProVersionFile);
+    end;
 
     product.InitBat        := config.Get('product/initbat');
     if product.InitBat <> '' then begin
@@ -769,17 +788,21 @@ begin
     product.Title          := config.Get('product/title');
 
     FixConfigPath;
+    php.Version            := GetVersion('php', True);
+    apache.Version         := GetVersion('apache', True);
+    mysql.Version          := GetVersion('mysql', True);
 
     PrintLn;
     PrintLn(GetLang('message/currentLocation', '当前目录：%s'), [os.Location]);
 end;
 
-function GetProductVersion(): string;
+function GetProductVersion(versionFile: string = ''): string;
 var
     fileLines: TStringList;
 begin
     fileLines := TStringList.Create;
-    fileLines.LoadFromFile(product.VersionFile);
+    if versionFile = '' then versionFile := product.VersionFile;
+    fileLines.LoadFromFile(versionFile);
     if fileLines.Count > 0 then begin
         Result := fileLines[0];
     end else begin
@@ -842,7 +865,10 @@ begin
     if serviceName = apache.ServiceName then begin
         Result := UpdateConfigPort(serviceName, apache.ConfigFile);
     end else begin
-        UpdateConfigPort(mysql.ServiceName, mysql.myConfig);
+        UpdateConfigPort(mysql.ServiceName, product.myConfig);
+        if (product.pro <> '') then begin
+            Result := UpdateConfigPort(mysql.ServiceName, product.ProMyConfig);
+        end;
         Result := UpdateConfigPort(mysql.ServiceName, mysql.phpmyadminConfig);
         if Result then begin
             Result := UpdateConfigPort(mysql.ServiceName, mysql.configFile);
