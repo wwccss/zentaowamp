@@ -134,7 +134,7 @@ const
     CONFIG_USER_FILE        = 'config.user.json';
     CONFIG_FILE             = 'config.ini';
     APP_DIR                 = 'runner';
-    DEBUG_MODE              = 2;
+    // DEBUG_MODE              = 2;
     READ_BYTES              = 2048;
 
     MAX_PORT          = 65535;
@@ -146,6 +146,7 @@ const
     INIT_SUCCESSCODE  = '0';
 
 var
+    debug_mode : integer;
     os         : OsEnvironment;
     php        : PhpConfig;
     apache     : ApacheConfig;
@@ -1001,6 +1002,7 @@ begin
     userconfig   := TJSONConfig.Create(nil);
     try
         userconfig.FileName := os.UserConfigFile;
+        debug_mode := userconfig.GetValue('program/debug', 0);
 
         lastLoginTime := userconfig.GetValue('/LastRunTime', 0);
 
