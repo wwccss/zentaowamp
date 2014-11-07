@@ -943,6 +943,11 @@ begin
         Result := RestartService(mysql.ServiceName, True);
         if not Result then Result := RestartService(mysql.ServiceName, True, True);
     end;
+    if Result then begin
+        PrintLn(Format(GetLang('message/isRunning', '%s正在运行，点击“访问”按钮来使用。'), [product.title]));
+    end else begin
+        PrintLn(GetLang('message/failedAndTry', '启动失败，请稍后重试。'));
+    end;
 end;
 
 function BackupZentao(): string;
