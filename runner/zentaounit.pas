@@ -193,7 +193,7 @@ begin
 
     fileLines := TStringList.Create;
     regex := TRegExpr.Create;
-    regex.Expression := '(\w*\s*=\s*"?\.?;?)(\w:)(\/xampp\/.*)';
+    regex.Expression := '(\w*\.*\w*\s*=\s*"?\.?;?)(\w:)(\/xampp\/.*)';
 
     // fix mysql config path
     // backup config file
