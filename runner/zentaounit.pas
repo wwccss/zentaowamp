@@ -30,29 +30,32 @@ type
         ConfigFile     : string;
         UserConfigFile : string;
         IsInXAMPP      : boolean;
+        RunnerLocation : string;
     end;
 
     PhpConfig = record
-        Version    : string;
-        Exe        : string;
-        ConfigFile : string;
+        Version       : string;
+        Exe           : string;
+        ConfigFile    : string;
+        ConfigFileTpl : string;
     end;
 
     ApacheConfig = record
-        Version     : string;
-        Exe         : string;
-        ConfigFile  : string;
-        ServiceName : string;
-        Status      : string;
-        Port        : integer;
-        SuggestPort : integer;
+        Version       : string;
+        Exe           : string;
+        ConfigFile    : string;
+        ServiceName   : string;
+        Status        : string;
+        Port          : integer;
+        SuggestPort   : integer;
+        ConfigFileTpl : string;
     end;
 
     MysqlConfig = record
         Version           : string;
         Exe               : string;
         ConfigFile        : string;
-        OldConfigFile     : string;
+        ConfigFileTpl     : string;
         // MyConfig          : string;
         StoryConfig       : string;
         TaskConfig        : string;
@@ -133,6 +136,7 @@ function HttpGet(url: string): string;
 function GetLocalIP(): string;
 function InitBat(): boolean;
 function FixConfigPath(): boolean;
+function FixConfigFile(src: string; dest: string): boolean;
 function CheckVC2008(): boolean;
 procedure InstallVC2008();
 
@@ -150,7 +154,7 @@ const
     VC_REDIST_2005    = 'vcredist_x86_sp1.exe';
     VC_REDIST_2008    = 'vcredist_x86.exe';
     VC_DETECTOR       = 'vc2008_detector.bat';
-    VERSION           = '1.2';
+    VERSION           = '1.2.3';
     INIT_SUCCESSCODE  = '0';
 
 var
@@ -176,7 +180,7 @@ var
     i           : integer;
 begin
     Result := False;
-    outputLines := ExcuteCommand(os.Location + VC_DETECTOR);
+    outputLines := ExcuteCommand(os.RunnerLocation + VC_DETECTOR);
     for i := 0 to (outputLines.Count - 1) do
     begin
         if Pos('INSTALLED', outputLines[i]) > 0 then begin
@@ -188,56 +192,47 @@ end;
 
 procedure InstallVC2008();
 begin
-    ExcuteCommand(os.Location + VC_REDIST_2008, False, False);
+    ExcuteCommand(os.RunnerLocation + VC_REDIST_2008, False, False);
 end;
 
-{ Fix config path }
-function FixConfigPath(): boolean;
+{ Generage config file from template }
+function FixConfigFile(src: string; dest: string): boolean;
 var
     fileLines   : TStringList;
     regex       : TRegExpr;
     i           : integer;
 begin
-    ConsoleLn('> FixConfigPath');
+    ConsoleLn('\n> FixConfigFile');
+    ConsoleLn('    src: ' + src);
+    ConsoleLn('    dest:' + dest);
 
     fileLines := TStringList.Create;
     regex := TRegExpr.Create;
-    regex.Expression := '(\w*\.*\w*\s*=\s*"?\.?;?)(\w:)(\/xampp\/.*)';
-
-    // fix mysql config path
-    // backup config file
-    // try
-    //     ExcuteCommand('copy ' + mysql.OldConfigFile + ' ' + mysql.ConfigFile).Free;
-    // finally
-    // end;
-
-    ConsoleLn('  fix mysql config file: ' + mysql.ConfigFile);
-    fileLines.LoadFromFile(mysql.ConfigFile);
+    regex.Expression := '(.*)(%APP_LOCATION%)(.*)';
+    fileLines.LoadFromFile(src);
     for i := 0 to (fileLines.Count - 1) do
     begin
         if regex.Exec(fileLines[i]) then begin
-            Console('    ' + fileLines[i]);
-            fileLines[i] := regex.Match[1] + os.Drive + regex.Match[3];
-            ConsoleLn(' -> ' + fileLines[i]);
+            ConsoleLn('         ' + fileLines[i]);
+            fileLines[i] := regex.Match[1] + os.Location + regex.Match[3];
+            ConsoleLn('      -> ' + fileLines[i]);
         end;
     end;
-    fileLines.SaveToFile(mysql.ConfigFile);
-
-    // fix php config path
-    ConsoleLn('  fix php config file: ' + php.ConfigFile);
-    fileLines.LoadFromFile(php.ConfigFile);
-    for i := 0 to (fileLines.Count - 1) do
-    begin
-        if regex.Exec(fileLines[i]) then begin
-            Console('    ' + fileLines[i]);
-            fileLines[i] := regex.Match[1] + os.Drive + regex.Match[3];
-            ConsoleLn(' -> ' + fileLines[i]);
-        end;
-    end;
-    fileLines.SaveToFile(php.ConfigFile);
-
+    fileLines.SaveToFile(dest);
     regex.Free;
     fileLines.Free;
+    ConsoleLn('    saved! |<');
+    Result := true;
+end;
+
+{ Fix config path }
+function FixConfigPath(): boolean;
+begin
+    FixConfigFile(mysql.ConfigFileTpl, mysql.ConfigFile);
+    FixConfigFile(php.ConfigFileTpl, php.ConfigFile);
+    FixConfigFile(apache.ConfigFileTpl, apache.ConfigFile);
+
+    Result := true;
 end;
 
 { Get local IP address }
@@ -431,12 +426,12 @@ begin
     if serviceName = apache.ServiceName then
     begin
         process        := 'httpd';
-        installCommand := os.Drive + '\xampp\apache\bin\httpd.exe -k install -n ' + apache.serviceName;
+        installCommand := os.Location + 'apache\bin\httpd.exe -k install -n ' + apache.serviceName;
     end
     else if serviceName = mysql.ServiceName then
     begin
         process        := 'mysqld';
-        installCommand := os.Drive + '\xampp\mysql\bin\mysqld.exe --install ' + mysql.serviceName;
+        installCommand := os.Location + 'mysql\bin\mysqld.exe --install ' + mysql.serviceName;
     end;
 
     PrintLn(GetLang('message/installingSerivce', '正在安装服务：%s...'), [serviceName]);
@@ -743,55 +738,57 @@ begin
     isFirstRun := True;
     
     // php
-    php.Exe                := os.Drive + '\xampp\php\php.exe';
-    php.ConfigFile         := os.Drive + '\xampp\php\php.ini';
+    php.Exe                := os.Location + 'php\php.exe';
+    php.ConfigFile         := os.Location + 'php\php.ini';
+    php.ConfigFileTpl      := os.RunnerLocation + 'res\php\php.ini';
 
     // apache
-    apache.Exe             := os.Drive + '\xampp\apache\bin\httpd.exe';
-    apache.ConfigFile      := os.Drive + '\xampp\apache\conf\httpd.conf';
+    apache.Exe             := os.Location + 'apache\bin\httpd.exe';
+    apache.ConfigFile      := os.Location + 'apache\conf\httpd.conf';
+    apache.ConfigFileTpl   := os.RunnerLocation + 'res\apache\conf\httpd.conf';
     apache.ServiceName     := 'apachezt';
     apache.Status          := GetServiceStatus(apache.ServiceName);
     apache.Port            := userconfig.ApachePort;
     apache.SuggestPort     := GetConfigPort(apache.ServiceName);
 
     // mysql
-    mysql.Exe              := os.Drive + '\xampp\mysql\bin\mysql.exe';
-    mysql.OldConfigFile    := os.Drive + '\xampp\mysql\bin\my.ini';
-    mysql.ConfigFile       := os.Drive + '\xampp\mysql\my.ini';
+    mysql.Exe              := os.Location + 'mysql\bin\mysql.exe';
+    mysql.ConfigFile       := os.Location + 'mysql\my.ini';
+    mysql.ConfigFileTpl    := os.RunnerLocation + 'res\mysql\my.ini';
     
-    mysql.PhpmyadminConfig := os.Drive + '\xampp\phpmyadmin\config.inc.php';
+    mysql.PhpmyadminConfig := os.Location + 'phpmyadmin\config.inc.php';
     mysql.ServiceName      := 'mysqlzt';
     mysql.Status           := GetServiceStatus(mysql.ServiceName);
     mysql.Port             := userconfig.MysqlPort;
     mysql.SuggestPort      := GetConfigPort(mysql.ServiceName);
 
     // phpmyadmin
-    phpmyadmin.Readme      := os.Drive + '\xampp\phpmyadmin\README';
+    phpmyadmin.Readme      := os.Location + '\phpmyadmin\README';
     phpmyadmin.Version     := GetVersion('phpmyadmin', True);
 
     // product, like zentao or chanzhi
     product.ID             := config.Get('product/id', 'zentao');
-    product.ConfigFile     := os.Drive + '\xampp\' + product.ID + '\' + config.Get('product/config', 'config\config.php');
-    product.VersionFile    := os.Drive + '\xampp\' + product.ID + '\VERSION';
+    product.ConfigFile     := os.Location + product.ID + '\' + config.Get('product/config', 'config\config.php');
+    product.VersionFile    := os.Location + product.ID + '\VERSION';
     product.Version        := GetProductVersion;
-    product.BinPath        := os.Drive + '\xampp\' + product.ID + '\bin\';
+    product.BinPath        := os.Location + product.ID + '\bin\';
     product.Pro            := config.Get('product/proversion', '');
-    product.MyConfig       := os.Drive + '\xampp\' + product.ID + '\' + config.Get('product/myconfig', 'config\my.php');
+    product.MyConfig       := os.Location + product.ID + '\' + config.Get('product/myconfig', 'config\my.php');
     if product.Pro <> '' then begin
-        product.ProConfigFile     := os.Drive + '\xampp\' + product.Pro + '\' + config.Get('product/config', 'config\config.php');
-        product.ProVersionFile    := os.Drive + '\xampp\' + product.Pro + '\VERSION';
-        product.ProMyConfig       := os.Drive + '\xampp\' + product.Pro + '\' + config.Get('product/myconfig', 'config\my.php');
+        product.ProConfigFile     := os.Location + product.Pro + '\' + config.Get('product/config', 'config\config.php');
+        product.ProVersionFile    := os.Location + product.Pro + '\VERSION';
+        product.ProMyConfig       := os.Location + product.Pro + '\' + config.Get('product/myconfig', 'config\my.php');
         product.ProVersion        := GetProductVersion(product.ProVersionFile);
     end;
 
     product.InitBat        := config.Get('product/initbat');
     if product.InitBat <> '' then begin
-        product.InitBat := os.Drive + '\xampp\' + product.ID + '\' + product.InitBat;
+        product.InitBat := os.Location + product.ID + '\' + product.InitBat;
     end;
 
     product.BackupFile     := config.Get('product/backfile');
     if product.BackupFile <> '' then begin
-        product.BackupFile := os.Drive + '\xampp\' + product.ID + '\' + product.BackupFile;
+        product.BackupFile := os.Location + product.ID + '\' + product.BackupFile;
     end;
 
     product.Title          := config.Get('product/title');
@@ -967,7 +964,7 @@ begin
     ExcuteCommand(php.Exe + ' ' + product.BackupFile);
     Print(GetLang('message/bakupSuccess', '备份成功。'));
 
-    Result := UpperCase(os.Drive) + '\xampp\' + product.ID + '\backup\' + Formatdatetime('yyyymm', Date);
+    Result := os.Location + product.ID + '\backup\' + Formatdatetime('yyyymm', Date);
 end;
 
 { Print message on main form }
@@ -1000,13 +997,17 @@ begin
     // os
     os.Exe                                 := Application.ExeName;
     os.Location                            := Application.Location;
-    os.Drive                               := Copy(os.Location, 0, 2);//F:\xampp\runner\
-    os.IsInXAMPP                           := (os.Location = (os.Drive + '\xampp\'));
-    os.ConfigFile                          := CONFIG_FILE;
-    if os.IsInXAMPP then os.ConfigFile     := APP_DIR + '\' + os.ConfigFile;
-    os.UserConfigFile                      := CONFIG_USER_FILE;
-    if os.IsInXAMPP then os.UserConfigFile := APP_DIR + '\' + os.UserConfigFile;
-    if os.IsInXAMPP then os.Location       := os.Location + 'runner\';
+    os.RunnerLocation                      := os.Location + APP_DIR + '\';
+    // os.Drive                               := Copy(os.Location, 0, 2);//F:\xampp\runner\
+    // os.IsInXAMPP                           := (os.Location = (os.Drive + '\xampp\'));
+
+    consoleln('Application info:');
+    consoleln('    os.Exe           ', os.Exe);
+    consoleln('    os.Location      ', os.Location);
+    consoleln('    os.RunnerLocation', os.RunnerLocation);
+
+    os.ConfigFile                          := os.RunnerLocation + os.ConfigFile;
+    os.UserConfigFile                      := os.RunnerLocation + CONFIG_USER_FILE;
 
     { Load system config }
     config := TIniFile.Create(os.ConfigFile);

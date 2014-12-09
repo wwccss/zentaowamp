@@ -169,14 +169,14 @@ procedure TMainForm.FormCreate(Sender: TObject);
 begin
     FirstShow := True;
     LoadConfig();
-    SetLanguage('zh_cn', false, os.Location);
+    SetLanguage('zh_cn', false, os.RunnerLocation);
 
     PrintLn(product.Title + Format(GetLang('message/zentaoControl', '控制面板 %s'), [GetBuildVersion]));
 
-    if Pos(':\xampp\', LowerCase(Application.ExeName)) <> 2 then begin
-        ShowMessage(GetLang('UI/wrongPath', '请将一键安装包解压到根目录, 例如：D:\xampp'));
-        Close;
-    end;
+    // if Pos(':\xampp\', LowerCase(Application.ExeName)) <> 2 then begin
+    //     ShowMessage(GetLang('UI/wrongPath', '请将一键安装包解压到根目录, 例如：D:\xampp'));
+    //     Close;
+    // end;
 
     if not CheckVC2008 then begin
         if mrYes = MessageDlg(GetLang('UI/isInstallVC', '检查到没有安装VC2008运行环境，将无法正常使用所有功能。是否立即安装？'), mtConfirmation, [mbYes, mbNo], 0) then begin
