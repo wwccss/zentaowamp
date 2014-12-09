@@ -16,37 +16,37 @@ type
     { TMainForm }
 
     TMainForm = class(TForm)
-        ButtonRun       : TButton;
-        ButtonVisit     : TButton;
-        ButtonStop      : TButton;
-        ButtonZtOffical : TButton;
-        MainMenu        : TMainMenu;
-        MemoMessager    : TMemo;
-        MenuItem1: TMenuItem;
-        MenuItem2: TMenuItem;
-        MenuItemXampp: TMenuItem;
-        MenuItemService       : TMenuItem;
-        MenuItemZhcn: TMenuItem;
-        MenuItem11      : TMenuItem;
-        MenuItemLang      : TMenuItem;
-        MenuItemOfficialSite      : TMenuItem;
-        MenuItemOfficialHelp      : TMenuItem;
-        MenuItemFlowChart      : TMenuItem;
-        MenuItem16      : TMenuItem;
-        MenuItemFaq      : TMenuItem;
-        MenuItemForum      : TMenuItem;
-        MenuItemEn: TMenuItem;
-        MenuItemZhtw: TMenuItem;
-        MenuItemRunCommands: TMenuItem;
-        MenuItemMore       : TMenuItem;
-        MenuItemViewService       : TMenuItem;
-        MenuItemUninstallService       : TMenuItem;
-        MenuItemHelp       : TMenuItem;
-        MenuItemExit       : TMenuItem;
-        MenuItemInitBat       : TMenuItem;
-        MenuItemDatabase       : TMenuItem;
-        MenuItemBackup       : TMenuItem;
-        TrayIcon1: TTrayIcon;
+        ButtonRun                : TButton;
+        ButtonVisit              : TButton;
+        ButtonStop               : TButton;
+        ButtonZtOffical          : TButton;
+        MainMenu                 : TMainMenu;
+        MemoMessager             : TMemo;
+        MenuItem1                : TMenuItem;
+        MenuItem2                : TMenuItem;
+        MenuItemXampp            : TMenuItem;
+        MenuItemService          : TMenuItem;
+        MenuItemZhcn             : TMenuItem;
+        MenuItem11               : TMenuItem;
+        MenuItemLang             : TMenuItem;
+        MenuItemOfficialSite     : TMenuItem;
+        MenuItemOfficialHelp     : TMenuItem;
+        MenuItemFlowChart        : TMenuItem;
+        MenuItem16               : TMenuItem;
+        MenuItemFaq              : TMenuItem;
+        MenuItemForum            : TMenuItem;
+        MenuItemEn               : TMenuItem;
+        MenuItemZhtw             : TMenuItem;
+        MenuItemRunCommands      : TMenuItem;
+        MenuItemMore             : TMenuItem;
+        MenuItemViewService      : TMenuItem;
+        MenuItemUninstallService : TMenuItem;
+        MenuItemHelp             : TMenuItem;
+        MenuItemExit             : TMenuItem;
+        MenuItemInitBat          : TMenuItem;
+        MenuItemDatabase         : TMenuItem;
+        MenuItemBackup           : TMenuItem;
+        TrayIcon1                : TTrayIcon;
         procedure ButtonRunClick(Sender: TObject);
         procedure ButtonStopClick(Sender: TObject);
         procedure ButtonVisitClick(Sender: TObject);
@@ -160,7 +160,7 @@ procedure TMainForm.TrayIcon1Click(Sender: TObject);
 begin
     if WindowState = wsMinimized then begin
         Show;
-        WindowState := wsNormal;
+        WindowState   := wsNormal;
         ShowInTaskBar := stAlways;
     end;
 end;
@@ -186,8 +186,8 @@ begin
 
     InitZentao();
 
-    MenuItemInitBat.Enabled := product.InitBat <> '';
-    MenuItemBackup.Enabled := product.BackupFile <> '';
+    MenuItemInitBat.Enabled   := product.InitBat <> '';
+    MenuItemBackup.Enabled    := product.BackupFile <> '';
     MenuItemFlowChart.Visible := product.ID = 'zentao';
 
     if DEBUG_MODE > 0 then begin
@@ -196,10 +196,10 @@ begin
 
     if (apache.Status = 'running') and (mysql.Status = 'running') then begin
         ButtonVisit.Enabled := True;
-        ButtonStop.Enabled := True;
-        ButtonStop.Caption := GetLang('UI/stop', '停止');
-        ButtonRun.Enabled := False;
-        ButtonRun.Caption := GetLang('UI/running', '正在运行');
+        ButtonStop.Enabled  := True;
+        ButtonStop.Caption  := GetLang('UI/stop', '停止');
+        ButtonRun.Enabled   := False;
+        ButtonRun.Caption   := GetLang('UI/running', '正在运行');
     end;
 end;
 
@@ -264,10 +264,10 @@ begin
     UninstallService();
     Cursor := crDefault;
     ButtonVisit.Enabled := False;
-    ButtonStop.Enabled := False;
-    ButtonStop.Caption := GetLang('UI/stopped', '已停止');
-    ButtonRun.Enabled := True;
-    ButtonRun.Caption := GetLang('UI/startZentao', '启动') + product.Title;
+    ButtonStop.Enabled  := False;
+    ButtonStop.Caption  := GetLang('UI/stopped', '已停止');
+    ButtonRun.Enabled   := True;
+    ButtonRun.Caption   := GetLang('UI/startZentao', '启动') + product.Title;
 end;
 
 procedure TMainForm.ButtonStopClick(Sender: TObject);
@@ -277,16 +277,16 @@ begin
     ButtonStop.Caption := GetLang('UI/stopping', '正在停止');
     if StopZentao then begin
         ButtonVisit.Enabled := False;
-        ButtonStop.Enabled := False;
-        ButtonStop.Caption := GetLang('UI/stopped', '已停止');
-        ButtonRun.Enabled := True;
-        ButtonRun.Caption := GetLang('UI/startZentao', '启动') + product.Title;
+        ButtonStop.Enabled  := False;
+        ButtonStop.Caption  := GetLang('UI/stopped', '已停止');
+        ButtonRun.Enabled   := True;
+        ButtonRun.Caption   := GetLang('UI/startZentao', '启动') + product.Title;
     end else begin
         ButtonVisit.Enabled := True;
-        ButtonStop.Enabled := True;
-        ButtonStop.Caption := GetLang('UI/stop', '停止');
-        ButtonRun.Enabled := False;
-        ButtonRun.Caption := GetLang('UI/running', '正在运行');
+        ButtonStop.Enabled  := True;
+        ButtonStop.Caption  := GetLang('UI/stop', '停止');
+        ButtonRun.Enabled   := False;
+        ButtonRun.Caption   := GetLang('UI/running', '正在运行');
     end;
     Cursor := crDefault;
 end;
@@ -298,16 +298,16 @@ begin
     ButtonRun.Caption := GetLang('UI/starting', '正在启动');
     if StartZentao then begin
         ButtonVisit.Enabled := True;
-        ButtonStop.Enabled := True;
-        ButtonStop.Caption := GetLang('UI/stop', '停止');
-        ButtonRun.Enabled := False;
-        ButtonRun.Caption := GetLang('UI/running', '正在运行');
+        ButtonStop.Enabled  := True;
+        ButtonStop.Caption  := GetLang('UI/stop', '停止');
+        ButtonRun.Enabled   := False;
+        ButtonRun.Caption   := GetLang('UI/running', '正在运行');
     end else begin
         ButtonVisit.Enabled := False;
-        ButtonStop.Enabled := False;
-        ButtonStop.Caption := GetLang('UI/stopped', '已停止');
-        ButtonRun.Enabled := True;
-        ButtonRun.Caption := GetLang('UI/startZentao', '启动') + product.Title;
+        ButtonStop.Enabled  := False;
+        ButtonStop.Caption  := GetLang('UI/stopped', '已停止');
+        ButtonRun.Enabled   := True;
+        ButtonRun.Caption   := GetLang('UI/startZentao', '启动') + product.Title;
     end;
     Cursor := crDefault;
 end;
@@ -352,28 +352,28 @@ begin
 
     Caption := product.Title + GetLang('ui/title', '集成运行环境') + ' ' + GetBuildVersion;
 
-    MenuItemService.Caption := GetLang('menu/service', '服务');
-    MenuItem2.Caption := GetLang('menu/configPort', '配置默认端口');
-    MenuItemViewService.Caption := GetLang('menu/viewService', '查看服务');
+    MenuItemService.Caption          := GetLang('menu/service', '服务');
+    MenuItem2.Caption                := GetLang('menu/configPort', '配置默认端口');
+    MenuItemViewService.Caption      := GetLang('menu/viewService', '查看服务');
     MenuItemUninstallService.Caption := GetLang('menu/uninstallService', '卸载服务');
-    MenuItemMore.Caption := GetLang('menu/more', '更多');
-    MenuItemInitBat.Caption := GetLang('menu/initBat', '生成脚本');
-    MenuItemDatabase.Caption := GetLang('menu/database', '数 据 库');
-    MenuItemBackup.Caption := GetLang('menu/backup', '备份') + product.Title;
-    MenuItemLang.Caption := GetLang('menu/lang', '语言');
-    MenuItemZhcn.Caption := GetLang('menu/zhcn', '中文简体');
-    MenuItemZhtw.Caption := GetLang('menu/zhtw', '中文繁体');
-    MenuItemEn.Caption := GetLang('menu/en', 'English');
-    MenuItemHelp.Caption := GetLang('menu/help', '帮助');
-    MenuItemOfficialSite.Caption := product.Title + GetLang('menu/officialSite', '官网');
-    MenuItemOfficialHelp.Caption := GetLang('menu/officialHelp', '帮助文档');
-    MenuItemFlowChart.Caption := GetLang('menu/flowChart', '流 程 图');
-    MenuItemFaq.Caption := GetLang('menu/faq', '常见问题');
-    MenuItemForum.Caption := GetLang('menu/forum', '官方论坛');
-    MenuItemExit.Caption := GetLang('menu/exit', '退出');
-    MenuItemRunCommands.Caption := GetLang('menu/runCommands', '执行命令');
+    MenuItemMore.Caption             := GetLang('menu/more', '更多');
+    MenuItemInitBat.Caption          := GetLang('menu/initBat', '生成脚本');
+    MenuItemDatabase.Caption         := GetLang('menu/database', '数 据 库');
+    MenuItemBackup.Caption           := GetLang('menu/backup', '备份') + product.Title;
+    MenuItemLang.Caption             := GetLang('menu/lang', '语言');
+    MenuItemZhcn.Caption             := GetLang('menu/zhcn', '中文简体');
+    MenuItemZhtw.Caption             := GetLang('menu/zhtw', '中文繁体');
+    MenuItemEn.Caption               := GetLang('menu/en', 'English');
+    MenuItemHelp.Caption             := GetLang('menu/help', '帮助');
+    MenuItemOfficialSite.Caption     := product.Title + GetLang('menu/officialSite', '官网');
+    MenuItemOfficialHelp.Caption     := GetLang('menu/officialHelp', '帮助文档');
+    MenuItemFlowChart.Caption        := GetLang('menu/flowChart', '流 程 图');
+    MenuItemFaq.Caption              := GetLang('menu/faq', '常见问题');
+    MenuItemForum.Caption            := GetLang('menu/forum', '官方论坛');
+    MenuItemExit.Caption             := GetLang('menu/exit', '退出');
+    MenuItemRunCommands.Caption      := GetLang('menu/runCommands', '执行命令');
 
-    ButtonVisit.Caption := GetLang('UI/visitZentao', '访问') + product.Title;
+    ButtonVisit.Caption     := GetLang('UI/visitZentao', '访问') + product.Title;
     ButtonZtOffical.Caption :=  product.Title + GetLang('UI/zentaoOfficial', '官网');
     if ButtonStop.Enabled then begin
         ButtonStop.Caption := GetLang('UI/stop', ButtonStop.Caption);
@@ -386,9 +386,9 @@ begin
     end else begin
         ButtonRun.Caption := GetLang('UI/runing', ButtonRun.Caption);
     end;
-
+    
     MenuItemZhcn.Checked := False;
-    MenuItemEn.Checked := False;
+    MenuItemEn.Checked   := False;
     MenuItemZhtw.Checked := False;
     if language = MenuItemZhcn.Hint then MenuItemZhcn.Checked := True;
     if language = MenuItemEn.Hint then MenuItemEn.Checked := True;
