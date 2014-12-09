@@ -740,12 +740,12 @@ begin
     // php
     php.Exe                := os.Location + 'php\php.exe';
     php.ConfigFile         := os.Location + 'php\php.ini';
-    php.ConfigFileTpl      := os.RunnerLocation + 'res\php\php.ini';
+    php.ConfigFileTpl      := os.RunnerLocation + config.Get('php/configfile', 'res\php\php.ini');
 
     // apache
     apache.Exe             := os.Location + 'apache\bin\httpd.exe';
     apache.ConfigFile      := os.Location + 'apache\conf\httpd.conf';
-    apache.ConfigFileTpl   := os.RunnerLocation + 'res\apache\conf\httpd.conf';
+    apache.ConfigFileTpl   := os.RunnerLocation + config.Get('apache/configfile', 'res\apache\conf\httpd.conf');
     apache.ServiceName     := 'apachezt';
     apache.Status          := GetServiceStatus(apache.ServiceName);
     apache.Port            := userconfig.ApachePort;
@@ -754,7 +754,7 @@ begin
     // mysql
     mysql.Exe              := os.Location + 'mysql\bin\mysql.exe';
     mysql.ConfigFile       := os.Location + 'mysql\my.ini';
-    mysql.ConfigFileTpl    := os.RunnerLocation + 'res\mysql\my.ini';
+    mysql.ConfigFileTpl    := os.RunnerLocation + config.Get('php/configfile', 'res\mysql\my.ini');
     
     mysql.PhpmyadminConfig := os.Location + 'phpmyadmin\config.inc.php';
     mysql.ServiceName      := 'mysqlzt';
