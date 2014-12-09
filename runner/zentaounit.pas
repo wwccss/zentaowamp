@@ -1020,7 +1020,7 @@ begin
         userconfig.ApachePort     := userConfigFile.GetValue('apache/port', 80);
         userconfig.MysqlPort      := userConfigFile.GetValue('mysql/port', 3306);
         userconfig.Language       := userConfigFile.GetValue('/language', 'zh_cn');
-        userconfig.AutoChangePort := userConfigFile.GetValue('/AutoChangePort', true);
+        userconfig.AutoChangePort := userConfigFile.GetValue('/AutoChangePort', False);
 
         if userconfig.LastRunTime > 0 then
         begin
