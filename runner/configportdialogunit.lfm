@@ -1,12 +1,12 @@
 object ConfigPortDialog: TConfigPortDialog
   Left = 677
-  Height = 204
+  Height = 254
   Top = 376
-  Width = 236
+  Width = 241
   BorderStyle = bsToolWindow
   Caption = '配置默认端口'
-  ClientHeight = 204
-  ClientWidth = 236
+  ClientHeight = 254
+  ClientWidth = 241
   OnShow = FormShow
   LCLVersion = '1.2.6.0'
   object Label1: TLabel
@@ -42,9 +42,9 @@ object ConfigPortDialog: TConfigPortDialog
     Text = '3306'
   end
   object Button1: TButton
-    Left = 24
+    Left = 23
     Height = 41
-    Top = 144
+    Top = 192
     Width = 192
     Caption = '确定'
     OnClick = Button1Click
@@ -72,5 +72,13 @@ object ConfigPortDialog: TConfigPortDialog
     Position = 3306
     TabOrder = 4
     Wrap = False
+  end
+  object CheckBox1: TCheckBox
+    Left = 24
+    Height = 24
+    Top = 152
+    Width = 129
+    Caption = '自动更改端口号'
+    TabOrder = 5
   end
 end

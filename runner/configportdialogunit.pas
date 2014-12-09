@@ -13,13 +13,14 @@ type
     { TConfigPortDialog }
 
     TConfigPortDialog = class(TForm)
-        Button1: TButton;
-        Edit1: TEdit;
-        Edit2: TEdit;
-        Label1: TLabel;
-        Label2: TLabel;
-        UpDown1: TUpDown;
-        UpDown2: TUpDown;
+        Button1   : TButton;
+        CheckBox1 : TCheckBox;
+        Edit1     : TEdit;
+        Edit2     : TEdit;
+        Label1    : TLabel;
+        Label2    : TLabel;
+        UpDown1   : TUpDown;
+        UpDown2   : TUpDown;
         procedure Button1Click(Sender: TObject);
         procedure FormShow(Sender: TObject);
     private
@@ -39,21 +40,26 @@ implementation
 
 procedure TConfigPortDialog.Button1Click(Sender: TObject);
 begin
-    apache.Port := StrToInt(Edit1.Text);
-    mysql.Port  := StrToInt(Edit2.Text);
+    userConfig.ApachePort := StrToInt(Edit1.Text);
+    userConfig.MysqlPort  := StrToInt(Edit2.Text);
+    mysql.port            := userConfig.MysqlPort;
+    apache.port           := userConfig.apachePort;
+    userConfig.AutoChangePort := CheckBox1.Checked;
     SaveConfig();
     Close;
 end;
 
 procedure TConfigPortDialog.FormShow(Sender: TObject);
 begin
-    Edit1.Text := IntToStr(apache.Port);
-    Edit2.Text := IntToStr(mysql.Port);
+    Edit1.Text        := IntToStr(userConfig.ApachePort);
+    Edit2.Text        := IntToStr(userConfig.MysqlPort);
+    CheckBox1.Checked := userConfig.AutoChangePort;
 
-    Caption := GetLang('menu/configPort', '配置默认服务');
-    Label1.Caption := 'apache ' + GetLang('ui/port', '端口');
-    Label2.Caption := 'mysql ' + GetLang('ui/port', '端口');
-    Button1.Caption := GetLang('ui/confirm', '确定');
+    Caption           := GetLang('menu/configPort', '配置默认服务');
+    Label1.Caption    := 'apache ' + GetLang('ui/port', '端口');
+    Label2.Caption    := 'mysql ' + GetLang('ui/port', '端口');
+    Button1.Caption   := GetLang('ui/confirm', '确定');
+    CheckBox1.Caption := GetLang('ui/autoChangePort', '自动更改端口号');
 end;
 
 end.

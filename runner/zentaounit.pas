@@ -88,6 +88,14 @@ type
         ProVersionFile : string;
     end;
 
+    UserConfiguration = record
+        LastRunTime    : TDateTime;
+        ApachePort     : Integer;
+        MysqlPort      : Integer;
+        Language       : string;
+        AutoChangePort : boolean;
+    end;
+
 function GetVersion(soft: string; display: Boolean = False): string;
 function ExcuteCommand(commands: string; waitOnExit: boolean = False; hideWindow: boolean = True): TStringList;
 function ExcuteShell(commands: string; waitOnExit: boolean = False): TStringList;
@@ -134,7 +142,7 @@ const
     CONFIG_USER_FILE        = 'config.user.json';
     CONFIG_FILE             = 'config.ini';
     APP_DIR                 = 'runner';
-    // DEBUG_MODE              = 2;
+    DEBUG_MODE              = 2;
     READ_BYTES              = 2048;
 
     MAX_PORT          = 65535;
@@ -146,16 +154,17 @@ const
     INIT_SUCCESSCODE  = '0';
 
 var
-    debug_mode : integer;
-    os         : OsEnvironment;
-    php        : PhpConfig;
-    apache     : ApacheConfig;
-    mysql      : MysqlConfig;
-    phpmyadmin : PhpmyadminConfig;
-    product    : ProductSystemConfig;
-    userConfig : TJSONConfig;
-    isFirstRun : boolean;
-    config     : TIniFile;
+    // debug_mode : integer;
+    os             : OsEnvironment;
+    php            : PhpConfig;
+    apache         : ApacheConfig;
+    mysql          : MysqlConfig;
+    phpmyadmin     : PhpmyadminConfig;
+    product        : ProductSystemConfig;
+    userConfig     : UserConfiguration;
+    isFirstRun     : boolean;
+    config         : TIniFile;
+    userConfigFile : TJSONConfig;
 
 implementation
 
@@ -340,20 +349,22 @@ begin
     serviceStatus := GetServiceStatus(serviceName);
     if serviceStatus = 'running' then begin
         StopService(ServiceName);
+        Sleep(1000);
         serviceStatus := GetServiceStatus(serviceName);
     end else if serviceStatus = 'failed' then begin
         // PrintLn('服务' + serviceName + '没有安装。');
         if force then begin
             InstallService(serviceName);
+            Sleep(1000);
             serviceStatus := GetServiceStatus(serviceName);
         end;
     end;
 
     if serviceStatus = 'stopped' then begin
         if retry then begin
-            PrintLn(GetLang('message/startingServiceAgain', '再次尝试启动服务：%s...'), [serviceName]);
+            PrintLn(GetLang('message/startingServiceAgain', '再次尝试启动服务：%s(P%s)...'), [serviceName, port]);
         end else begin
-            PrintLn(GetLang('message/startingService', '正在启动服务：%s...'), [serviceName]);
+            PrintLn(GetLang('message/startingService', '正在启动服务：%s(P%s)...'), [serviceName, port]);
         end;
         port := FixPort(ServiceName, retry);
         ExcuteCommand('net start ' + serviceName).Free;
@@ -569,7 +580,7 @@ var
 begin
     if serviceName = apache.ServiceName then begin
         // fix apache port
-        if forceChange or (not CheckPort(apache.Port)) then
+        if userconfig.AutoChangePort and (forceChange or (not CheckPort(apache.Port))) then
         begin
             oldPort := apache.Port;
             apache.Port := 80;
@@ -580,19 +591,19 @@ begin
                 apache.Port := apache.Port + 1;
             end;
 
-            userconfig.SetValue('apache/port', apache.port);
+            userconfig.ApachePort := apache.Port;
 
-            Print(GetLang('message/portChanged', '已更换端口...'));
+            Print(GetLang('message/portChanged', '更换端口...'));
         end
         else
         begin
-            // Print('apache端口号为：'+ IntToStr(apache.Port));
+            Print(GetLang('ui/port', '端口') + ':' + IntToStr(apache.Port) + '...');
         end;
         Result := apache.Port;
         SetConfigPort(apache.ServiceName);
     end else begin
         // fix mysql port
-        if forceChange or (not CheckPort(mysql.Port)) then
+        if userconfig.AutoChangePort and (forceChange or (not CheckPort(mysql.Port))) then
         begin
             oldPort := mysql.Port;
             mysql.Port := 3307;
@@ -603,13 +614,13 @@ begin
                 mysql.Port := mysql.Port + 1;
             end;
 
-            userconfig.SetValue('mysql/port', mysql.port);
+            userconfig.MysqlPort := mysql.Port;
 
             Print(GetLang('message/portChanged', '已更换端口...'));
         end
         else
         begin
-            // Print('mysql端口号为：'+ IntToStr(mysql.Port));
+            Print(GetLang('ui/port', '端口') + ':' + IntToStr(mysql.Port) + '...');
         end;
         Result := mysql.Port;
         SetConfigPort(mysql.ServiceName);
@@ -682,7 +693,6 @@ var
     text    : string;
     output  : TStringList;
 begin
-    Result := userconfig.GetValue(soft + '/version', '');
     if Result = '' then
     begin
         if soft = 'php' then
@@ -719,8 +729,6 @@ begin
             Result := output[0];
             output.Free;
         end;
-
-        userconfig.SetValue(soft + '/version', Result)
     end;
 
     if display then
@@ -743,7 +751,7 @@ begin
     apache.ConfigFile      := os.Drive + '\xampp\apache\conf\httpd.conf';
     apache.ServiceName     := 'apachezt';
     apache.Status          := GetServiceStatus(apache.ServiceName);
-    apache.Port            := userconfig.GetValue('apache/port', 80);
+    apache.Port            := userconfig.ApachePort;
     apache.SuggestPort     := GetConfigPort(apache.ServiceName);
 
     // mysql
@@ -754,7 +762,7 @@ begin
     mysql.PhpmyadminConfig := os.Drive + '\xampp\phpmyadmin\config.inc.php';
     mysql.ServiceName      := 'mysqlzt';
     mysql.Status           := GetServiceStatus(mysql.ServiceName);
-    mysql.Port             := userconfig.GetValue('mysql/port', 3306);
+    mysql.Port             := userconfig.MysqlPort;
     mysql.SuggestPort      := GetConfigPort(mysql.ServiceName);
 
     // phpmyadmin
@@ -825,10 +833,10 @@ begin
     ConsoleLn('> GetConfigPort');
     if serviceName = apache.ServiceName then begin
         configFile := apache.configFile;
-        Result := userconfig.GetValue('apache/port', 80);
+        Result := userconfig.ApachePort;
     end else if serviceName = mysql.ServiceName then begin
         configFile := mysql.configFile;
-        Result := userconfig.GetValue('mysql/port', 3306);
+        Result := userconfig.MysqlPort;
     end;
 
     fileLines := TStringList.Create;
@@ -987,16 +995,16 @@ end;
 { Load config }
 function LoadConfig(): boolean;
 var
-    lastLoginTime: TDateTime;
+    LastRunTime: TDateTime;
 begin
     // os
-    os.Exe                                     := Application.ExeName;
-    os.Location                                := Application.Location;
-    os.Drive                                   := Copy(os.Location, 0, 2);//F:\xampp\runner\
-    os.IsInXAMPP                               := (os.Location = (os.Drive + '\xampp\'));
-    os.ConfigFile                              := CONFIG_FILE;
+    os.Exe                                 := Application.ExeName;
+    os.Location                            := Application.Location;
+    os.Drive                               := Copy(os.Location, 0, 2);//F:\xampp\runner\
+    os.IsInXAMPP                           := (os.Location = (os.Drive + '\xampp\'));
+    os.ConfigFile                          := CONFIG_FILE;
     if os.IsInXAMPP then os.ConfigFile     := APP_DIR + '\' + os.ConfigFile;
-    os.UserConfigFile                          := CONFIG_USER_FILE;
+    os.UserConfigFile                      := CONFIG_USER_FILE;
     if os.IsInXAMPP then os.UserConfigFile := APP_DIR + '\' + os.UserConfigFile;
     if os.IsInXAMPP then os.Location       := os.Location + 'runner\';
 
@@ -1004,14 +1012,17 @@ begin
     config := TIniFile.Create(os.ConfigFile);
 
     Result := False;
-    userconfig   := TJSONConfig.Create(nil);
+    userConfigFile   := TJSONConfig.Create(nil);
     try
-        userconfig.FileName := os.UserConfigFile;
-        debug_mode := userconfig.GetValue('program/debug', 0);
+        userConfigFile.FileName := os.UserConfigFile;
 
-        lastLoginTime := userconfig.GetValue('/LastRunTime', 0);
+        userconfig.LastRunTime    := userConfigFile.GetValue('/LastRunTime', 0);
+        userconfig.ApachePort     := userConfigFile.GetValue('apache/port', 80);
+        userconfig.MysqlPort      := userConfigFile.GetValue('mysql/port', 3306);
+        userconfig.Language       := userConfigFile.GetValue('/language', 'zh_cn');
+        userconfig.AutoChangePort := userConfigFile.GetValue('/AutoChangePort', true);
 
-        if lastLoginTime > 0 then
+        if userconfig.LastRunTime > 0 then
         begin
             isFirstRun := False;
             Result     := True;
@@ -1023,17 +1034,19 @@ end;
 { Load config }
 function SaveConfig(destroy: boolean = False): boolean;
 begin
-    ConsoleLn('SaveConfig');
+    ConsoleLn('SaveConfig: ' + userConfigFile.FileName);
     Result := False;
     try
-        userconfig.SetValue('/LastRunTime', Now);
-        userconfig.SetValue('/language', language);
-        userconfig.SetValue('apache/port', apache.port);
-        userconfig.SetValue('mysql/port', mysql.port);
-        userconfig.Flush;
+        userConfigFile.SetValue('/LastRunTime', Now);
+        userConfigFile.SetValue('/language', userconfig.Language);
+        userConfigFile.SetValue('apache/port', userconfig.ApachePort);
+        userConfigFile.SetValue('mysql/port', userconfig.MysqlPort);
+        userConfigFile.SetValue('/AutoChangePort', userconfig.AutoChangePort);
+
+        userConfigFile.Flush;
         Result := True;
     finally
-        if destroy then userconfig.Free;
+        if destroy then userConfigFile.Free;
     end;
 end;
 
