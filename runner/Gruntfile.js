@@ -12,6 +12,18 @@ module.exports = function(grunt)
                 expand: true,
                 src: 'zentaorunner.exe',
                 dest: 'D:\\xampp'
+            },
+            res:
+            {
+                expand: true,
+                src: 'res\\**',
+                dest: 'D:\\xampp\\runner'
+            },
+            langs:
+            {
+                expand: true,
+                src: 'languages\\**',
+                dest: 'D:\\xampp\\runner'
             }
         },
 
