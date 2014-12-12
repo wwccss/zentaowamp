@@ -146,7 +146,7 @@ const
     CONFIG_USER_FILE        = 'config.user.json';
     CONFIG_FILE             = 'config.ini';
     APP_DIR                 = 'runner';
-    DEBUG_MODE              = 2;
+    DEBUG_MODE              = 0;
     READ_BYTES              = 2048;
 
     MAX_PORT          = 65535;
@@ -1006,7 +1006,7 @@ begin
     consoleln('    os.Location      ', os.Location);
     consoleln('    os.RunnerLocation', os.RunnerLocation);
 
-    os.ConfigFile                          := os.RunnerLocation + os.ConfigFile;
+    os.ConfigFile                          := os.RunnerLocation + CONFIG_FILE;
     os.UserConfigFile                      := os.RunnerLocation + CONFIG_USER_FILE;
 
     { Load system config }
@@ -1101,7 +1101,7 @@ begin
     end
     else
     begin
-        Result := Format(formatStr, [1, 2, 2, 0]);
+        Result := Format(formatStr, [1, 2, 3, 0]);
     end;
 end;
 
