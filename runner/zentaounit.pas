@@ -47,7 +47,7 @@ type
         ServiceName   : string;
         Status        : string;
         Port          : integer;
-        SuggestPort   : integer;
+        // SuggestPort   : integer;
         ConfigFileTpl : string;
     end;
 
@@ -65,7 +65,7 @@ type
         ServiceName       : string;
         Status            : string;
         Port              : integer;
-        SuggestPort       : integer;
+        // SuggestPort       : integer;
     end;
 
     PhpmyadminConfig = record
@@ -749,7 +749,7 @@ begin
     apache.ServiceName     := 'apachezt';
     apache.Status          := GetServiceStatus(apache.ServiceName);
     apache.Port            := userconfig.ApachePort;
-    apache.SuggestPort     := GetConfigPort(apache.ServiceName);
+    // apache.SuggestPort     := GetConfigPort(apache.ServiceName);
 
     // mysql
     mysql.Exe              := os.Location + 'mysql\bin\mysql.exe';
@@ -760,7 +760,7 @@ begin
     mysql.ServiceName      := 'mysqlzt';
     mysql.Status           := GetServiceStatus(mysql.ServiceName);
     mysql.Port             := userconfig.MysqlPort;
-    mysql.SuggestPort      := GetConfigPort(mysql.ServiceName);
+    // mysql.SuggestPort      := GetConfigPort(mysql.ServiceName);
 
     // phpmyadmin
     phpmyadmin.Readme      := os.Location + '\phpmyadmin\README';
