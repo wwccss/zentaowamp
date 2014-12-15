@@ -47,7 +47,7 @@ $clientLang = $lang->$acceptLang;
   <style>
   </style>
 </head>
-<link rel='stylesheet' href='../ranzhi/theme/default/all.css' type='text/css' media='screen' />
+<link rel='stylesheet' href='../ranzhi/theme/zui/css/min.css' type='text/css' media='screen' />
 <script src='../ranzhi/js/jquery/min.js?v=1.3.beta' type='text/javascript'></script>
 <script src='../ranzhi/js/zui/min.js?v=1.3.beta' type='text/javascript'></script>
 <style>body{background-color: #f1f1f1}
