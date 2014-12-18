@@ -431,7 +431,7 @@ begin
     else if serviceName = mysql.ServiceName then
     begin
         process        := 'mysqld';
-        installCommand := os.Location + 'mysql\bin\mysqld.exe --install ' + mysql.serviceName;
+        installCommand := os.Location + 'mysql\bin\mysqld.exe --install ' + mysql.serviceName + ' --defaults-file="' + mysql.configfile + '"';
     end;
 
     PrintLn(GetLang('message/installingSerivce', '正在安装服务：%s...'), [serviceName]);
