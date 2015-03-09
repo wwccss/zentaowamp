@@ -1,18 +1,18 @@
 @echo off
+set currentDir=%~dp0
 
 echo stopping apache 2.4
 net stop apachezt
 echo removing apache 2.4
-..\apache\bin\httpd -k uninstall -n apachezt
+%currentDir%..\apache\bin\httpd -k uninstall -n apachezt
 
-del port.apache
+del %currentDir%port.apache
 
-echo 
 echo stopping mysql
 net stop mysqlzt
 echo removing mysql
-..\mysql\bin\mysqld.exe --remove mysqlzt
+%currentDir%..\mysql\bin\mysqld.exe --remove mysqlzt
 
-del port.mysql
+del %currentDir%port.mysql
 
 pause
