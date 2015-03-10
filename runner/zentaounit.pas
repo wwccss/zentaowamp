@@ -101,6 +101,7 @@ type
 
 function GetVersion(soft: string; display: Boolean = False): string;
 function ExcuteCommand(commands: string; waitOnExit: boolean = False; hideWindow: boolean = True): TStringList;
+function CommondResultHas(outputlines: TStringList; theValue: string): boolean;
 function ExcuteShell(commands: string; waitOnExit: boolean = False): TStringList;
 procedure PrintLn(message: string = '');overload;
 procedure PrintLn(Const message : String; const args : Array of const);overload;
@@ -154,7 +155,7 @@ const
     VC_REDIST_2005    = 'vcredist_x86_sp1.exe';
     VC_REDIST_2008    = 'vcredist_x86.exe';
     VC_DETECTOR       = 'vc2008_detector.bat';
-    VERSION           = '1.2.3';
+    VERSION           = '1.2.4';
     INIT_SUCCESSCODE  = '0';
 
 var
@@ -184,6 +185,20 @@ begin
     for i := 0 to (outputLines.Count - 1) do
     begin
         if Pos('INSTALLED', outputLines[i]) > 0 then begin
+            Result := True;
+            BREAK;
+        end;
+    end;
+end;
+
+function CommondResultHas(outputlines: TStringList; theValue: string): boolean;
+var
+    i : integer;
+begin
+    Result := False;
+    for i := 0 to (outputlines.Count - 1) do
+    begin
+        if Pos(theValue, outputlines[i]) > 0 then begin
             Result := True;
             BREAK;
         end;
@@ -754,7 +769,7 @@ begin
     // mysql
     mysql.Exe              := os.Location + 'mysql\bin\mysql.exe';
     mysql.ConfigFile       := os.Location + 'mysql\my.ini';
-    mysql.ConfigFileTpl    := os.RunnerLocation + config.Get('php/configfile', 'res\mysql\my.ini');
+    mysql.ConfigFileTpl    := os.RunnerLocation + config.Get('mysql/configfile', 'res\mysql\my.ini');
     
     mysql.PhpmyadminConfig := os.Location + 'phpmyadmin\config.inc.php';
     mysql.ServiceName      := 'mysqlzt';
@@ -768,7 +783,7 @@ begin
 
     // product, like zentao or chanzhi
     product.ID             := config.Get('product/id', 'zentao');
-    product.ConfigFile     := os.Location + product.ID + '\' + config.Get('product/config', 'config\config.php');
+    // product.ConfigFile     := os.Location + product.ID + '\' + config.Get('product/config', 'config\config.php');
     product.VersionFile    := os.Location + product.ID + '\VERSION';
     product.Version        := GetProductVersion;
     product.BinPath        := os.Location + product.ID + '\bin\';
@@ -956,15 +971,38 @@ begin
 end;
 
 function BackupZentao(): string;
+var
+    outputLines : TStringList;
+    sqlSuccess  : boolean;
+    fileSuccess : boolean;
+    i           : integer;
 begin
     if product.BackupFile = '' then Exit;
 
     PrintLn;
     PrintLn(GetLang('message/bakuping', '正在备份......'));
-    ExcuteCommand(php.Exe + ' ' + product.BackupFile);
-    Print(GetLang('message/bakupSuccess', '备份成功。'));
+    outputLines := ExcuteCommand(php.Exe + ' "' + product.BackupFile + '"');
+    sqlSuccess := CommondResultHas(outputLines, 'Backuping database, successfully saved');
+    fileSuccess := CommondResultHas(outputLines, 'Backuping files, successfully saved');
 
-    Result := os.Location + product.ID + '\backup\' + Formatdatetime('yyyymm', Date);
+    if sqlSuccess then begin
+        Print('Database ' + GetLang('message/bakupSuccess', '备份成功。') + '  ');
+    end;
+    if fileSuccess then begin
+        Print('Files ' + GetLang('message/bakupSuccess', '备份成功。') + '  ');
+    end;
+    
+    if fileSuccess or sqlSuccess then begin
+        Result := os.Location + product.ID + '\backup\' + Formatdatetime('yyyymm', Date);
+    end;
+    
+    if not fileSuccess or not sqlSuccess then begin
+        PrintLn('Backup failed. Message: ');
+        for i := 0 to (outputLines.Count - 1) do
+        begin
+            PrintLn('- ' + outputLines[i]);
+        end;
+    end;
 end;
 
 { Print message on main form }
@@ -1101,7 +1139,7 @@ begin
     end
     else
     begin
-        Result := Format(formatStr, [1, 2, 3, 0]);
+        Result := Format(formatStr, [1, 2, 4, 0]);
     end;
 end;
 
