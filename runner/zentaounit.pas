@@ -140,6 +140,8 @@ function FixConfigPath(): boolean;
 function FixConfigFile(src: string; dest: string): boolean;
 function CheckVC2008(): boolean;
 procedure InstallVC2008();
+function StrReplace(source: string; find: string; forReplace: string): string;
+function formatDir(source: string): string;
 
 const
     ONE_DAY_MILLION_SECONDS = 24 * 60 * 60 * 1000;
@@ -215,27 +217,28 @@ end;
 function FixConfigFile(src: string; dest: string): boolean;
 var
     fileLines   : TStringList;
-    regex       : TRegExpr;
     i           : integer;
+    line        : string;
 begin
     ConsoleLn('\n> FixConfigFile');
     ConsoleLn('    src: ' + src);
     ConsoleLn('    dest:' + dest);
 
+    if (debugMode > 99) and (mysql.ConfigFileTpl = src) then begin
+        Exit;
+    end;
+
     fileLines := TStringList.Create;
-    regex := TRegExpr.Create;
-    regex.Expression := '(.*)(%APP_LOCATION%)(.*)';
     fileLines.LoadFromFile(src);
     for i := 0 to (fileLines.Count - 1) do
     begin
-        if regex.Exec(fileLines[i]) then begin
-            ConsoleLn('         ' + fileLines[i]);
-            fileLines[i] := regex.Match[1] + os.Location + regex.Match[3];
-            ConsoleLn('      -> ' + fileLines[i]);
-        end;
+        line := StrReplace(fileLines[i], '%APP_LOCATION%', os.Location);
+        line := StrReplace(line, '%APACHE_PORT%', inttostr(apache.Port));
+        line := StrReplace(line, '%MYSQL_PORT%', inttostr(mysql.Port));
+        line := StrReplace(line, '%PRODUCT_ID%', product.id);
+        fileLines[i] := line;
     end;
     fileLines.SaveToFile(dest);
-    regex.Free;
     fileLines.Free;
     ConsoleLn('    saved! |<');
     Result := true;
@@ -590,6 +593,7 @@ var
     oldPort: Integer;
 begin
     if serviceName = apache.ServiceName then begin
+        Result := apache.Port;
         // fix apache port
         if userconfig.AutoChangePort and (forceChange or (not CheckPort(apache.Port))) then
         begin
@@ -610,9 +614,12 @@ begin
         begin
             Print(GetLang('ui/port', '端口') + ':' + IntToStr(apache.Port) + '...');
         end;
-        Result := apache.Port;
-        SetConfigPort(apache.ServiceName);
+        if Result <> apache.Port then begin
+            Result := apache.Port;
+            SetConfigPort(apache.serviceName);
+        end;
     end else begin
+        Result := mysql.Port;
         // fix mysql port
         if userconfig.AutoChangePort and (forceChange or (not CheckPort(mysql.Port))) then
         begin
@@ -633,8 +640,10 @@ begin
         begin
             Print(GetLang('ui/port', '端口') + ':' + IntToStr(mysql.Port) + '...');
         end;
-        Result := mysql.Port;
-        SetConfigPort(mysql.ServiceName);
+        if Result <> mysql.Port then begin
+            Result := mysql.Port;
+            SetConfigPort(mysql.serviceName);
+        end;
     end;
 end;
 
@@ -885,16 +894,10 @@ function SetConfigPort(serviceName: string): boolean;
 begin
     ConsoleLn('> SetConfigPort', 'serviceName:' + serviceName);
     if serviceName = apache.ServiceName then begin
-        Result := UpdateConfigPort(serviceName, apache.ConfigFile);
+        FixConfigFile(apache.ConfigFileTpl, apache.ConfigFile); 
     end else begin
-        UpdateConfigPort(mysql.ServiceName, product.myConfig);
-        if (product.pro <> '') then begin
-            Result := UpdateConfigPort(mysql.ServiceName, product.ProMyConfig);
-        end;
-        Result := UpdateConfigPort(mysql.ServiceName, mysql.phpmyadminConfig);
-        if Result then begin
-            Result := UpdateConfigPort(mysql.ServiceName, mysql.configFile);
-        end;
+        FixConfigFile(php.ConfigFileTpl, php.ConfigFile); 
+        FixConfigFile(mysql.ConfigFileTpl, mysql.ConfigFile); 
     end;
 end;
 
@@ -1034,9 +1037,9 @@ var
     LastRunTime: TDateTime;
 begin
     // os
-    os.Exe                                 := Application.ExeName;
-    os.Location                            := Application.Location;
-    os.RunnerLocation                      := os.Location + APP_DIR + '\';
+    os.Exe                                 := formatDir(Application.ExeName);
+    os.Location                            := formatDir(Application.Location);
+    os.RunnerLocation                      := os.Location + APP_DIR + '/';
     // os.Drive                               := Copy(os.Location, 0, 2);//F:\xampp\runner\
     // os.IsInXAMPP                           := (os.Location = (os.Drive + '\xampp\'));
 
@@ -1108,7 +1111,7 @@ begin
             AllocConsole;
             IsConsole := True; // in System unit
             SysInitStdIO;      // in System unit
-            WriteLn('=== Debug Console ===');
+            WriteLn('=== Debug Console [Mode: ' + inttostr(debugMode) + '] ===');
         end;
         {$endif}
 
@@ -1164,6 +1167,16 @@ begin
       Free;
     end;
     Console('-> ' + Result);
+end;
+
+function StrReplace(source: string; find: string; forReplace: string): string;
+begin
+    Result := StringReplace(source, find, forReplace, [rfReplaceAll]);
+end;
+
+function formatDir(source: string): string;
+begin
+    Result := StrReplace(source, '\', '/');
 end;
 
 end.

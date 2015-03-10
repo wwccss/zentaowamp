@@ -190,7 +190,7 @@ begin
     MenuItemBackup.Enabled    := product.BackupFile <> '';
     MenuItemFlowChart.Visible := product.ID = 'zentao';
 
-    if DEBUG_MODE > 0 then begin
+    if debugMode > 0 then begin
         MenuItemRunCommands.Visible := True;
     end;
 
