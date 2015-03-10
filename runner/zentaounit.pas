@@ -147,7 +147,7 @@ const
     CONFIG_USER_FILE        = 'config.user.json';
     CONFIG_FILE             = 'config.ini';
     APP_DIR                 = 'runner';
-    DEBUG_MODE              = 0;
+    DEBUG_MODE_DEFAULT      = 0;
     READ_BYTES              = 2048;
 
     MAX_PORT          = 65535;
@@ -170,6 +170,7 @@ var
     isFirstRun     : boolean;
     config         : TIniFile;
     userConfigFile : TJSONConfig;
+    debugMode      : integer;
 
 implementation
 
@@ -683,7 +684,7 @@ begin
         Result := TStringList.Create;
         Result.LoadFromStream(MemStream);
 
-        if DEBUG_MODE > 1 then begin
+        if debugMode > 1 then begin
             for BytesRead := 0 to (Result.Count - 1) do
             begin
                 ConsoleLn(' - ' + Result[BytesRead]);
@@ -1049,6 +1050,7 @@ begin
 
     { Load system config }
     config := TIniFile.Create(os.ConfigFile);
+    debugMode := StrToInt(config.Get('debug/mode', IntToStr(DEBUG_MODE_DEFAULT)));
 
     Result := False;
     userConfigFile   := TJSONConfig.Create(nil);
@@ -1098,7 +1100,7 @@ end;
 { Display debug info into console window. }
 procedure Console(textOrName: string = ''; text: string = '`'; newLine: boolean = False);
 begin
-    if DEBUG_MODE > 0 then
+    if debugMode > 0 then
     begin
         {$ifdef WINDOWS}
         if not IsConsole then
