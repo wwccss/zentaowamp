@@ -219,6 +219,7 @@ var
     fileLines   : TStringList;
     i           : integer;
     line        : string;
+    osLocation  : string;
 begin
     ConsoleLn('\n> FixConfigFile');
     ConsoleLn('    src: ' + src);
@@ -227,12 +228,12 @@ begin
     if (debugMode > 99) and (mysql.ConfigFileTpl = src) then begin
         Exit;
     end;
-
+    osLocation := formatDir(os.Location);
     fileLines := TStringList.Create;
     fileLines.LoadFromFile(src);
     for i := 0 to (fileLines.Count - 1) do
     begin
-        line := StrReplace(fileLines[i], '%APP_LOCATION%', os.Location);
+        line := StrReplace(fileLines[i], '%APP_LOCATION%', osLocation);
         line := StrReplace(line, '%APACHE_PORT%', inttostr(apache.Port));
         line := StrReplace(line, '%MYSQL_PORT%', inttostr(mysql.Port));
         line := StrReplace(line, '%PRODUCT_ID%', product.id);
@@ -1037,8 +1038,8 @@ var
     LastRunTime: TDateTime;
 begin
     // os
-    os.Exe                                 := formatDir(Application.ExeName);
-    os.Location                            := formatDir(Application.Location);
+    os.Exe                                 := Application.ExeName;
+    os.Location                            := Application.Location;
     os.RunnerLocation                      := os.Location + APP_DIR + '/';
     // os.Drive                               := Copy(os.Location, 0, 2);//F:\xampp\runner\
     // os.IsInXAMPP                           := (os.Location = (os.Drive + '\xampp\'));
