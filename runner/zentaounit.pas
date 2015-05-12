@@ -11,6 +11,8 @@ uses
     {$endif}
     Forms,
     Dialogs,
+    StdCtrls,
+    controls,
     Process,
     jsonconf,
     regexpr,
@@ -123,6 +125,7 @@ function InstallService(serviceName: string): boolean;
 function UninstallService(serviceName: string): boolean;overload;
 function UninstallService(): boolean;overload;
 function GetServiceStatus(serviceName: string): string;
+function checkSevicePath(serviceName: String): Boolean;
 function ProcessIsRunning(process: string): boolean;
 function RestartService(serviceName: string; force: boolean = False; retry: boolean = False): boolean;
 function StopService(serviceName: string; cleanup: boolean = False): boolean;
@@ -375,6 +378,19 @@ begin
         end;
     end;
 
+    if not checkSevicePath(ServiceName) then begin
+        PrintLn(GetLang('message/wrongService', '服务安装路径不正确。'));
+        if mrYes = MessageDlg(GetLang('message/wrongServiceTip', '服务安装路径不正确。是否重新安装？'), mtConfirmation, [mbYes, mbNo], 0) then begin
+            UninstallService(serviceName);
+            Sleep(1000);
+            InstallService(serviceName);
+            Sleep(1000);
+            serviceStatus := GetServiceStatus(serviceName);
+        end else begin
+            Exit;
+        end;
+    end;
+
     if serviceStatus = 'stopped' then begin
         if retry then begin
             PrintLn(GetLang('message/startingServiceAgain', '再次尝试启动服务：%s(P%s)...'), [serviceName, port]);
@@ -568,6 +584,34 @@ begin
     end;
 
     ConsoleLn('> GetServiceStatus:' + serviceName, Result);
+end;
+
+{ Check service path }
+function checkSevicePath(serviceName: String): Boolean;
+var
+    OutputLines    : TStringList;
+    i              : integer;
+    text           : string;
+begin
+    Result := True;
+    ConsoleLn('> checkSevicePath:' + serviceName);
+    OutputLines := ExcuteCommand('sc qc ' + serviceName);
+    if OutputLines.Count > 0 then begin
+        for i := 0 to (OutputLines.Count - 1) do
+        begin
+            text := OutputLines[i];
+            if Pos('BINARY_PATH_NAME', text) > 0 then begin
+                if ServiceName = apache.ServiceName then begin
+                    Result := Pos(apache.exe, text) > 0;
+                end else if ServiceName = mysql.ServiceName then begin
+                    Result := Pos(mysql.exe, text) > 0;
+                end;
+                Break;
+            end;
+        end;
+    end;
+    ConsoleLn(' - Result: ' + BooleanStr(Result));
+    OutputLines.Free;
 end;
 
 { Check port avaliable }
