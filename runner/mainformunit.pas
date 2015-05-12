@@ -180,7 +180,7 @@ begin
 
     if not CheckVC2008 then begin
         if mrYes = MessageDlg(GetLang('UI/isInstallVC', '检查到没有安装VC2008运行环境，将无法正常使用所有功能。是否立即安装？'), mtConfirmation, [mbYes, mbNo], 0) then begin
-        InstallVC2008;
+            InstallVC2008;
         end;
     end;
 
