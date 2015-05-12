@@ -1189,7 +1189,7 @@ begin
     end
     else
     begin
-        Result := Format(formatStr, [1, 2, 4, 0]);
+        Result := Format(formatStr, [1, 2, 5, 0]);
     end;
 end;
 
