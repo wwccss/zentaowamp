@@ -64,6 +64,7 @@ type
         TestConfig        : string;
         ProConfig         : string;
         PhpmyadminConfig  : string;
+        PhpmyadminCfgTpl  : string;
         ServiceName       : string;
         Status            : string;
         Port              : integer;
@@ -254,6 +255,11 @@ begin
     FixConfigFile(mysql.ConfigFileTpl, mysql.ConfigFile);
     FixConfigFile(php.ConfigFileTpl, php.ConfigFile);
     FixConfigFile(apache.ConfigFileTpl, apache.ConfigFile);
+    FixConfigFile(mysql.PhpmyadminCfgTpl, mysql.PhpmyadminConfig);
+    UpdateConfigPort(mysql.ServiceName, product.MyConfig);
+    if product.pro <> '' then begin
+        UpdateConfigPort(mysql.ServiceName, product.ProMyConfig);
+    end;
 
     Result := true;
 end;
@@ -387,6 +393,7 @@ begin
             Sleep(1000);
             serviceStatus := GetServiceStatus(serviceName);
         end else begin
+            Result := false;
             Exit;
         end;
     end;
@@ -603,8 +610,10 @@ begin
             if Pos('BINARY_PATH_NAME', text) > 0 then begin
                 if ServiceName = apache.ServiceName then begin
                     Result := Pos(apache.exe, text) > 0;
+                    ConsoleLn('apache result: ' + BooleanStr(Result) + ', apache: ' + apache.exe)
                 end else if ServiceName = mysql.ServiceName then begin
                     Result := Pos(mysql.exe, text) > 0;
+                    ConsoleLn('mysql result: ' + BooleanStr(Result) + ', mysql: ' + mysql.exe)
                 end;
                 Break;
             end;
@@ -822,11 +831,12 @@ begin
     // apache.SuggestPort     := GetConfigPort(apache.ServiceName);
 
     // mysql
-    mysql.Exe              := os.Location + 'mysql\bin\mysql.exe';
+    mysql.Exe              := os.Location + 'mysql\bin\mysqld.exe';
     mysql.ConfigFile       := os.Location + 'mysql\my.ini';
     mysql.ConfigFileTpl    := os.RunnerLocation + config.Get('mysql/configfile', 'res\mysql\my.ini');
     
     mysql.PhpmyadminConfig := os.Location + 'phpmyadmin\config.inc.php';
+    mysql.PhpmyadminCfgTpl := os.RunnerLocation + config.Get('phpmyadmin/configfile', 'res\phpmyadmin\config.inc.php');
     mysql.ServiceName      := 'mysqlzt';
     mysql.Status           := GetServiceStatus(mysql.ServiceName);
     mysql.Port             := userconfig.MysqlPort;
@@ -942,7 +952,12 @@ begin
         FixConfigFile(apache.ConfigFileTpl, apache.ConfigFile); 
     end else begin
         FixConfigFile(php.ConfigFileTpl, php.ConfigFile); 
-        FixConfigFile(mysql.ConfigFileTpl, mysql.ConfigFile); 
+        FixConfigFile(mysql.ConfigFileTpl, mysql.ConfigFile);
+        FixConfigFile(mysql.PhpmyadminCfgTpl, mysql.PhpmyadminConfig);
+        UpdateConfigPort(serviceName, product.MyConfig);
+        if product.pro <> '' then begin
+            UpdateConfigPort(serviceName, product.ProMyConfig);
+        end;
     end;
 end;
 
