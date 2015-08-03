@@ -52,26 +52,15 @@ $clientLang = $lang->$acceptLang;
 <script src='../ranzhi/js/zui/min.js?v=1.3.beta' type='text/javascript'></script>
 <style>body{background-color: #f1f1f1}
 .container{padding: 0}
-.modal-dialog{width: 800px}
-.modal-footer{text-align: center;margin-top: 0;}
-
-.table,.alert{margin: 0;}
-.table+.alert{margin-top: 20px;}
-.table.table-form>thead>tr>th, .table.table-form>tbody>tr>th, .table.table-form>tfoot>tr>th{color: #666}
-.table.table-form>thead>tr>th, .table.table-form>tbody>tr>th, .table.table-form>tfoot>tr>th, .table.table-form>thead>tr>td, .table.table-form>tbody>tr>td, .table.table-form>tfoot>tr>td{vertical-align: middle;}
-.table td.ok{color:green;}
-.table td.fail{color:red;}
-.table-form .text-center{text-align:center}
-
-@media (max-width: 700px){.modal-dialog{padding: 0;} .modal-content{box-shadow: none;border-width: 1px 0;border-radius: 0}}
-h3{font-size:16px; margin-bottom: 20px;}
-blockquote{font-size:14px; padding:0px 20px; line-height:1.5; border:0}
-#ranzhi{margin-top:30px}
-
+.modal-dialog{width: 450px}
+.modal-footer{text-align: left;}
+.modal-footer > a{margin-left:5px;}
 .modal-dialog{position: relative; margin-top: 10%;}
-.modal-header{position: absolute; right: 15px; top: 10px; border: none;z-index: 999}
-.modal-body{padding: 20px 60px;}
 
+.modal-body{margin:20px 0px; text-align: center;}
+.modal-body img{}
+
+.dropdown{position: absolute; right: 15px; bottom: 10px; border: none;z-index: 999}
 .dropdown.btn{padding: 0;overflow: visible;}
 .dropdown a:hover,button a:active,.dropdown a:focus{text-decoration: none;}
 .dropdown .dropdown-menu li{text-align: left}
@@ -82,43 +71,34 @@ blockquote{font-size:14px; padding:0px 20px; line-height:1.5; border:0}
 <div class='container'>
   <div class='modal-dialog'>
     <div class='modal-content'>
-      <div class="modal-header text-right">
-        <div class='btn dropdown'>
-          <a href='###' class='dropdown-toggle' data-toggle='dropdown'> <i class='icon-globe icon-large'></i>
-            &nbsp;<?php echo $config->langs[$acceptLang]?>
-            <span class='caret'></span>
-          </a>
-          <ul class='dropdown-menu'>
-            <?php foreach($config->langs as $langCode => $langName) echo "<li><a href='?lang=$langCode'>$langName</a></li>";?>
-          </ul>
-        </div>
-      </div>
       <div class='modal-body'>
-        <h3><?php echo $clientLang->title;?></h3>
-        <div>
         <div class="row">
-          <div class="col-xs-6 text-center">
+          <div class="col-xs-6 text-center" style="border-right: 1px solid #ddd;">
             <img src='?mode=getlogo' />
           </div>
-          <div class="col-xs-6" style="border-left: 1px solid #ddd">
-            <ul>
-              <li><?php echo $clientLang->xampp;?></li>
-              <li><?php echo $clientLang->official ?></li>
-              <li><?php echo $clientLang->phpmyadmin ?></li>
-              <li><?php echo $clientLang->phpinfo ?></li>
-            </ul>
+          <div class="col-xs-6" style="margin-top:11px;">
+			<?php foreach($clientLang->links as $linkID => $link):?>
+			  <a id='product-<?php echo $linkID;?>' href="<?php echo $link['link']?>" class='btn btn-success' target='<?php echo $link['target']?>'><?php echo $clientLang->visit . $link['text'];?></a>
+			<?php endforeach;?>
           </div>
-        </div>
         </div>
       </div>
     </div>
     <div class='modal-footer'>
-      <p class='text-center'>
-        <?php foreach($clientLang->links as $linkID => $link):?>
-          <a id='product-<?php echo $linkID;?>' href="<?php echo $link['link']?>" class='btn btn-success' target='<?php echo $link['target']?>'><?php echo $clientLang->visit . $link['text'];?></a>
-        <?php endforeach;?>
-      </p>
-    </div>
+      <?php echo $clientLang->xampp;?>
+      <?php echo $clientLang->official ?>
+      <?php echo $clientLang->phpmyadmin ?>
+      <?php echo $clientLang->phpinfo ?>
+	  <div class='btn dropdown'>
+        <a href='###' class='dropdown-toggle' data-toggle='dropdown'>
+          &nbsp;&nbsp;<?php echo $config->langs[$acceptLang]?>
+          <span class='caret'></span>
+        </a>
+        <ul class='dropdown-menu'>
+          <?php foreach($config->langs as $langCode => $langName) echo "<li><a href='?lang=$langCode'>$langName</a></li>";?>
+        </ul>
+      </div>
+    </div>   
   </div>
 </div>
 </body>
