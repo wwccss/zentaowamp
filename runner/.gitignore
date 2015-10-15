@@ -60,3 +60,10 @@ zentaorunner.exe
 
 #node modules
 node_modules
+
+#output
+xampp/chanzhi-xampp/
+xampp/ranzhi-xampp/
+xampp/zentao-xampp/
+xampp/yidou-xampp/
+xampp/*.zip
