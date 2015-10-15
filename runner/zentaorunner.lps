@@ -4,7 +4,7 @@
     <PathDelim Value="\"/>
     <Version Value="9"/>
     <BuildModes Active="Default"/>
-    <Units Count="21">
+    <Units Count="22">
       <Unit0>
         <Filename Value="zentaorunner.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -193,6 +193,14 @@
         <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit20>
+      <Unit21>
+        <Filename Value="C:\Users\Catouse\AppData\Local\Temp\Rar$DIa0.026\BackgroundWorker.pas"/>
+        <UnitName Value="BackgroundWorker"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="339"/>
+        <CursorPos X="39" Y="6"/>
+        <UsageCount Value="10"/>
+      </Unit21>
     </Units>
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
