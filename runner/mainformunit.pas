@@ -173,10 +173,10 @@ begin
 
     PrintLn(product.Title + Format(GetLang('message/zentaoControl', '控制面板 %s'), [GetBuildVersion]));
 
-    // if Pos(':\xampp\', LowerCase(Application.ExeName)) <> 2 then begin
-    //     ShowMessage(GetLang('UI/wrongPath', '请将一键安装包解压到根目录, 例如：D:\xampp'));
-    //     Close;
-    // end;
+    if not CheckApplicationPath(Application.Location) then begin
+        ShowMessage(GetLang('message/wrongAppLocationPath', '无法安装启动服务，因为当前程序所在路径包含中文等特殊字符。程序所在路径必须仅包含数字、大小写字母或下划线，请修改路径后重试。'));
+        Close;
+    end;
 
     if not CheckVC2008 then begin
         if mrYes = MessageDlg(GetLang('UI/isInstallVC', '检查到没有安装VC2008运行环境，将无法正常使用所有功能。是否立即安装？'), mtConfirmation, [mbYes, mbNo], 0) then begin

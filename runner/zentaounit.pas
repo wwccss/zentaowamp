@@ -112,6 +112,7 @@ procedure Print(message: string = '');overload;
 procedure Print(Const message : String; const args : Array of const);overload;
 procedure ConsoleLn(textOrName: string = ''; text: string = '`');
 procedure Console(textOrName: string = ''; text: string = '`'; newLine: boolean = False);
+function CheckApplicationPath(path: String): boolean;
 procedure InitZentao();
 function BackupZentao(): string;
 function StartZentao(): boolean;
@@ -262,6 +263,16 @@ begin
     end;
 
     Result := true;
+end;
+
+function CheckApplicationPath(path: String): boolean;
+var
+    regex: TRegExpr;
+begin
+    regex := TRegExpr.Create;
+    regex.Expression := '^[a-zA-Z\d_\s\\\/:\.]*$';
+    Result := regex.Exec(path);
+    regex.Free;
 end;
 
 { Get local IP address }
@@ -1204,7 +1215,7 @@ begin
     end
     else
     begin
-        Result := Format(formatStr, [1, 2, 5, 0]);
+        Result := Format(formatStr, [1, 2, 6, 0]);
     end;
 end;
 
