@@ -40,6 +40,7 @@ $acceptLang = isset($_GET['lang']) ? $_GET['lang'] : $acceptLang;
 $clientLang = $lang->$acceptLang;
 
 ?>
+<!DOCTYPE html>
 <html xmlns='http://www.w3.org/1999/xhtml'>
 <head>
   <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
@@ -50,12 +51,12 @@ $clientLang = $lang->$acceptLang;
 <link rel='stylesheet' href='../ranzhi/theme/zui/css/min.css' type='text/css' media='screen' />
 <script src='../ranzhi/js/jquery/min.js?v=1.3.beta' type='text/javascript'></script>
 <script src='../ranzhi/js/zui/min.js?v=1.3.beta' type='text/javascript'></script>
-<style>body{background-color: #f1f1f1}
+<style>
+body{background-color: #f1f1f1}
 .container{padding: 0}
-.modal-dialog{width: 450px}
 .modal-footer{text-align: left;}
 .modal-footer > a{margin-left:5px;}
-.modal-dialog{position: relative; margin-top: 10%;}
+.modal-dialog{width: 450px; margin: auto; position: relative; margin-top: 10%;}
 
 .modal-body{margin:20px 0px; text-align: center;}
 .modal-body img{}
