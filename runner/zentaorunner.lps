@@ -21,6 +21,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="mainformunit"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="164"/>
@@ -33,11 +34,10 @@
         <Filename Value="zentaounit.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="zentaounit"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="934"/>
-        <CursorPos X="30" Y="956"/>
+        <CursorPos X="42" Y="939"/>
         <UsageCount Value="172"/>
         <Loaded Value="True"/>
       </Unit2>
