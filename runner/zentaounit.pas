@@ -270,7 +270,7 @@ var
     regex: TRegExpr;
 begin
     regex := TRegExpr.Create;
-    regex.Expression := '^[a-zA-Z\d_\s\\\/:\.]*$';
+    regex.Expression := '^[a-zA-Z\d_\\\/:]*$';
     Result := regex.Exec(path);
     regex.Free;
 end;
