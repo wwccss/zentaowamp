@@ -1215,7 +1215,7 @@ begin
     end
     else
     begin
-        Result := Format(formatStr, [1, 2, 6, 0]);
+        Result := Format(formatStr, [1, 2, 8, 0]);
     end;
 end;
 
