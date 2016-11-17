@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 510
+  Left = 721
   Height = 334
-  Top = 352
+  Top = 450
   Width = 550
   Caption = '禅道集成运行环境'
   ClientHeight = 314
@@ -4406,8 +4406,8 @@ object MainForm: TMainForm
         OnClick = MenuItemUninstallServiceClick
       end
     end
-    object MenuItemMore: TMenuItem
-      Caption = '更多'
+    object MenuItemTool: TMenuItem
+      Caption = '工具'
       object MenuItemInitBat: TMenuItem
         Caption = '生成脚本'
         ShortCut = 16457
@@ -4423,27 +4423,23 @@ object MainForm: TMainForm
         ShortCut = 16450
         OnClick = MenuItemBackupClick
       end
-      object MenuItem11: TMenuItem
-        Caption = '-'
+    end
+    object MenuItemLang: TMenuItem
+      Caption = '语言'
+      object MenuItemZhcn: TMenuItem
+        Caption = '中文简体'
+        Hint = 'zh_cn'
+        OnClick = ChangeLangMenuItemClick
       end
-      object MenuItemLang: TMenuItem
-        Caption = '语言'
-        ShortCut = 16460
-        object MenuItemZhcn: TMenuItem
-          Caption = '中文简体'
-          Hint = 'zh_cn'
-          OnClick = ChangeLangMenuItemClick
-        end
-        object MenuItemZhtw: TMenuItem
-          Caption = '中文繁体'
-          Hint = 'zh_tw'
-          OnClick = ChangeLangMenuItemClick
-        end
-        object MenuItemEn: TMenuItem
-          Caption = 'English'
-          Hint = 'en'
-          OnClick = ChangeLangMenuItemClick
-        end
+      object MenuItemZhtw: TMenuItem
+        Caption = '中文繁体'
+        Hint = 'zh_tw'
+        OnClick = ChangeLangMenuItemClick
+      end
+      object MenuItemEn: TMenuItem
+        Caption = 'English'
+        Hint = 'en'
+        OnClick = ChangeLangMenuItemClick
       end
     end
     object MenuItemHelp: TMenuItem
