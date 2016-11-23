@@ -1,7 +1,6 @@
 <?php
 error_reporting(0);
 
-if(isset($_GET['mode']) and $_GET['mode'] == 'phpinfo') die(phpinfo());
 if(isset($_GET['mode']) and $_GET['mode'] == 'getlogo')
 {
     header('Content-type: image/png');  
@@ -19,7 +18,6 @@ $lang->cn->title = '欢迎使用禅道集成运行环境！';
 $lang->cn->xampp      = " <a href='http://www.apachefriends.org/en/xampp.html' target='_blank'>xampp</a>";
 $lang->cn->official   = " <a href='http://www.zentao.net' target='_blank'>禅道官网</a>";
 $lang->cn->phpmyadmin = "<a href='/phpmyadmin/' target='_blank'>数据库管理</a>";
-$lang->cn->phpinfo    = "<a href='?mode=phpinfo' target='_blank'>PHP信息</a>";
 
 $lang->en->links['zentao']['link']       = '/zentao/';
 $lang->en->links['zentao']['text']       = 'Zentao';
@@ -33,7 +31,6 @@ $lang->en->title      = 'Welcome to use zentao!';
 $lang->en->xampp      = " <a href='http://www.apachefriends.org/en/xampp.html' target='_blank'>xampp</a> ";
 $lang->en->official   = " <a href='http://www.zentao.net/en' target='_blank'>Community</a>";
 $lang->en->phpmyadmin = "<a href='/phpmyadmin/' target='_blank'>MySQL</a>";
-$lang->en->phpinfo    = "<a href='?mode=phpinfo' target='_blank'>PHP</a>";
 
 $acceptLang = stripos($_SERVER['HTTP_ACCEPT_LANGUAGE'], 'zh-CN') !== false ? 'cn' : 'en';
 $acceptLang = isset($_GET['lang']) ? $_GET['lang'] : $acceptLang;
@@ -85,7 +82,6 @@ body {background-color: #06294e}
         <li><?php echo $clientLang->xampp;?></li>
         <li><?php echo $clientLang->official ?></li>
         <li><?php echo $clientLang->phpmyadmin ?></li>
-        <li><?php echo $clientLang->phpinfo ?></li>
       </ul>
     </div>
   </div>

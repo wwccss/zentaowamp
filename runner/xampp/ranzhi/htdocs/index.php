@@ -1,7 +1,6 @@
 <?php
 error_reporting(0);
 
-if(isset($_GET['mode']) and $_GET['mode'] == 'phpinfo') die(phpinfo());
 if(isset($_GET['mode']) and $_GET['mode'] == 'getlogo')
 {
     header('Content-type: image/png');  
@@ -21,7 +20,6 @@ $lang->cn->title = '欢迎使用然之集成运行环境！';
 $lang->cn->xampp      = " <a href='http://www.apachefriends.org/en/xampp.html' target='_blank'>xampp</a>";
 $lang->cn->official   = " <a href='http://www.ranzhi.org' target='_blank'>然之官网</a>";
 $lang->cn->phpmyadmin = "<a href='/phpmyadmin/' target='_blank'>数据库管理</a>";
-$lang->cn->phpinfo    = "<a href='?mode=phpinfo' target='_blank'>PHP信息</a>";
 
 $lang->en->visit = 'Visit ';
 
@@ -33,7 +31,6 @@ $lang->en->title      = 'Welcome to use ranzhi!';
 $lang->en->xampp      = " <a href='http://www.apachefriends.org/en/xampp.html' target='_blank'>xampp</a> ";
 $lang->en->official   = " <a href='http://www.ranzhi.org/en' target='_blank'>Community</a>";
 $lang->en->phpmyadmin = "<a href='/phpmyadmin/' target='_blank'>MySQL</a>";
-$lang->en->phpinfo    = "<a href='?mode=phpinfo' target='_blank'>PHP</a>";
 
 $acceptLang = stripos($_SERVER['HTTP_ACCEPT_LANGUAGE'], 'zh-CN') !== false ? 'cn' : 'en';
 $acceptLang = isset($_GET['lang']) ? $_GET['lang'] : $acceptLang;
@@ -89,8 +86,7 @@ body{background-color: #f1f1f1}
       <?php echo $clientLang->xampp;?>
       <?php echo $clientLang->official ?>
       <?php echo $clientLang->phpmyadmin ?>
-      <?php echo $clientLang->phpinfo ?>
-	  <div class='btn dropdown'>
+	    <div class='btn dropdown'>
         <a href='###' class='dropdown-toggle' data-toggle='dropdown'>
           &nbsp;&nbsp;<?php echo $config->langs[$acceptLang]?>
           <span class='caret'></span>
