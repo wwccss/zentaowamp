@@ -18,7 +18,6 @@ if(count($argv) != 3) die("php build.php sourceDir product=zentao|chanzhi|common
 $sourceDir  = $argv[1];
 $product    = $argv[2];
 $xampp      = $sourceDir . '\xampp';
-$phpmyadmin = $sourceDir . '\phpmyadmin';
 $output     = $sourceDir . '\release';
 
 chdir($sourceDir);
@@ -71,6 +70,7 @@ $file->copyFile('./xampp/apache/modulesold/mod_dir.so',           './xampp/apach
 $file->copyFile('./xampp/apache/modulesold/mod_deflate.so',       './xampp/apache/modules/mod_deflate.so');
 $file->copyFile('./xampp/apache/modulesold/mod_filter.so',        './xampp/apache/modules/mod_filter.so');
 $file->copyFile('./xampp/apache/modulesold/mod_log_config.so',    './xampp/apache/modules/mod_log_config.so');
+$file->copyFile('./xampp/apache/modulesold/mod_ssl.so',           './xampp/apache/modules/mod_ssl.so');
 $file->removeDir('./xampp/apache/modulesold');
 
 /* Remove apache's error, icons, include, lib, logs directory. */
@@ -133,7 +133,9 @@ $file->mkdir('./xampp/mysql/bin');
 
 $file->copyFile('./xampp/mysql/binold/mysql.exe',      './xampp/mysql/bin/mysql.exe');
 $file->copyFile('./xampp/mysql/binold/mysqld.exe',     './xampp/mysql/bin/mysqld.exe');
+$file->copyFile('./xampp/mysql/binold/mysqld.exe',     './xampp/mysql/bin/mysqld.exe');
 $file->copyFile('./xampp/mysql/binold/mysqldump.exe',  './xampp/mysql/bin/mysqldump.exe');
+$file->copyFile('./xampp/mysql/binold/myisamchk.exe',  './xampp/mysql/bin/myisamchk.exe');
 $file->removeFile('./xampp/mysql/binold/my.ini');
 
 $file->removeDir('./xampp/mysql/binold');
@@ -192,16 +194,16 @@ $file->batchRemoveFile('./xampp/php/phpdoc');
 $file->batchRemoveFile('./xampp/php/phpuml');
 $file->batchRemoveFile('./xampp/php/*.sh');
 $file->batchRemoveFile('./xampp/php/logs/*');
-$file->batchRemoveFile('./xampp/php/php5embed.lib');
+$file->batchRemoveFile('./xampp/php/php7embed.lib');
 
-$file->rename('./xampp/php/php5apache2_4.dll', './xampp/php/php5apache2_4.bak');
-$file->rename('./xampp/php/php5ts.dll',   './xampp/php/php5ts.bak');
+$file->rename('./xampp/php/php7apache2_4.dll', './xampp/php/php7apache2_4.bak');
+$file->rename('./xampp/php/php7ts.dll',   './xampp/php/php7ts.bak');
 $file->rename('./xampp/php/ssleay32.dll', './xampp/php/ssleay32.dll.bak');
 $file->rename('./xampp/php/libeay32.dll', './xampp/php/libeay32.dll.bak');
 $file->rename('./xampp/php/libsasl.dll',  './xampp/php/libsasl.dll.bak');
 $file->batchRemoveFile('./xampp/php/*.dll');
-$file->rename('./xampp/php/php5apache2_4.bak', './xampp/php/php5apache2_4.dll');
-$file->rename('./xampp/php/php5ts.bak', './xampp/php/php5ts.dll');
+$file->rename('./xampp/php/php7apache2_4.bak', './xampp/php/php7apache2_4.dll');
+$file->rename('./xampp/php/php7ts.bak', './xampp/php/php7ts.dll');
 $file->rename('./xampp/php/ssleay32.dll.bak', './xampp/php/ssleay32.dll');
 $file->rename('./xampp/php/libeay32.dll.bak', './xampp/php/libeay32.dll');
 $file->copyFile('./xampp/php/libsasl.dll.bak', './xampp/apache/bin/libsasl.dll');
@@ -225,35 +227,25 @@ $file->copyFile('./xampp/php/extold/php_sockets.dll',   './xampp/php/ext/php_soc
 $file->copyFile('./xampp/php/extold/php_openssl.dll',   './xampp/php/ext/php_openssl.dll');
 $file->copyFile('./xampp/php/extold/php_ldap.dll',      './xampp/php/ext/php_ldap.dll');
 $file->copyFile('./xampp/php/extold/php_curl.dll',      './xampp/php/ext/php_curl.dll');
+$file->copyFile('./xampp/php/extold/php_opcache.dll',   './xampp/php/ext/php_opcache.dll');
 $file->removeDir('./xampp/php/extold');
 
 /* Process phpmyadmin. */
 $file->removeDir('./xampp/phpMyAdmin');
-$file->copyDir('./phpmyadmin', './xampp/phpmyadmin/');
-$file->mkdir('./xampp/phpmyadmin/locale.new');
-$file->copyDir('./xampp/phpmyadmin/locale/zh_CN', './xampp/phpmyadmin/locale.new/zh_CN');
-$file->copyDir('./xampp/phpmyadmin/locale/zh_TW', './xampp/phpmyadmin/locale.new/zh_TW');
-$file->copyDir('./xampp/phpmyadmin/locale/en_GB', './xampp/phpmyadmin/locale.new/en_GB');
-$file->removeDir('./xampp/phpmyadmin/locale');
-$file->rename('./xampp/phpmyadmin/locale.new', './xampp/phpmyadmin/locale');
-$file->copyFile($buildDir . '/phpmyadmin.php', './xampp/phpmyadmin/config.inc.php');
-$file->removeDir('./xampp/phpmyadmin/themes/original/');
-$file->removeDir('./xampp/phpmyadmin/examples/');
-$file->removeDir('./xampp/phpmyadmin/js/openlayers/');
-$file->removeDir('./xampp/phpmyadmin/doc');
-$file->removeDir('./xampp/phpmyadmin/doc');
-$file->batchRemoveFile('./xampp/phpmyadmin/Documentation*');
+$file->mkdir('./xampp/adminer');
+$file->copyFile(dirname(__FILE__) . '/adminer.php', './xampp/adminer/index.php');
+$file->copyFile(dirname(__FILE__) . '/adminer.css', './xampp/adminer/adminer.php');
 
 /* Process the svn. */
 if($product == 'zentao')
 {
-    $file->copyDir($buildDir . '/svn/silksvn/', './xampp/silksvn');
+    $file->copyDir($buildDir . '/svn/sliksvn/', './xampp/sliksvn');
     $file->mkdir('./xampp/zentao/module/svn/ext/config');
     $file->copyFile($buildDir . '/svn/svn.php', './xampp/zentao/module/svn/ext/config/svn.php');
 }
 else
 {
-    $file->removeDir('./xampp/silksvn/');
+    $file->removeDir('./xampp/sliksvn/');
     $file->removeDir('./xampp/zentao/');
 }
 
@@ -264,9 +256,6 @@ file_put_contents('./xampp/htdocs/index.php', file_get_contents($remoteIndexFile
 
 /* Copy ioncube loader. */
 $file->copyFile($buildDir . '/php_ioncube.dll', './xampp/php/ext/php_ioncube.dll');
-
-/* Copy opcache so file. */
-$file->copyFile($buildDir . '/php_opcache.dll', './xampp/php/ext/php_opcache.dll');
 
 /* Copy serive bat file. */
 $file->copyDir($buildDir . '/services', './xampp/services');
