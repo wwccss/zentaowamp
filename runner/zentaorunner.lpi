@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
-    <Version Value="9"/>
+    <Version Value="10"/>
     <PathDelim Value="\"/>
     <General>
       <SessionStorage Value="InProjectDir"/>
@@ -10,7 +10,7 @@
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
       <XPManifest>
-        <ExecutionLevel Value="2"/>
+        <ExecutionLevel Value="requireAdministrator"/>
       </XPManifest>
       <Icon Value="0"/>
     </General>
@@ -51,12 +51,6 @@
               </Win32>
             </Options>
           </Linking>
-          <Other>
-            <CompilerMessages>
-              <MsgFileName Value=""/>
-            </CompilerMessages>
-            <CompilerPath Value="$(CompPath)"/>
-          </Other>
         </CompilerOptions>
       </Item2>
     </BuildModes>
@@ -80,7 +74,6 @@
       <Unit0>
         <Filename Value="zentaorunner.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="zentaorunner"/>
       </Unit0>
       <Unit1>
         <Filename Value="mainformunit.pas"/>
@@ -88,22 +81,18 @@
         <ComponentName Value="MainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="mainformunit"/>
       </Unit1>
       <Unit2>
         <Filename Value="zentaounit.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="zentaounit"/>
       </Unit2>
       <Unit3>
         <Filename Value="langunit.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="langunit"/>
       </Unit3>
       <Unit4>
         <Filename Value="inifileunit.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="inifileunit"/>
       </Unit4>
       <Unit5>
         <Filename Value="configportdialogunit.pas"/>
@@ -135,12 +124,6 @@
         </Win32>
       </Options>
     </Linking>
-    <Other>
-      <CompilerMessages>
-        <MsgFileName Value=""/>
-      </CompilerMessages>
-      <CompilerPath Value="$(CompPath)"/>
-    </Other>
   </CompilerOptions>
   <Debugging>
     <Exceptions Count="3">

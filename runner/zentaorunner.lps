@@ -2,15 +2,12 @@
 <CONFIG>
   <ProjectSession>
     <PathDelim Value="\"/>
-    <Version Value="9"/>
+    <Version Value="10"/>
     <BuildModes Active="Default"/>
     <Units Count="21">
       <Unit0>
         <Filename Value="zentaorunner.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="zentaorunner"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
         <CursorPos X="40" Y="5"/>
         <UsageCount Value="195"/>
       </Unit0>
@@ -20,9 +17,7 @@
         <ComponentName Value="MainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="mainformunit"/>
-        <EditorIndex Value="6"/>
-        <WindowIndex Value="0"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="353"/>
         <CursorPos X="52" Y="367"/>
         <UsageCount Value="195"/>
@@ -32,9 +27,6 @@
       <Unit2>
         <Filename Value="zentaounit.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="zentaounit"/>
-        <EditorIndex Value="0"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="1196"/>
         <CursorPos X="108" Y="1206"/>
         <UsageCount Value="194"/>
@@ -43,8 +35,6 @@
       <Unit3>
         <Filename Value="langunit.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="langunit"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="53"/>
         <CursorPos X="24" Y="28"/>
         <UsageCount Value="128"/>
@@ -52,9 +42,7 @@
       <Unit4>
         <Filename Value="inifileunit.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="inifileunit"/>
-        <EditorIndex Value="5"/>
-        <WindowIndex Value="0"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="48"/>
         <CursorPos X="22" Y="48"/>
         <UsageCount Value="118"/>
@@ -67,10 +55,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="ConfigPortDialogUnit"/>
-        <EditorIndex Value="3"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="40" Y="5"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="24"/>
+        <CursorPos X="12" Y="55"/>
         <UsageCount Value="108"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -78,7 +66,6 @@
       <Unit6>
         <Filename Value="D:\Applications\lazarus\lcl\forms.pp"/>
         <UnitName Value="Forms"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="594"/>
         <CursorPos X="23" Y="608"/>
         <UsageCount Value="12"/>
@@ -86,23 +73,18 @@
       <Unit7>
         <Filename Value="D:\Applications\lazarus\fpc\2.6.4\source\packages\fcl-base\src\custapp.pp"/>
         <UnitName Value="CustApp"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="68"/>
         <CursorPos X="22" Y="81"/>
         <UsageCount Value="10"/>
       </Unit7>
       <Unit8>
         <Filename Value="D:\Applications\lazarus\fpc\2.6.4\source\packages\fcl-process\src\process.pp"/>
-        <UnitName Value="process"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="163"/>
         <CursorPos X="43" Y="179"/>
         <UsageCount Value="7"/>
       </Unit8>
       <Unit9>
         <Filename Value="D:\Applications\lazarus\fpc\2.6.4\source\rtl\inc\ctypes.pp"/>
-        <UnitName Value="ctypes"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="35"/>
         <CursorPos X="30" Y="49"/>
         <UsageCount Value="3"/>
@@ -110,14 +92,12 @@
       <Unit10>
         <Filename Value="D:\Applications\lazarus\fpc\2.6.4\source\packages\regexpr\src\regexpr.pas"/>
         <UnitName Value="RegExpr"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="490"/>
         <CursorPos X="31" Y="497"/>
         <UsageCount Value="9"/>
       </Unit10>
       <Unit11>
         <Filename Value="D:\Applications\lazarus\lcl\include\winapih.inc"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="191"/>
         <CursorPos X="10" Y="196"/>
         <UsageCount Value="5"/>
@@ -125,21 +105,18 @@
       <Unit12>
         <Filename Value="D:\Applications\lazarus\lcl\dialogs.pp"/>
         <UnitName Value="Dialogs"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="701"/>
         <CursorPos X="37" Y="715"/>
         <UsageCount Value="12"/>
       </Unit12>
       <Unit13>
         <Filename Value="D:\Applications\lazarus\fpc\2.6.4\source\rtl\objpas\sysutils\datih.inc"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="128"/>
         <CursorPos X="10" Y="142"/>
         <UsageCount Value="3"/>
       </Unit13>
       <Unit14>
         <Filename Value="D:\Applications\lazarus\fpc\2.6.4\source\rtl\objpas\sysutils\sysstrh.inc"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="110"/>
         <CursorPos X="24" Y="114"/>
         <UsageCount Value="12"/>
@@ -147,23 +124,19 @@
       <Unit15>
         <Filename Value="C:\Applications\lazarus\fpc\2.6.4\source\packages\fcl-json\src\jsonconf.pp"/>
         <UnitName Value="jsonConf"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="67"/>
         <CursorPos X="15" Y="85"/>
         <UsageCount Value="6"/>
       </Unit15>
       <Unit16>
         <Filename Value="C:\Applications\lazarus\fpc\2.6.4\source\rtl\objpas\sysutils\sysstrh.inc"/>
-        <EditorIndex Value="2"/>
-        <WindowIndex Value="0"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="9"/>
         <CursorPos X="17" Y="27"/>
         <UsageCount Value="29"/>
-        <Loaded Value="True"/>
       </Unit16>
       <Unit17>
         <Filename Value="C:\Applications\lazarus\fpc\2.6.4\source\rtl\inc\systemh.inc"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="822"/>
         <CursorPos X="18" Y="840"/>
         <UsageCount Value="9"/>
@@ -171,8 +144,7 @@
       <Unit18>
         <Filename Value="C:\Applications\lazarus\lcl\controls.pp"/>
         <UnitName Value="Controls"/>
-        <EditorIndex Value="4"/>
-        <WindowIndex Value="0"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="33"/>
         <CursorPos X="3" Y="51"/>
         <UsageCount Value="24"/>
@@ -180,27 +152,20 @@
       </Unit18>
       <Unit19>
         <Filename Value="C:\Users\Catouse\AppData\Local\Temp\Rar$DIa0.026\BackgroundWorker.pas"/>
-        <UnitName Value="BackgroundWorker"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="339"/>
         <CursorPos X="39" Y="6"/>
         <UsageCount Value="7"/>
       </Unit19>
       <Unit20>
         <Filename Value="..\..\zui\package.json"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1575"/>
-        <CursorPos X="21" Y="3"/>
+        <TopLine Value="27"/>
+        <CursorPos X="37" Y="48"/>
         <UsageCount Value="13"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit20>
     </Units>
-    <General>
-      <ActiveWindowIndexAtStart Value="0"/>
-    </General>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="mainformunit.pas"/>
@@ -216,79 +181,79 @@
       </Position3>
       <Position4>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="245" Column="1" TopLine="243"/>
+        <Caret Line="245" TopLine="243"/>
       </Position4>
       <Position5>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="239" Column="1" TopLine="231"/>
+        <Caret Line="239" TopLine="231"/>
       </Position5>
       <Position6>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="238" Column="1" TopLine="230"/>
+        <Caret Line="238" TopLine="230"/>
       </Position6>
       <Position7>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="237" Column="1" TopLine="229"/>
+        <Caret Line="237" TopLine="229"/>
       </Position7>
       <Position8>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="236" Column="1" TopLine="228"/>
+        <Caret Line="236" TopLine="228"/>
       </Position8>
       <Position9>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="235" Column="1" TopLine="227"/>
+        <Caret Line="235" TopLine="227"/>
       </Position9>
       <Position10>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="234" Column="1" TopLine="226"/>
+        <Caret Line="234" TopLine="226"/>
       </Position10>
       <Position11>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="233" Column="1" TopLine="225"/>
+        <Caret Line="233" TopLine="225"/>
       </Position11>
       <Position12>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="232" Column="1" TopLine="224"/>
+        <Caret Line="232" TopLine="224"/>
       </Position12>
       <Position13>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="231" Column="1" TopLine="223"/>
+        <Caret Line="231" TopLine="223"/>
       </Position13>
       <Position14>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="232" Column="1" TopLine="224"/>
+        <Caret Line="232" TopLine="224"/>
       </Position14>
       <Position15>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="233" Column="1" TopLine="225"/>
+        <Caret Line="233" TopLine="225"/>
       </Position15>
       <Position16>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="235" Column="1" TopLine="227"/>
+        <Caret Line="235" TopLine="227"/>
       </Position16>
       <Position17>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="234" Column="1" TopLine="233"/>
+        <Caret Line="234" TopLine="233"/>
       </Position17>
       <Position18>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="235" Column="1" TopLine="234"/>
+        <Caret Line="235" TopLine="234"/>
       </Position18>
       <Position19>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="236" Column="1" TopLine="235"/>
+        <Caret Line="236" TopLine="235"/>
       </Position19>
       <Position20>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="237" Column="1" TopLine="236"/>
+        <Caret Line="237" TopLine="236"/>
       </Position20>
       <Position21>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="236" Column="1" TopLine="235"/>
+        <Caret Line="236" TopLine="235"/>
       </Position21>
       <Position22>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="237" Column="1" TopLine="236"/>
+        <Caret Line="237" TopLine="236"/>
       </Position22>
       <Position23>
         <Filename Value="mainformunit.pas"/>
@@ -296,33 +261,32 @@
       </Position23>
       <Position24>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="298" Column="35" TopLine="348"/>
+        <Caret Line="297" Column="35" TopLine="297"/>
       </Position24>
       <Position25>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="297" Column="35" TopLine="297"/>
+        <Caret Line="296" Column="35" TopLine="296"/>
       </Position25>
       <Position26>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="296" Column="35" TopLine="296"/>
+        <Caret Line="295" Column="35" TopLine="295"/>
       </Position26>
       <Position27>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="295" Column="35" TopLine="295"/>
+        <Caret Line="294" Column="35" TopLine="294"/>
       </Position27>
       <Position28>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="294" Column="35" TopLine="294"/>
+        <Caret Line="372" Column="27" TopLine="354"/>
       </Position28>
       <Position29>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="372" Column="27" TopLine="354"/>
+        <Caret Line="371" Column="27" TopLine="353"/>
       </Position29>
       <Position30>
-        <Filename Value="mainformunit.pas"/>
-        <Caret Line="371" Column="27" TopLine="353"/>
+        <Filename Value="configportdialogunit.pas"/>
+        <Caret Line="5" Column="40"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>
-  <EditorMacros Count="0"/>
 </CONFIG>

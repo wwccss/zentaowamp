@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 721
+  Left = 441
   Height = 334
-  Top = 450
+  Top = 443
   Width = 550
   Caption = '禅道集成运行环境'
   ClientHeight = 314
@@ -4323,7 +4323,7 @@ object MainForm: TMainForm
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
   Position = poScreenCenter
-  LCLVersion = '1.2.6.0'
+  LCLVersion = '1.6.4.0'
   object ButtonRun: TButton
     Left = 15
     Height = 40
