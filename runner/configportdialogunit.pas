@@ -22,6 +22,7 @@ type
         UpDown1   : TUpDown;
         UpDown2   : TUpDown;
         procedure Button1Click(Sender: TObject);
+        procedure Edit1Change(Sender: TObject);
         procedure FormShow(Sender: TObject);
     private
         { private declarations }
@@ -47,6 +48,11 @@ begin
     userConfig.AutoChangePort := CheckBox1.Checked;
     SaveConfig();
     Close;
+end;
+
+procedure TConfigPortDialog.Edit1Change(Sender: TObject);
+begin
+
 end;
 
 procedure TConfigPortDialog.FormShow(Sender: TObject);
