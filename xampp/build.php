@@ -114,6 +114,7 @@ $file->copyFile($xampp . '\php\libeay32.dll',      $output . '\php\libeay32.dll'
 $file->copyFile($xampp . '\php\libsasl.dll',       $output . '\apache\bin\libsasl.dll');
 $file->copyFile($xampp . '\php\libsasl.dll',       $output . '\php\libsasl.dll');
 $file->copyFile($xampp . '\php\libssh2.dll',       $output . '\php\libssh2.dll');
+$file->copyFile($xampp . '\php\libssh2.dll',       $output . '\apache\bin\libssh2.dll');
 $file->copyFile($xampp . '\php\php.exe',      	   $output . '\php\php.exe');
 $file->copyFile($xampp . '\php\php.gif',      	   $output . '\php\php.gif');
 
