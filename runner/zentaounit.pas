@@ -384,13 +384,13 @@ begin
     serviceStatus := GetServiceStatus(serviceName);
     if serviceStatus = 'running' then begin
         StopService(ServiceName);
-        Sleep(1000);
+        Sleep(3000);
         serviceStatus := GetServiceStatus(serviceName);
     end else if serviceStatus = 'failed' then begin
         // PrintLn('服务' + serviceName + '没有安装。');
         if force then begin
             InstallService(serviceName);
-            Sleep(1000);
+            Sleep(3000);
             serviceStatus := GetServiceStatus(serviceName);
         end;
     end;
@@ -399,9 +399,9 @@ begin
         PrintLn(GetLang('message/wrongService', '服务安装路径不正确。'));
         if mrYes = MessageDlg(GetLang('message/wrongServiceTip', '服务安装路径不正确。是否重新安装？'), mtConfirmation, [mbYes, mbNo], 0) then begin
             UninstallService(serviceName);
-            Sleep(1000);
+            Sleep(3000);
             InstallService(serviceName);
-            Sleep(1000);
+            Sleep(3000);
             serviceStatus := GetServiceStatus(serviceName);
         end else begin
             Result := false;
@@ -417,7 +417,7 @@ begin
         end;
         port := FixPort(ServiceName, retry);
         ExcuteCommand('net start ' + serviceName).Free;
-        Sleep(1000);
+        Sleep(3000);
         
         serviceStatus := GetServiceStatus(serviceName);
         if serviceStatus = 'running' then begin
@@ -1031,6 +1031,8 @@ function StartZentao(): boolean;
 begin
     PrintLn;
     PrintLn(GetLang('message/starting', '正在启动......'));
+
+    // FixConfigPath;
 
     Result := RestartService(apache.ServiceName, True);
     if not Result then Result := RestartService(apache.ServiceName, True, True);
