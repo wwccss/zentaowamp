@@ -9,7 +9,7 @@
         <Filename Value="zentaorunner.lpr"/>
         <IsPartOfProject Value="True"/>
         <CursorPos X="40" Y="5"/>
-        <UsageCount Value="195"/>
+        <UsageCount Value="198"/>
       </Unit0>
       <Unit1>
         <Filename Value="mainformunit.pas"/>
@@ -20,7 +20,7 @@
         <EditorIndex Value="5"/>
         <TopLine Value="353"/>
         <CursorPos X="52" Y="367"/>
-        <UsageCount Value="195"/>
+        <UsageCount Value="198"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
@@ -29,7 +29,7 @@
         <IsPartOfProject Value="True"/>
         <TopLine Value="1196"/>
         <CursorPos X="108" Y="1206"/>
-        <UsageCount Value="194"/>
+        <UsageCount Value="197"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
@@ -37,7 +37,7 @@
         <IsPartOfProject Value="True"/>
         <TopLine Value="53"/>
         <CursorPos X="24" Y="28"/>
-        <UsageCount Value="128"/>
+        <UsageCount Value="131"/>
       </Unit3>
       <Unit4>
         <Filename Value="inifileunit.pas"/>
@@ -45,7 +45,7 @@
         <EditorIndex Value="4"/>
         <TopLine Value="48"/>
         <CursorPos X="22" Y="48"/>
-        <UsageCount Value="118"/>
+        <UsageCount Value="121"/>
         <Loaded Value="True"/>
       </Unit4>
       <Unit5>
@@ -59,7 +59,7 @@
         <EditorIndex Value="2"/>
         <TopLine Value="24"/>
         <CursorPos X="12" Y="55"/>
-        <UsageCount Value="108"/>
+        <UsageCount Value="111"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit5>
@@ -147,7 +147,7 @@
         <EditorIndex Value="3"/>
         <TopLine Value="33"/>
         <CursorPos X="3" Y="51"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="25"/>
         <Loaded Value="True"/>
       </Unit18>
       <Unit19>
@@ -161,7 +161,7 @@
         <EditorIndex Value="1"/>
         <TopLine Value="27"/>
         <CursorPos X="37" Y="48"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="14"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit20>
