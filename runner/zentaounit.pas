@@ -63,17 +63,10 @@ type
         TaskConfig        : string;
         TestConfig        : string;
         ProConfig         : string;
-        PhpmyadminConfig  : string;
-        PhpmyadminCfgTpl  : string;
         ServiceName       : string;
         Status            : string;
         Port              : integer;
         // SuggestPort       : integer;
-    end;
-
-    PhpmyadminConfig = record
-        Readme  : string;
-        Version : string;
     end;
 
     ProductSystemConfig = record
@@ -143,10 +136,11 @@ function GetLocalIP(): string;
 function InitBat(): boolean;
 function FixConfigPath(): boolean;
 function FixConfigFile(src: string; dest: string): boolean;
-function CheckVC2008(): boolean;
-procedure InstallVC2008();
+function CheckVC(): boolean;
+procedure InstallVC();
 function StrReplace(source: string; find: string; forReplace: string): string;
 function formatDir(source: string): string;
+function GenRandomStr(len: integer): String;
 
 const
     ONE_DAY_MILLION_SECONDS = 24 * 60 * 60 * 1000;
@@ -159,11 +153,11 @@ const
 
     MAX_PORT          = 65535;
     HOST              = '127.0.0.1';
-    VC_REDIST_2005    = 'vcredist_x86_sp1.exe';
-    VC_REDIST_2008    = 'vcredist_x86.exe';
+    VC_REDIST_2015    = 'vc_redist.x86.exe';
     VC_DETECTOR       = 'vc2008_detector.bat';
     VERSION           = '1.3.0';
     INIT_SUCCESSCODE  = '0';
+    RANDOM_STR_SET    = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 var
     // debug_mode : integer;
@@ -171,7 +165,6 @@ var
     php            : PhpConfig;
     apache         : ApacheConfig;
     mysql          : MysqlConfig;
-    phpmyadmin     : PhpmyadminConfig;
     product        : ProductSystemConfig;
     userConfig     : UserConfiguration;
     isFirstRun     : boolean;
@@ -183,7 +176,16 @@ implementation
 
 uses mainformunit;
 
-function CheckVC2008(): boolean;
+function GenRandomStr(len: integer): String;
+begin
+    Result := '';
+    For i := 0 to len do
+    begin
+        Result := Result + RANDOM_STR_SET[Random()]
+    end;
+end;
+
+function CheckVC(): boolean;
 var
     outputLines : TStringList;
     i           : integer;
@@ -213,9 +215,9 @@ begin
     end;
 end;
 
-procedure InstallVC2008();
+procedure InstallVC();
 begin
-    ExcuteCommand(os.RunnerLocation + VC_REDIST_2008, False, False);
+    ExcuteCommand(os.RunnerLocation + VC_REDIST_2015, False, False);
 end;
 
 { Generage config file from template }
@@ -256,7 +258,6 @@ begin
     FixConfigFile(mysql.ConfigFileTpl, mysql.ConfigFile);
     FixConfigFile(php.ConfigFileTpl, php.ConfigFile);
     FixConfigFile(apache.ConfigFileTpl, apache.ConfigFile);
-    FixConfigFile(mysql.PhpmyadminCfgTpl, mysql.PhpmyadminConfig);
     UpdateConfigPort(mysql.ServiceName, product.MyConfig);
     if product.pro <> '' then begin
         UpdateConfigPort(mysql.ServiceName, product.ProMyConfig);
@@ -825,16 +826,10 @@ begin
     mysql.ConfigFile       := os.Location + 'mysql\my.ini';
     mysql.ConfigFileTpl    := os.RunnerLocation + config.Get('mysql/configfile', 'res\mysql\my.ini');
     
-    mysql.PhpmyadminConfig := os.Location + 'phpmyadmin\config.inc.php';
-    mysql.PhpmyadminCfgTpl := os.RunnerLocation + config.Get('phpmyadmin/configfile', 'res\phpmyadmin\config.inc.php');
     mysql.ServiceName      := 'mysqlzt';
     mysql.Status           := GetServiceStatus(mysql.ServiceName);
     mysql.Port             := userconfig.MysqlPort;
     // mysql.SuggestPort      := GetConfigPort(mysql.ServiceName);
-
-    // phpmyadmin
-    phpmyadmin.Readme      := os.Location + '\phpmyadmin\README';
-    phpmyadmin.Version     := GetVersion('phpmyadmin', True);
 
     // product, like zentao or chanzhi
     product.ID             := config.Get('product/id', 'zentao');
@@ -943,7 +938,6 @@ begin
     end else begin
         FixConfigFile(php.ConfigFileTpl, php.ConfigFile); 
         FixConfigFile(mysql.ConfigFileTpl, mysql.ConfigFile);
-        FixConfigFile(mysql.PhpmyadminCfgTpl, mysql.PhpmyadminConfig);
         UpdateConfigPort(serviceName, product.MyConfig);
         if product.pro <> '' then begin
             UpdateConfigPort(serviceName, product.ProMyConfig);
