@@ -778,43 +778,22 @@ var
     text    : string;
     output  : TStringList;
 begin
-    if Result = '' then
+    if soft = 'php' then
     begin
-        if soft = 'php' then
-        begin
-            command := php.Exe + ' --version';
-        end
-        else if soft = 'mysql' then
-        begin
-            command := mysql.Exe + ' --version';
-        end
-        else if soft = 'apache' then
-        begin
-            command := apache.Exe + ' -v';
-        end;
-        
-        if soft = 'phpmyadmin' then
-        begin
-            output := TStringList.Create;
-            output.LoadFromFile(phpmyadmin.Readme);
-            for i := 0 to (output.Count - 1) do
-            begin
-                text := output[i];
-                if (text <> '') and (Pos('version ', LowerCase(text)) = 1) then
-                begin
-                    Result := text;
-                    break;
-                end;
-            end;
-            output.Free;
-        end
-        else
-        begin
-            output := ExcuteCommand(command, True);
-            Result := output[0];
-            output.Free;
-        end;
+        command := php.Exe + ' --version';
+    end
+    else if soft = 'mysql' then
+    begin
+        command := mysql.Exe + ' --version';
+    end
+    else if soft = 'apache' then
+    begin
+        command := apache.Exe + ' -v';
     end;
+    
+    output := ExcuteCommand(command, True);
+    Result := output[0];
+    output.Free;
 
     if display then
     begin
