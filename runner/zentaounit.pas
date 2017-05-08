@@ -162,7 +162,7 @@ const
     VC_REDIST_2005    = 'vcredist_x86_sp1.exe';
     VC_REDIST_2008    = 'vcredist_x86.exe';
     VC_DETECTOR       = 'vc2008_detector.bat';
-    VERSION           = '1.2.4';
+    VERSION           = '1.3.0';
     INIT_SUCCESSCODE  = '0';
 
 var
