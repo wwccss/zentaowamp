@@ -253,7 +253,7 @@ begin
 
     authConfig := 'Require all granted';
     if userconfig.EnableApacheAuth then begin
-        authConfig := 'AuthName "' + product.id + ' auth required."'
+        authConfig := 'AuthName "' + product.id + ' runner authentication required"'
             + LineEnding + '  AuthType Basic'
             + LineEnding + '  AuthUserFile "' + formatDir(apache.authFile) + '"'
             + LineEnding + '  Require valid-user';
