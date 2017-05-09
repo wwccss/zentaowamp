@@ -1,0 +1,201 @@
+2017-05-08 15:55:00 10004 [Note] Plugin 'InnoDB' is disabled.
+2017-05-08 15:55:00 10004 [Note] Server socket created on IP: '127.0.0.1'.
+2017-05-08 15:55:01 10084 [Warning] Failed to load slave replication state from table mysql.gtid_slave_pos: 1286: Unknown storage engine 'InnoDB'
+2017-05-08 15:55:01 10004 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: ready for connections.
+Version: '10.1.21-MariaDB'  socket: ''  port: 3306  mariadb.org binary distribution
+2017-05-08 15:56:57 10080 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Normal shutdown
+
+2017-05-08 15:56:57 10080 [Note] Event Scheduler: Purging the queue. 0 events
+2017-05-08 15:56:57 10080 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Shutdown complete
+
+2017-05-08 15:57:14 4372 [Note] Plugin 'InnoDB' is disabled.
+2017-05-08 15:57:14 4372 [Note] Server socket created on IP: '127.0.0.1'.
+2017-05-08 15:57:14 7904 [Warning] Failed to load slave replication state from table mysql.gtid_slave_pos: 1286: Unknown storage engine 'InnoDB'
+2017-05-08 15:57:14 4372 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: ready for connections.
+Version: '10.1.21-MariaDB'  socket: ''  port: 3306  mariadb.org binary distribution
+2017-05-08 16:02:15 9076 [Note] feedback plugin: report to 'https://mariadb.org/feedback_plugin/post' was sent
+2017-05-08 16:02:18 9076 [Note] feedback plugin: server replied 'ok'
+2017-05-08 16:12:47 7408 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Normal shutdown
+
+2017-05-08 16:12:47 7408 [Note] Event Scheduler: Purging the queue. 0 events
+2017-05-08 16:12:47 9076 [Note] feedback plugin: report to 'https://mariadb.org/feedback_plugin/post' was sent
+2017-05-08 16:12:48 9076 [Note] feedback plugin: server replied 'ok'
+2017-05-08 16:12:48 7408 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Shutdown complete
+
+2017-05-08 16:20:18 1932 [Note] Plugin 'InnoDB' is disabled.
+2017-05-08 16:20:21 1932 [Note] Server socket created on IP: '127.0.0.1'.
+2017-05-08 16:20:26 2816 [Warning] Failed to load slave replication state from table mysql.gtid_slave_pos: 1286: Unknown storage engine 'InnoDB'
+2017-05-08 16:20:27 1932 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: ready for connections.
+Version: '10.1.21-MariaDB'  socket: ''  port: 3306  mariadb.org binary distribution
+2017-05-08 16:25:21 908 [Note] feedback plugin: report to 'https://mariadb.org/feedback_plugin/post' was sent
+2017-05-08 16:25:22 908 [Note] feedback plugin: server replied 'ok'
+2017-05-08 16:44:14 1800 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Normal shutdown
+
+2017-05-08 16:44:14 1800 [Note] Event Scheduler: Purging the queue. 0 events
+2017-05-08 16:44:15 908 [Note] feedback plugin: report to 'https://mariadb.org/feedback_plugin/post' was sent
+2017-05-08 16:44:15 908 [Note] feedback plugin: server replied 'ok'
+2017-05-08 16:44:15 1800 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Shutdown complete
+
+2017-05-08 16:44:31 7656 [Note] Plugin 'InnoDB' is disabled.
+2017-05-08 16:44:31 7656 [Note] Server socket created on IP: '127.0.0.1'.
+2017-05-08 16:44:32 10152 [Warning] Failed to load slave replication state from table mysql.gtid_slave_pos: 1286: Unknown storage engine 'InnoDB'
+2017-05-08 16:44:32 7656 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: ready for connections.
+Version: '10.1.21-MariaDB'  socket: ''  port: 3306  mariadb.org binary distribution
+2017-05-08 16:49:32 8920 [Note] feedback plugin: report to 'https://mariadb.org/feedback_plugin/post' was sent
+2017-05-08 16:49:33 8920 [Note] feedback plugin: server replied 'ok'
+2017-05-08 17:45:26 628 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Normal shutdown
+
+2017-05-08 17:45:27 628 [Note] Event Scheduler: Purging the queue. 0 events
+2017-05-08 20:27:57 2932 [Note] Plugin 'InnoDB' is disabled.
+2017-05-08 20:28:01 2932 [Note] Server socket created on IP: '127.0.0.1'.
+2017-05-08 20:28:07 3348 [Warning] Failed to load slave replication state from table mysql.gtid_slave_pos: 1286: Unknown storage engine 'InnoDB'
+2017-05-08 20:28:07 2932 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: ready for connections.
+Version: '10.1.21-MariaDB'  socket: ''  port: 3306  mariadb.org binary distribution
+2017-05-08 20:33:02 3244 [Note] feedback plugin: report to 'https://mariadb.org/feedback_plugin/post' was sent
+2017-05-08 20:33:03 3244 [Note] feedback plugin: server replied 'ok'
+2017-05-08 21:43:23 3340 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Normal shutdown
+
+2017-05-08 21:43:23 3340 [Note] Event Scheduler: Purging the queue. 0 events
+2017-05-08 21:43:24 3244 [Note] feedback plugin: report to 'https://mariadb.org/feedback_plugin/post' was sent
+2017-05-08 21:43:25 3244 [Note] feedback plugin: server replied 'ok'
+2017-05-08 21:43:25 3340 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Shutdown complete
+
+2017-05-08 21:52:00 8432 [Note] Plugin 'InnoDB' is disabled.
+2017-05-08 21:52:00 8432 [Note] Server socket created on IP: '127.0.0.1'.
+2017-05-08 21:52:00 8452 [Warning] Failed to load slave replication state from table mysql.gtid_slave_pos: 1286: Unknown storage engine 'InnoDB'
+2017-05-08 21:52:00 8432 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: ready for connections.
+Version: '10.1.21-MariaDB'  socket: ''  port: 3306  mariadb.org binary distribution
+2017-05-08 21:52:13 824 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Normal shutdown
+
+2017-05-08 21:52:13 824 [Note] Event Scheduler: Purging the queue. 0 events
+2017-05-08 21:52:14 824 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Shutdown complete
+
+2017-05-08 22:00:48 8672 [Note] Plugin 'InnoDB' is disabled.
+2017-05-08 22:00:48 8672 [Note] Server socket created on IP: '127.0.0.1'.
+2017-05-08 22:00:48 4372 [Warning] Failed to load slave replication state from table mysql.gtid_slave_pos: 1286: Unknown storage engine 'InnoDB'
+2017-05-08 22:00:48 8672 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: ready for connections.
+Version: '10.1.21-MariaDB'  socket: ''  port: 3306  mariadb.org binary distribution
+2017-05-08 22:04:16 8448 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Normal shutdown
+
+2017-05-08 22:04:16 8448 [Note] Event Scheduler: Purging the queue. 0 events
+2017-05-08 22:04:16 8448 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Shutdown complete
+
+2017-05-08 22:04:32 984 [Note] Plugin 'InnoDB' is disabled.
+2017-05-08 22:04:32 984 [Note] Server socket created on IP: '127.0.0.1'.
+2017-05-08 22:04:32 1996 [Warning] Failed to load slave replication state from table mysql.gtid_slave_pos: 1286: Unknown storage engine 'InnoDB'
+2017-05-08 22:04:32 984 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: ready for connections.
+Version: '10.1.21-MariaDB'  socket: ''  port: 3306  mariadb.org binary distribution
+2017-05-08 22:09:33 4704 [Note] feedback plugin: report to 'https://mariadb.org/feedback_plugin/post' was sent
+2017-05-08 22:09:34 4704 [Note] feedback plugin: server replied 'ok'
+2017-05-08 23:21:05 7400 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Normal shutdown
+
+2017-05-08 23:21:05 7400 [Note] Event Scheduler: Purging the queue. 0 events
+2017-05-08 23:21:06 4704 [Note] feedback plugin: report to 'https://mariadb.org/feedback_plugin/post' was sent
+2017-05-08 23:21:07 4704 [Note] feedback plugin: server replied 'ok'
+2017-05-08 23:21:07 7400 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Shutdown complete
+
+2017-05-09  9:43:25 7148 [Note] Plugin 'InnoDB' is disabled.
+2017-05-09  9:43:25 7148 [Note] Server socket created on IP: '127.0.0.1'.
+2017-05-09  9:43:25 3580 [Warning] Failed to load slave replication state from table mysql.gtid_slave_pos: 1286: Unknown storage engine 'InnoDB'
+2017-05-09  9:43:25 7148 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: ready for connections.
+Version: '10.1.21-MariaDB'  socket: ''  port: 3306  mariadb.org binary distribution
+2017-05-09  9:44:55 4124 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Normal shutdown
+
+2017-05-09  9:44:55 4124 [Note] Event Scheduler: Purging the queue. 0 events
+2017-05-09  9:44:55 4124 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Shutdown complete
+
+2017-05-09 10:07:46 92 [Note] Plugin 'InnoDB' is disabled.
+2017-05-09 10:07:46 92 [Note] Server socket created on IP: '127.0.0.1'.
+2017-05-09 10:07:46 8872 [Warning] Failed to load slave replication state from table mysql.gtid_slave_pos: 1286: Unknown storage engine 'InnoDB'
+2017-05-09 10:07:46 92 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: ready for connections.
+Version: '10.1.21-MariaDB'  socket: ''  port: 3306  mariadb.org binary distribution
+2017-05-09 10:12:47 8392 [Note] feedback plugin: report to 'https://mariadb.org/feedback_plugin/post' was sent
+2017-05-09 10:12:47 8392 [Note] feedback plugin: server replied 'ok'
+2017-05-09 10:19:30 7064 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Normal shutdown
+
+2017-05-09 10:19:30 7064 [Note] Event Scheduler: Purging the queue. 0 events
+2017-05-09 10:19:32 8392 [Note] feedback plugin: report to 'https://mariadb.org/feedback_plugin/post' was sent
+2017-05-09 10:19:32 8392 [Note] feedback plugin: server replied 'ok'
+2017-05-09 10:19:32 7064 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Shutdown complete
+
+2017-05-09 10:19:47 10908 [Note] Plugin 'InnoDB' is disabled.
+2017-05-09 10:19:47 10908 [Note] Server socket created on IP: '127.0.0.1'.
+2017-05-09 10:19:47 7212 [Warning] Failed to load slave replication state from table mysql.gtid_slave_pos: 1286: Unknown storage engine 'InnoDB'
+2017-05-09 10:19:47 10908 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: ready for connections.
+Version: '10.1.21-MariaDB'  socket: ''  port: 3306  mariadb.org binary distribution
+2017-05-09 10:21:14 9624 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Normal shutdown
+
+2017-05-09 10:21:14 9624 [Note] Event Scheduler: Purging the queue. 0 events
+2017-05-09 10:21:14 9624 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Shutdown complete
+
+2017-05-09 10:21:26 9976 [Note] Plugin 'InnoDB' is disabled.
+2017-05-09 10:21:26 9976 [Note] Server socket created on IP: '127.0.0.1'.
+2017-05-09 10:21:26 4032 [Warning] Failed to load slave replication state from table mysql.gtid_slave_pos: 1286: Unknown storage engine 'InnoDB'
+2017-05-09 10:21:26 9976 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: ready for connections.
+Version: '10.1.21-MariaDB'  socket: ''  port: 3306  mariadb.org binary distribution
+2017-05-09 10:26:28 3344 [Note] feedback plugin: report to 'https://mariadb.org/feedback_plugin/post' was sent
+2017-05-09 10:26:28 3344 [Note] feedback plugin: server replied 'ok'
+2017-05-09 10:39:16 6408 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Normal shutdown
+
+2017-05-09 10:39:16 6408 [Note] Event Scheduler: Purging the queue. 0 events
+2017-05-09 12:09:33 3096 [Note] Plugin 'InnoDB' is disabled.
+2017-05-09 12:09:36 3096 [Note] Server socket created on IP: '127.0.0.1'.
+2017-05-09 12:09:42 2564 [Warning] Failed to load slave replication state from table mysql.gtid_slave_pos: 1286: Unknown storage engine 'InnoDB'
+2017-05-09 12:09:42 3096 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: ready for connections.
+Version: '10.1.21-MariaDB'  socket: ''  port: 3306  mariadb.org binary distribution
+2017-05-09 12:14:36 4064 [Note] feedback plugin: report to 'https://mariadb.org/feedback_plugin/post' was sent
+2017-05-09 12:14:37 4064 [Note] feedback plugin: server replied 'ok'
+2017-05-09 13:31:57 2428 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Normal shutdown
+
+2017-05-09 13:31:57 2428 [Note] Event Scheduler: Purging the queue. 0 events
+2017-05-09 13:31:58 4064 [Note] feedback plugin: report to 'https://mariadb.org/feedback_plugin/post' was sent
+2017-05-09 13:31:59 4064 [Note] feedback plugin: server replied 'ok'
+2017-05-09 13:31:59 2428 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Shutdown complete
+
+2017-05-09 13:32:09 8492 [Note] Plugin 'InnoDB' is disabled.
+2017-05-09 13:32:09 8492 [Note] Server socket created on IP: '127.0.0.1'.
+2017-05-09 13:32:09 4848 [Warning] Failed to load slave replication state from table mysql.gtid_slave_pos: 1286: Unknown storage engine 'InnoDB'
+2017-05-09 13:32:09 8492 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: ready for connections.
+Version: '10.1.21-MariaDB'  socket: ''  port: 3306  mariadb.org binary distribution
+2017-05-09 13:32:29 2900 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Normal shutdown
+
+2017-05-09 13:32:29 2900 [Note] Event Scheduler: Purging the queue. 0 events
+2017-05-09 13:32:30 2900 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Shutdown complete
+
+2017-05-09 13:32:40 5216 [Note] Plugin 'InnoDB' is disabled.
+2017-05-09 13:32:40 5216 [Note] Server socket created on IP: '127.0.0.1'.
+2017-05-09 13:32:40 9064 [Warning] Failed to load slave replication state from table mysql.gtid_slave_pos: 1286: Unknown storage engine 'InnoDB'
+2017-05-09 13:32:40 5216 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: ready for connections.
+Version: '10.1.21-MariaDB'  socket: ''  port: 3306  mariadb.org binary distribution
+2017-05-09 13:37:34 7704 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Normal shutdown
+
+2017-05-09 13:37:34 7704 [Note] Event Scheduler: Purging the queue. 0 events
+2017-05-09 13:37:34 7704 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Shutdown complete
+
+2017-05-09 13:37:43 1776 [Note] Plugin 'InnoDB' is disabled.
+2017-05-09 13:37:43 1776 [Note] Server socket created on IP: '127.0.0.1'.
+2017-05-09 13:37:43 3656 [Warning] Failed to load slave replication state from table mysql.gtid_slave_pos: 1286: Unknown storage engine 'InnoDB'
+2017-05-09 13:37:43 1776 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: ready for connections.
+Version: '10.1.21-MariaDB'  socket: ''  port: 3306  mariadb.org binary distribution
+2017-05-09 13:38:06 7268 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Normal shutdown
+
+2017-05-09 13:38:06 7268 [Note] Event Scheduler: Purging the queue. 0 events
+2017-05-09 13:38:06 7268 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Shutdown complete
+
+2017-05-09 13:38:18 3624 [Note] Plugin 'InnoDB' is disabled.
+2017-05-09 13:38:18 3624 [Note] Server socket created on IP: '127.0.0.1'.
+2017-05-09 13:38:18 7696 [Warning] Failed to load slave replication state from table mysql.gtid_slave_pos: 1286: Unknown storage engine 'InnoDB'
+2017-05-09 13:38:18 3624 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: ready for connections.
+Version: '10.1.21-MariaDB'  socket: ''  port: 3306  mariadb.org binary distribution
+2017-05-09 13:38:36 7592 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Normal shutdown
+
+2017-05-09 13:38:36 7592 [Note] Event Scheduler: Purging the queue. 0 events
+2017-05-09 13:38:36 7592 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: Shutdown complete
+
+2017-05-09 13:39:00 9104 [Note] Plugin 'InnoDB' is disabled.
+2017-05-09 13:39:00 9104 [Note] Server socket created on IP: '127.0.0.1'.
+2017-05-09 13:39:00 3588 [Warning] Failed to load slave replication state from table mysql.gtid_slave_pos: 1286: Unknown storage engine 'InnoDB'
+2017-05-09 13:39:01 9104 [Note] C:\zentao\xampp\mysql\bin\mysqld.exe: ready for connections.
+Version: '10.1.21-MariaDB'  socket: ''  port: 3306  mariadb.org binary distribution
+2017-05-09 13:44:02 1536 [Note] feedback plugin: report to 'https://mariadb.org/feedback_plugin/post' was sent
+2017-05-09 13:44:02 1536 [Note] feedback plugin: server replied 'ok'
