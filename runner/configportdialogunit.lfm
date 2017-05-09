@@ -1,7 +1,7 @@
 object ConfigPortDialog: TConfigPortDialog
-  Left = 424
+  Left = 875
   Height = 254
-  Top = 181
+  Top = 192
   Width = 241
   BorderStyle = bsToolWindow
   Caption = '配置默认端口'
@@ -11,15 +11,15 @@ object ConfigPortDialog: TConfigPortDialog
   LCLVersion = '1.6.4.0'
   object Label1: TLabel
     Left = 24
-    Height = 17
+    Height = 24
     Top = 16
-    Width = 90
+    Width = 134
     Caption = 'apache默认端口'
     ParentColor = False
   end
   object Edit1: TEdit
     Left = 24
-    Height = 25
+    Height = 32
     Top = 40
     Width = 176
     NumbersOnly = True
@@ -29,15 +29,15 @@ object ConfigPortDialog: TConfigPortDialog
   end
   object Label2: TLabel
     Left = 24
-    Height = 17
+    Height = 24
     Top = 80
-    Width = 82
+    Width = 124
     Caption = 'mysql默认端口'
     ParentColor = False
   end
   object Edit2: TEdit
     Left = 24
-    Height = 25
+    Height = 32
     Top = 104
     Width = 174
     NumbersOnly = True
@@ -55,7 +55,7 @@ object ConfigPortDialog: TConfigPortDialog
   end
   object UpDown1: TUpDown
     Left = 200
-    Height = 25
+    Height = 32
     Top = 40
     Width = 17
     Associate = Edit1
@@ -67,7 +67,7 @@ object ConfigPortDialog: TConfigPortDialog
   end
   object UpDown2: TUpDown
     Left = 198
-    Height = 25
+    Height = 32
     Top = 104
     Width = 17
     Associate = Edit2
@@ -80,9 +80,9 @@ object ConfigPortDialog: TConfigPortDialog
   end
   object CheckBox1: TCheckBox
     Left = 24
-    Height = 21
+    Height = 28
     Top = 152
-    Width = 106
+    Width = 154
     Caption = '自动更改端口号'
     TabOrder = 5
   end

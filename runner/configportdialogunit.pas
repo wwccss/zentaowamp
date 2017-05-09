@@ -47,7 +47,7 @@ begin
     apache.port           := userConfig.apachePort;
     userConfig.AutoChangePort := CheckBox1.Checked;
     SaveConfig();
-    FixConfigPath();
+    // FixConfigPath();
     Close;
 end;
 

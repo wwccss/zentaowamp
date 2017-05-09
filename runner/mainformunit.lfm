@@ -1,10 +1,10 @@
 object MainForm: TMainForm
-  Left = 668
-  Height = 334
-  Top = 181
+  Left = 767
+  Height = 385
+  Top = 614
   Width = 550
   Caption = '禅道集成运行环境'
-  ClientHeight = 314
+  ClientHeight = 355
   ClientWidth = 550
   Constraints.MinHeight = 115
   Constraints.MinWidth = 550
@@ -4363,8 +4363,8 @@ object MainForm: TMainForm
     TabOrder = 3
   end
   object MemoMessager: TMemo
-    Left = 10
-    Height = 241
+    Left = 8
+    Height = 211
     Top = 64
     Width = 530
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -4376,6 +4376,54 @@ object MainForm: TMainForm
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 4
+  end
+  object apacheAuthToggle: TCheckBox
+    Left = 8
+    Height = 28
+    Top = 280
+    Width = 211
+    Anchors = [akLeft, akBottom]
+    Caption = '启用 Apache 访问验证'
+    Checked = True
+    OnChange = apacheAuthToggleChange
+    State = cbChecked
+    TabOrder = 5
+  end
+  object apacheAuthAccount: TEdit
+    Left = 72
+    Height = 32
+    Top = 315
+    Width = 152
+    Anchors = [akLeft, akBottom]
+    TabOrder = 6
+    Text = 'account'
+  end
+  object apacheAuthPassword: TEdit
+    Left = 287
+    Height = 32
+    Top = 315
+    Width = 251
+    Anchors = [akLeft, akBottom]
+    TabOrder = 7
+    Text = '123456'
+  end
+  object apacheAccountLabel: TLabel
+    Left = 8
+    Height = 24
+    Top = 319
+    Width = 54
+    Anchors = [akLeft, akBottom]
+    Caption = '用户名'
+    ParentColor = False
+  end
+  object apachePasswordLabel: TLabel
+    Left = 240
+    Height = 24
+    Top = 319
+    Width = 36
+    Anchors = [akLeft, akBottom]
+    Caption = '密码'
+    ParentColor = False
   end
   object MainMenu: TMainMenu
     left = 640

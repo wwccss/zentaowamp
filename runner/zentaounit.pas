@@ -45,6 +45,8 @@ type
     ApacheConfig = record
         Version       : string;
         Exe           : string;
+        htpasswd      : string;
+        authFile      : string;
         ConfigFile    : string;
         ServiceName   : string;
         Status        : string;
@@ -93,6 +95,9 @@ type
         MysqlPort      : Integer;
         Language       : string;
         AutoChangePort : boolean;
+        EnableApacheAuth: boolean;
+        ApacheAuthAccount: String;
+        ApacheAuthPassword: String;
     end;
 
 function GetVersion(soft: string; display: Boolean = False): string;
@@ -141,6 +146,7 @@ procedure InstallVC();
 function StrReplace(source: string; find: string; forReplace: string): string;
 function formatDir(source: string): string;
 function GenRandomStr(len: integer): String;
+function addApacheUser(account: String; password: String): Boolean;
 
 const
     ONE_DAY_MILLION_SECONDS = 24 * 60 * 60 * 1000;
@@ -177,11 +183,13 @@ implementation
 uses mainformunit;
 
 function GenRandomStr(len: integer): String;
+var
+    i: integer;
 begin
     Result := '';
     For i := 0 to len do
     begin
-        Result := Result + RANDOM_STR_SET[Random()]
+        Result := Result + RANDOM_STR_SET[Random(Length(RANDOM_STR_SET))];
     end;
 end;
 
@@ -220,6 +228,16 @@ begin
     ExcuteCommand(os.RunnerLocation + VC_REDIST_2015, False, False);
 end;
 
+function addApacheUser(account: String; password: String): Boolean;
+var
+    emptyLines: TStringList;
+begin
+    emptyLines := TStringList.Create;
+    emptyLines.SaveToFile(apache.authFile);
+    emptyLines.Free;
+    ExcuteCommand(apache.htpasswd + ' -b ' + apache.authFile + ' ' + account + ' ' + password);
+end;
+
 { Generage config file from template }
 function FixConfigFile(src: string; dest: string): boolean;
 var
@@ -227,14 +245,20 @@ var
     i           : integer;
     line        : string;
     osLocation  : string;
+    authConfig  : String;
 begin
-    ConsoleLn('\n> FixConfigFile');
+    ConsoleLn(LineEnding + '> FixConfigFile');
     ConsoleLn('    src: ' + src);
     ConsoleLn('    dest:' + dest);
 
-    if (debugMode > 99) and (mysql.ConfigFileTpl = src) then begin
-        Exit;
+    authConfig := 'Require all granted';
+    if userconfig.EnableApacheAuth then begin
+        authConfig := 'AuthName "' + product.id + ' auth required."'
+            + LineEnding + '  AuthType Basic'
+            + LineEnding + '  AuthUserFile "' + formatDir(apache.authFile) + '"'
+            + LineEnding + '  Require valid-user';
     end;
+
     osLocation := formatDir(os.Location);
     fileLines := TStringList.Create;
     fileLines.LoadFromFile(src);
@@ -244,6 +268,7 @@ begin
         line := StrReplace(line, '%APACHE_PORT%', inttostr(apache.Port));
         line := StrReplace(line, '%MYSQL_PORT%', inttostr(mysql.Port));
         line := StrReplace(line, '%PRODUCT_ID%', product.id);
+        line := StrReplace(line, '%AUTH_CONFIG%', authConfig);
         fileLines[i] := line;
     end;
     fileLines.SaveToFile(dest);
@@ -262,6 +287,8 @@ begin
     if product.pro <> '' then begin
         UpdateConfigPort(mysql.ServiceName, product.ProMyConfig);
     end;
+
+    addApacheUser(userConfig.ApacheAuthAccount, userconfig.ApacheAuthPassword);
 
     Result := true;
 end;
@@ -819,6 +846,8 @@ begin
     apache.ServiceName     := 'apachezt';
     apache.Status          := GetServiceStatus(apache.ServiceName);
     apache.Port            := userconfig.ApachePort;
+    apache.htpasswd        := os.Location + 'apache\bin\htpasswd.exe';
+    apache.authFile        := os.Location + 'apache\auth\.htaccess';
     // apache.SuggestPort     := GetConfigPort(apache.ServiceName);
 
     // mysql
@@ -858,10 +887,21 @@ begin
 
     product.Title          := config.Get('product/title');
 
-    FixConfigPath;
+    // FixConfigPath;
     php.Version            := GetVersion('php', True);
     apache.Version         := GetVersion('apache', True);
     mysql.Version          := GetVersion('mysql', True);
+
+    if userConfig.ApacheAuthAccount = '' then begin
+        userConfig.ApacheAuthAccount := product.ID;
+    end;
+
+    if userConfig.ApacheAuthPassword = '' then begin
+        userConfig.ApacheAuthPassword := GenRandomStr(10);
+        SaveConfig();
+    end;
+
+    MainForm.updateAuthStatus();
 
     PrintLn;
     PrintLn(GetLang('message/currentLocation', '当前目录：%s'), [os.Location]);
@@ -1002,10 +1042,10 @@ end;
 { Start }
 function StartZentao(): boolean;
 begin
+    FixConfigPath;
+
     PrintLn;
     PrintLn(GetLang('message/starting', '正在启动......'));
-
-    // FixConfigPath;
 
     Result := RestartService(apache.ServiceName, True);
     if not Result then Result := RestartService(apache.ServiceName, True, True);
@@ -1082,6 +1122,9 @@ function LoadConfig(): boolean;
 var
     LastRunTime: TDateTime;
 begin
+    // This way we generate a new sequence every time the program is run
+    Randomize;
+
     // os
     os.Exe                                 := Application.ExeName;
     os.Location                            := Application.Location;
@@ -1106,11 +1149,14 @@ begin
     try
         userConfigFile.FileName := os.UserConfigFile;
 
-        userconfig.LastRunTime    := userConfigFile.GetValue('/LastRunTime', 0);
-        userconfig.ApachePort     := userConfigFile.GetValue('apache/port', 80);
-        userconfig.MysqlPort      := userConfigFile.GetValue('mysql/port', 3306);
-        userconfig.Language       := userConfigFile.GetValue('/language', 'zh_cn');
-        userconfig.AutoChangePort := userConfigFile.GetValue('/AutoChangePort', False);
+        userconfig.LastRunTime        := userConfigFile.GetValue('/LastRunTime', 0);
+        userconfig.ApachePort         := userConfigFile.GetValue('apache/port', 80);
+        userconfig.MysqlPort          := userConfigFile.GetValue('mysql/port', 3306);
+        userconfig.Language           := userConfigFile.GetValue('/language', 'zh_cn');
+        userconfig.AutoChangePort     := userConfigFile.GetValue('/AutoChangePort', False);
+        userconfig.EnableApacheAuth   := userConfigFile.GetValue('/EnableApacheAuth', True);
+        userconfig.ApacheAuthAccount  := userConfigFile.GetValue('/ApacheAuthAccount', '');
+        userconfig.ApacheAuthPassword := userConfigFile.GetValue('/ApacheAuthPassword', '');
 
         if userconfig.LastRunTime > 0 then
         begin
@@ -1132,6 +1178,9 @@ begin
         userConfigFile.SetValue('apache/port', userconfig.ApachePort);
         userConfigFile.SetValue('mysql/port', userconfig.MysqlPort);
         userConfigFile.SetValue('/AutoChangePort', userconfig.AutoChangePort);
+        userConfigFile.SetValue('/EnableApacheAuth', userconfig.EnableApacheAuth);
+        userConfigFile.SetValue('/ApacheAuthAccount', userconfig.ApacheAuthAccount);
+        userConfigFile.SetValue('/ApacheAuthPassword', userconfig.ApacheAuthPassword);
 
         userConfigFile.Flush;
         Result := True;
