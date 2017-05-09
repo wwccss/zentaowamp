@@ -51,6 +51,8 @@ type
         MenuItemDatabase         : TMenuItem;
         MenuItemBackup           : TMenuItem;
         TrayIcon1                : TTrayIcon;
+        procedure apacheAuthAccountChange(Sender: TObject);
+        procedure apacheAuthPasswordChange(Sender: TObject);
         procedure apacheAuthToggleChange(Sender: TObject);
         procedure ButtonRunClick(Sender: TObject);
         procedure ButtonStopClick(Sender: TObject);
@@ -330,8 +332,21 @@ procedure TMainForm.apacheAuthToggleChange(Sender: TObject);
 begin
     if userconfig.EnableApacheAuth <> apacheAuthToggle.Checked then begin
         userconfig.EnableApacheAuth := apacheAuthToggle.Checked;
+        SaveConfig();
         updateAuthStatus;
     end;
+end;
+
+procedure TMainForm.apacheAuthAccountChange(Sender: TObject);
+begin
+    userconfig.apacheAuthAccount := apacheAuthAccount.Text;
+    SaveConfig();
+end;
+
+procedure TMainForm.apacheAuthPasswordChange(Sender: TObject);
+begin
+    userconfig.apacheAuthPassword := apacheAuthPassword.Text;
+    SaveConfig();
 end;
 
 procedure TMainForm.ButtonVisitClick(Sender: TObject);

@@ -4395,6 +4395,7 @@ object MainForm: TMainForm
     Top = 315
     Width = 152
     Anchors = [akLeft, akBottom]
+    OnChange = apacheAuthAccountChange
     TabOrder = 6
     Text = 'account'
   end
@@ -4404,6 +4405,7 @@ object MainForm: TMainForm
     Top = 315
     Width = 251
     Anchors = [akLeft, akBottom]
+    OnChange = apacheAuthPasswordChange
     TabOrder = 7
     Text = '123456'
   end
