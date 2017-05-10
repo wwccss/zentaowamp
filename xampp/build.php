@@ -36,9 +36,14 @@ $file->mkdir($output . '\apache\conf\sites');
 $file->mkdir($output . '\apache\modules');
 $file->mkdir($output . '\apache\bin');
 
+$file->mkdir($output . '\apache\auth');
+touch($output . '\apache\auth\.htaccess');
+
 $file->copyFile($xampp . '\apache\modules\mod_access_compat.so', $output . '\apache\modules\mod_access_compat.so');
 $file->copyFile($xampp . '\apache\modules\mod_auth_basic.so',    $output . '\apache\modules\mod_auth_basic.so');
 $file->copyFile($xampp . '\apache\modules\mod_auth_basic.so',    $output . '\apache\modules\mod_auth_basic.so');
+$file->copyFile($xampp . '\apache\modules\mod_authn_core.so',    $output . '\apache\modules\mod_authn_core.so');
+$file->copyFile($xampp . '\apache\modules\mod_authn_file.so',    $output . '\apache\modules\mod_authn_file.so');
 $file->copyFile($xampp . '\apache\modules\mod_authz_core.so',    $output . '\apache\modules\mod_authz_core.so');
 $file->copyFile($xampp . '\apache\modules\mod_mime.so',          $output . '\apache\modules\mod_mime.so');
 $file->copyFile($xampp . '\apache\modules\mod_expires.so',       $output . '\apache\modules\mod_expires.so');
@@ -135,10 +140,7 @@ $file->copyFile($xampp . '\php\ext\php_ldap.dll',      $output . '\php\ext\php_l
 $file->copyFile($xampp . '\php\ext\php_curl.dll',      $output . '\php\ext\php_curl.dll');
 $file->copyFile($xampp . '\php\ext\php_opcache.dll',   $output . '\php\ext\php_opcache.dll');
 
-/* Process phpmyadmin. */
-$file->mkdir($output . '\phpmyadmin');
-$file->copyFile($xampp . '\phpMyAdmin\README',   $output . '\phpmyadmin\README');
-
+/* Process adminer. */
 $file->mkdir($output . '\adminer');
 $file->copyFile(dirname(__FILE__) . '\adminer.php', $output . '\adminer\index.php');
 $file->copyFile(dirname(__FILE__) . '\adminer.css', $output . '\adminer\adminer.css');
@@ -146,8 +148,6 @@ $file->copyFile(dirname(__FILE__) . '\adminer.css', $output . '\adminer\adminer.
 $file->mkdir($output . '\runner');
 $file->copyFile(dirname(dirname(__FILE__)) . '\runner\start.exe', $output . '\start.exe');
 $file->copyDir(dirname(dirname(__FILE__))  . '\runner\xampp\common\runner', $output . '\runner');
-$file->copyFile(dirname(dirname(__FILE__)) . '\runner\vc2008_detector.bat', $output . '\runner\vc2008_detector.bat');
-$file->copyFile(dirname(dirname(__FILE__)) . '\runner\vcredist_x86.exe', $output . '\runner\vcredist_x86.exe');
 $file->copyFile($buildDir . '\readme.txt', $output . '\readme.txt');
 
 /* Process the svn. */
