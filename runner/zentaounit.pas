@@ -166,7 +166,7 @@ const
     MAX_PORT          = 65535;
     HOST              = '127.0.0.1';
     VC_REDIST_2015    = 'vc_redist.x86.exe';
-    VC_DETECTOR       = 'vc2015_detector.bat'; 
+    VC_DETECTOR       = 'vc_detector.bat'; 
     VERSION           = '1.3.0';
     INIT_SUCCESSCODE  = '0';
     RANDOM_STR_SET    = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
