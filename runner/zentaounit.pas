@@ -165,7 +165,7 @@ const
 
     MAX_PORT          = 65535;
     HOST              = '127.0.0.1';
-    VC_REDIST_2015    = 'vc_redist.x86.exe';
+    VC_REDIST         = 'vc_redist.x86.exe';
     VC_DETECTOR       = 'vc_detector.bat'; 
     VERSION           = '1.3.0';
     INIT_SUCCESSCODE  = '0';
@@ -231,7 +231,7 @@ end;
 
 procedure InstallVC();
 begin
-    ExcuteCommand(os.RunnerLocation + VC_REDIST_2015, False, False);
+    ExcuteCommand(os.RunnerLocation + VC_REDIST, False, False);
 end;
 
 function addApacheUser(account: String; password: String): Boolean;
