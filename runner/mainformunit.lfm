@@ -1,12 +1,12 @@
 object MainForm: TMainForm
-  Left = 1235
+  Left = 995
   Height = 385
-  Top = 456
+  Top = 805
   Width = 550
   Caption = '禅道集成运行环境'
   ClientHeight = 355
   ClientWidth = 550
-  Constraints.MinHeight = 115
+  Constraints.MinHeight = 130
   Constraints.MinWidth = 550
   Icon.Data = {
     ACC0010000000100060010100000010020006804000066000000202000000100
@@ -3647,7 +3647,7 @@ object MainForm: TMainForm
   end
   object MemoMessager: TMemo
     Left = 8
-    Height = 211
+    Height = 248
     Top = 64
     Width = 530
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -3660,55 +3660,76 @@ object MainForm: TMainForm
     ScrollBars = ssVertical
     TabOrder = 4
   end
-  object apacheAuthToggle: TCheckBox
+  object FlowPanel1: TFlowPanel
     Left = 8
-    Height = 28
-    Top = 280
-    Width = 211
-    Anchors = [akLeft, akBottom]
-    Caption = '启用 Apache 访问验证'
-    Checked = True
-    OnChange = apacheAuthToggleChange
-    State = cbChecked
+    Height = 32
+    Top = 320
+    Width = 528
+    Anchors = [akLeft, akRight, akBottom]
+    BevelOuter = bvNone
+    ControlList = <    
+      item
+        Control = apacheAuthToggle
+        WrapAfter = waAuto
+        Index = 0
+      end    
+      item
+        Control = apacheAuthLabel
+        WrapAfter = waAuto
+        Index = 1
+      end    
+      item
+        Control = apacheAuthChangeBtn
+        WrapAfter = waAuto
+        Index = 2
+      end>
+    FlowStyle = fsLeftRightTopBottom
     TabOrder = 5
-  end
-  object apacheAuthAccount: TEdit
-    Left = 72
-    Height = 32
-    Top = 315
-    Width = 152
-    Anchors = [akLeft, akBottom]
-    OnChange = apacheAuthAccountChange
-    TabOrder = 6
-    Text = 'account'
-  end
-  object apacheAuthPassword: TEdit
-    Left = 287
-    Height = 32
-    Top = 315
-    Width = 251
-    Anchors = [akLeft, akBottom]
-    OnChange = apacheAuthPasswordChange
-    TabOrder = 7
-    Text = '123456'
-  end
-  object apacheAccountLabel: TLabel
-    Left = 8
-    Height = 24
-    Top = 319
-    Width = 54
-    Anchors = [akLeft, akBottom]
-    Caption = '用户名'
-    ParentColor = False
-  end
-  object apachePasswordLabel: TLabel
-    Left = 240
-    Height = 24
-    Top = 319
-    Width = 36
-    Anchors = [akLeft, akBottom]
-    Caption = '密码'
-    ParentColor = False
+    object apacheAuthToggle: TCheckBox
+      Left = 0
+      Height = 28
+      Top = 0
+      Width = 136
+      Anchors = [akLeft, akBottom]
+      Caption = '启用访问验证'
+      Checked = True
+      OnChange = apacheAuthToggleChange
+      State = cbChecked
+      TabOrder = 0
+    end
+    object apacheAuthLabel: TLabel
+      Left = 141
+      Height = 24
+      Top = 2
+      Width = 314
+      Anchors = []
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 2
+      BorderSpacing.Right = 5
+      BorderSpacing.Bottom = 2
+      Caption = '用户名: zentao 密码: 1234567890123'
+      Font.Color = clGrayText
+      ParentColor = False
+      ParentFont = False
+      OnClick = apacheAuthChangeBtnClick
+    end
+    object apacheAuthChangeBtn: TLabel
+      Left = 465
+      Height = 24
+      Top = 2
+      Width = 36
+      Anchors = []
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 2
+      BorderSpacing.Right = 5
+      BorderSpacing.Bottom = 2
+      Caption = '修改'
+      Font.Color = clHotLight
+      Font.Style = [fsUnderline]
+      ParentColor = False
+      ParentFont = False
+      OnClick = apacheAuthChangeBtnClick
+    end
   end
   object MainMenu: TMainMenu
     left = 640
@@ -3721,7 +3742,7 @@ object MainForm: TMainForm
     object MenuItemService: TMenuItem
       Caption = '服务'
       object MenuItem2: TMenuItem
-        Caption = '配置默认端口'
+        Caption = '配置端口'
         OnClick = MenuItem2Click
       end
       object MenuItem1: TMenuItem

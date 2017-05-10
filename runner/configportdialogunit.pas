@@ -62,7 +62,7 @@ begin
     Edit2.Text        := IntToStr(userConfig.MysqlPort);
     CheckBox1.Checked := userConfig.AutoChangePort;
 
-    Caption           := GetLang('menu/configPort', '配置默认服务');
+    Caption           := GetLang('menu/configPort', '配置端口');
     Label1.Caption    := 'apache ' + GetLang('ui/port', '端口');
     Label2.Caption    := 'mysql ' + GetLang('ui/port', '端口');
     Button1.Caption   := GetLang('ui/confirm', '确定');

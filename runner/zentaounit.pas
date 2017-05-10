@@ -53,6 +53,9 @@ type
         Port          : integer;
         // SuggestPort   : integer;
         ConfigFileTpl : string;
+        AccessFileDir : string;
+        AdminerPath   : String;
+        htdocsPath    : String;
     end;
 
     MysqlConfig = record
@@ -79,6 +82,8 @@ type
         UpdaterUrl     : string;
         InitBat        : string;
         BinPath        : string;
+        Path           : String;
+        ProPath        : String;
         BackupFile     : string;
         ID             : string;
         Title          : string;
@@ -96,8 +101,8 @@ type
         Language       : string;
         AutoChangePort : boolean;
         EnableApacheAuth: boolean;
-        ApacheAuthAccount: String;
-        ApacheAuthPassword: String;
+        ApacheAuthAccount: string;
+        ApacheAuthPassword: string;
     end;
 
 function GetVersion(soft: string; display: Boolean = False): string;
@@ -147,6 +152,7 @@ function StrReplace(source: string; find: string; forReplace: string): string;
 function formatDir(source: string): string;
 function GenRandomStr(len: integer): String;
 function addApacheUser(account: String; password: String): Boolean;
+procedure resetAuthConfig();
 
 const
     ONE_DAY_MILLION_SECONDS = 24 * 60 * 60 * 1000;
@@ -238,6 +244,28 @@ begin
     ExcuteCommand(apache.htpasswd + ' -b ' + apache.authFile + ' ' + account + ' ' + password);
 end;
 
+procedure resetAuthConfig();
+var
+    emptyLines: TStringList;
+begin
+    emptyLines := TStringList.Create;
+    emptyLines.SaveToFile(apache.authFile);
+    emptyLines.Free;
+
+    if userconfig.EnableApacheAuth then begin
+        ExcuteCommand(apache.htpasswd + ' -b ' + apache.authFile + ' ' + userconfig.ApacheAuthAccount + ' ' + userconfig.ApacheAuthPassword);
+    end;
+
+    FixConfigFile(apache.AccessFileDir + 'default.ztaccess', product.path + 'www/.ztaccess');
+    FixConfigFile(apache.AccessFileDir + 'adminer.ztaccess', apache.AdminerPath + '.ztaccess');
+    FixConfigFile(apache.AccessFileDir + 'htdocs.ztaccess', apache.htdocsPath + '.ztaccess');
+    if product.ProPath <> '' then begin
+        FixConfigFile(apache.AccessFileDir + 'pro.ztaccess', product.ProPath + 'www/.ztaccess');
+    end;
+
+    MainForm.updateAuthStatus;
+end;
+
 { Generage config file from template }
 function FixConfigFile(src: string; dest: string): boolean;
 var
@@ -247,6 +275,8 @@ var
     osLocation  : string;
     authConfig  : String;
 begin
+    src  := formatDir(src);
+    dest := formatDir(dest);
     ConsoleLn(LineEnding + '> FixConfigFile');
     ConsoleLn('    src: ' + src);
     ConsoleLn('    dest:' + dest);
@@ -254,9 +284,9 @@ begin
     authConfig := 'Require all granted';
     if userconfig.EnableApacheAuth then begin
         authConfig := 'AuthName "' + product.id + ' runner authentication required"'
-            + LineEnding + '  AuthType Basic'
-            + LineEnding + '  AuthUserFile "' + formatDir(apache.authFile) + '"'
-            + LineEnding + '  Require valid-user';
+            + LineEnding + 'AuthType Basic'
+            + LineEnding + 'AuthUserFile "' + formatDir(apache.authFile) + '"'
+            + LineEnding + 'Require valid-user';
     end;
 
     osLocation := formatDir(os.Location);
@@ -287,8 +317,6 @@ begin
     if product.pro <> '' then begin
         UpdateConfigPort(mysql.ServiceName, product.ProMyConfig);
     end;
-
-    addApacheUser(userConfig.ApacheAuthAccount, userconfig.ApacheAuthPassword);
 
     Result := true;
 end;
@@ -849,6 +877,9 @@ begin
     apache.htpasswd        := os.Location + 'apache\bin\htpasswd.exe';
     apache.authFile        := os.Location + 'apache\auth\.htaccess';
     // apache.SuggestPort     := GetConfigPort(apache.ServiceName);
+    apache.AccessFileDir   := os.RunnerLocation + config.Get('apache/AccessFileDir', 'res\ztaccess\');
+    apache.AdminerPath     := os.Location + 'adminer\';
+    apache.htdocsPath      := os.Location + 'htdocs\';
 
     // mysql
     mysql.Exe              := os.Location + 'mysql\bin\mysqld.exe';
@@ -865,8 +896,13 @@ begin
     // product.ConfigFile     := os.Location + product.ID + '\' + config.Get('product/config', 'config\config.php');
     product.VersionFile    := os.Location + product.ID + '\VERSION';
     product.Version        := GetProductVersion;
+    product.path           := os.Location + product.ID + '\';
     product.BinPath        := os.Location + product.ID + '\bin\';
     product.Pro            := config.Get('product/proversion', '');
+    product.ProPath        := '';
+    if product.Pro <> '' then begin
+        product.ProPath := os.Location + product.Pro + '\';
+    end;
     product.MyConfig       := os.Location + product.ID + '\' + config.Get('product/myconfig', 'config\my.php');
     if product.Pro <> '' then begin
         product.ProConfigFile     := os.Location + product.Pro + '\' + config.Get('product/config', 'config\config.php');
@@ -887,7 +923,8 @@ begin
 
     product.Title          := config.Get('product/title');
 
-    // FixConfigPath;
+    FixConfigPath;
+
     php.Version            := GetVersion('php', True);
     apache.Version         := GetVersion('apache', True);
     mysql.Version          := GetVersion('mysql', True);
@@ -901,7 +938,7 @@ begin
         SaveConfig();
     end;
 
-    MainForm.updateAuthStatus();
+    resetAuthConfig();
 
     PrintLn;
     PrintLn(GetLang('message/currentLocation', '当前目录：%s'), [os.Location]);

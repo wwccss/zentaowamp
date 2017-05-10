@@ -9,22 +9,21 @@ uses
     StdCtrls,
     LCLIntf, ExtCtrls,
     langunit,
-    zentaounit, process, ServiceManager, ConfigPortDialogUnit;
+    zentaounit, process, ServiceManager, ConfigPortDialogUnit, AuthConfigDialogUnit;
 
 type
 
     { TMainForm }
 
     TMainForm = class(TForm)
+      apacheAuthToggle: TCheckBox;
         ButtonRun                : TButton;
         ButtonVisit              : TButton;
         ButtonStop               : TButton;
         ButtonZtOffical          : TButton;
-        apacheAuthToggle: TCheckBox;
-        apacheAuthAccount: TEdit;
-        apacheAuthPassword: TEdit;
-        apacheAccountLabel: TLabel;
-        apachePasswordLabel: TLabel;
+        FlowPanel1: TFlowPanel;
+        apacheAuthLabel: TLabel;
+        apacheAuthChangeBtn: TLabel;
         MainMenu                 : TMainMenu;
         MemoMessager             : TMemo;
         MenuItem1                : TMenuItem;
@@ -51,8 +50,7 @@ type
         MenuItemDatabase         : TMenuItem;
         MenuItemBackup           : TMenuItem;
         TrayIcon1                : TTrayIcon;
-        procedure apacheAuthAccountChange(Sender: TObject);
-        procedure apacheAuthPasswordChange(Sender: TObject);
+        procedure apacheAuthChangeBtnClick(Sender: TObject);
         procedure apacheAuthToggleChange(Sender: TObject);
         procedure ButtonRunClick(Sender: TObject);
         procedure ButtonStopClick(Sender: TObject);
@@ -279,7 +277,6 @@ begin
     ButtonStop.Caption  := GetLang('UI/stopped', '已停止');
     ButtonRun.Enabled   := True;
     ButtonRun.Caption   := GetLang('UI/startZentao', '启动') + product.Title;
-    updateAuthStatus();
 end;
 
 procedure TMainForm.ButtonStopClick(Sender: TObject);
@@ -287,7 +284,6 @@ begin
     Cursor := crHourGlass;
     ButtonStop.Enabled := False;
     ButtonStop.Caption := GetLang('UI/stopping', '正在停止');
-    updateAuthStatus();
     if StopZentao then begin
         ButtonVisit.Enabled := False;
         ButtonStop.Enabled  := False;
@@ -301,7 +297,6 @@ begin
         ButtonRun.Enabled   := False;
         ButtonRun.Caption   := GetLang('UI/running', '正在运行');
     end;
-    updateAuthStatus();
     Cursor := crDefault;
 end;
 
@@ -310,7 +305,6 @@ begin
     Cursor := crHourGlass;
     ButtonRun.Enabled := False;
     ButtonRun.Caption := GetLang('UI/starting', '正在启动');
-    updateAuthStatus;
     if StartZentao then begin
         ButtonVisit.Enabled := True;
         ButtonStop.Enabled  := True;
@@ -325,28 +319,17 @@ begin
         ButtonRun.Caption   := GetLang('UI/startZentao', '启动') + product.Title;
     end;
     Cursor := crDefault;
-    updateAuthStatus;
 end;
 
 procedure TMainForm.apacheAuthToggleChange(Sender: TObject);
 begin
-    if userconfig.EnableApacheAuth <> apacheAuthToggle.Checked then begin
-        userconfig.EnableApacheAuth := apacheAuthToggle.Checked;
-        SaveConfig();
-        updateAuthStatus;
-    end;
+    userconfig.EnableApacheAuth := apacheAuthToggle.Checked;
+    resetAuthConfig;
 end;
 
-procedure TMainForm.apacheAuthAccountChange(Sender: TObject);
+procedure TMainForm.apacheAuthChangeBtnClick(Sender: TObject);
 begin
-    userconfig.apacheAuthAccount := apacheAuthAccount.Text;
-    SaveConfig();
-end;
-
-procedure TMainForm.apacheAuthPasswordChange(Sender: TObject);
-begin
-    userconfig.apacheAuthPassword := apacheAuthPassword.Text;
-    SaveConfig();
+    AuthConfigDialogForm.ShowModal();
 end;
 
 procedure TMainForm.ButtonVisitClick(Sender: TObject);
@@ -398,7 +381,7 @@ begin
     Caption := product.Title + GetLang('ui/title', '集成运行环境') + ' ' + GetBuildVersion;
 
     MenuItemService.Caption          := GetLang('menu/service', '服务');
-    MenuItem2.Caption                := GetLang('menu/configPort', '配置默认端口');
+    MenuItem2.Caption                := GetLang('menu/configPort', '配置端口');
     MenuItemViewService.Caption      := GetLang('menu/viewService', '查看服务');
     MenuItemUninstallService.Caption := GetLang('menu/uninstallService', '卸载服务');
     MenuItemTool.Caption             := GetLang('menu/tool', '工具');
@@ -418,8 +401,8 @@ begin
     MenuItemExit.Caption             := GetLang('menu/exit', '退出');
     MenuItemRunCommands.Caption      := GetLang('menu/runCommands', '执行命令');
 
-    ButtonVisit.Caption     := GetLang('UI/visitZentao', '访问') + product.Title;
-    ButtonZtOffical.Caption :=  product.Title + GetLang('UI/zentaoOfficial', '官网');
+    ButtonVisit.Caption          := GetLang('UI/visitZentao', '访问') + product.Title;
+    ButtonZtOffical.Caption      :=  product.Title + GetLang('UI/zentaoOfficial', '官网');
     if ButtonStop.Enabled then begin
         ButtonStop.Caption := GetLang('UI/stop', ButtonStop.Caption);
     end else begin
@@ -433,8 +416,8 @@ begin
     end;
 
     apacheAuthToggle.Caption := GetLang('ui/enableApacheAuth', '启用 Apache 用户访问验证');
-    apachePasswordLabel.Caption := GetLang('ui/password', '密码');
-    apacheAccountLabel.Caption := GetLang('ui/account', '用户名');
+    apacheAuthLabel.Caption := Format(GetLang('ui/apacheInfoLabel', '用户名:%s 密码:%s'), [userconfig.ApacheAuthAccount, userconfig.apacheAuthPassword]);
+    apacheAuthChangeBtn.Caption := GetLang('ui/change', '修改');
     
     MenuItemZhcn.Checked := False;
     MenuItemEn.Checked   := False;
@@ -449,13 +432,8 @@ end;
 procedure TMainForm.updateAuthStatus();
 begin
     apacheAuthToggle.Checked := userconfig.EnableApacheAuth;
-    apacheAuthToggle.Enabled := ButtonRun.Enabled;
-    apacheAuthAccount.Text := userconfig.apacheAuthAccount;
-    apacheAuthPassword.Text := userconfig.apacheAuthPassword;
-    apacheAuthAccount.ReadOnly := (not ButtonRun.Enabled);
-    apacheAuthPassword.ReadOnly := (not ButtonRun.Enabled);
-    apacheAuthAccount.Enabled := userconfig.EnableApacheAuth;
-    apacheAuthPassword.Enabled := userconfig.EnableApacheAuth;
+    apacheAuthLabel.Caption := Format(GetLang('ui/apacheInfoLabel', '用户名:%s 密码:%s'), [userconfig.ApacheAuthAccount, userconfig.apacheAuthPassword]);
+    apacheAuthChangeBtn.Enabled := userconfig.EnableApacheAuth;
 end;
 
 end.
