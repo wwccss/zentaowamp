@@ -1,13 +1,14 @@
 object ConfigPortDialog: TConfigPortDialog
-  Left = 875
+  Left = 1118
   Height = 254
-  Top = 192
+  Top = 483
   Width = 241
   BorderStyle = bsToolWindow
   Caption = '配置默认端口'
   ClientHeight = 254
   ClientWidth = 241
   OnShow = FormShow
+  Position = poOwnerFormCenter
   LCLVersion = '1.6.4.0'
   object Label1: TLabel
     Left = 24
