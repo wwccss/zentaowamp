@@ -62,8 +62,12 @@ zentaorunner.exe
 node_modules
 
 #output
+zentaorunner*.exe
+zentaorunner.ico
 xampp/chanzhi-xampp/
 xampp/ranzhi-xampp/
 xampp/zentao-xampp/
 xampp/yidou-xampp/
+xampp/zentao-wampp-win32/
 xampp/*.zip
+xampp/zentao/*.exe
