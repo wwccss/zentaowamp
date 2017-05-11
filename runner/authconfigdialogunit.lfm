@@ -3,11 +3,13 @@ object AuthConfigDialogForm: TAuthConfigDialogForm
   Height = 223
   Top = 199
   Width = 320
+  BorderStyle = bsToolWindow
   Caption = '设置访问验证账号'
   ClientHeight = 223
   ClientWidth = 320
   OnCreate = FormCreate
   OnShow = FormShow
+  Position = poOwnerFormCenter
   LCLVersion = '1.6.4.0'
   object AccountLabel: TLabel
     Left = 16
