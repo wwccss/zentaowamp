@@ -25,6 +25,8 @@ uses
     SysUtils;
 
 type
+    TIntegerArray = Array of Integer;
+
     OsEnvironment = record
         Exe            : string;
         Drive          : string;
@@ -33,6 +35,7 @@ type
         UserConfigFile : string;
         IsInXAMPP      : boolean;
         RunnerLocation : string;
+        Architecture   : string;
     end;
 
     PhpConfig = record
@@ -61,6 +64,7 @@ type
     MysqlConfig = record
         Version           : string;
         Exe               : string;
+        mysqlExe          : String;
         ConfigFile        : string;
         ConfigFileTpl     : string;
         // MyConfig          : string;
@@ -103,6 +107,7 @@ type
         EnableApacheAuth: boolean;
         ApacheAuthAccount: string;
         ApacheAuthPassword: string;
+        forceX86       : Boolean;
     end;
 
 function GetVersion(soft: string; display: Boolean = False): string;
@@ -152,7 +157,12 @@ function StrReplace(source: string; find: string; forReplace: string): string;
 function formatDir(source: string): string;
 function GenRandomStr(len: integer): String;
 function addApacheUser(account: String; password: String): Boolean;
-procedure resetAuthConfig();
+procedure ResetAuthConfig();
+function GetOsArch(): String;
+function ChangeMySqlPassword(password: string): boolean;
+function UpdateMySqlPassword(configFile: string; password: string): boolean;
+function CheckMySqlPassword(): boolean;
+function ConfirmMySqlPassword(): boolean;
 
 const
     ONE_DAY_MILLION_SECONDS = 24 * 60 * 60 * 1000;
@@ -160,15 +170,23 @@ const
     CONFIG_USER_FILE        = 'config.user.json';
     CONFIG_FILE             = 'config.ini';
     APP_DIR                 = 'runner';
-    DEBUG_MODE_DEFAULT      = 0;
+    DEBUG_MODE_DEFAULT      = 2;
     READ_BYTES              = 2048;
 
+    FORCE_X86         = False;
     MAX_PORT          = 65535;
     HOST              = '127.0.0.1';
-    VC_REDIST         = 'vc_redist.x86.exe';
-    VC_DETECTOR       = 'vc_detector.bat'; 
-    VERSION           = '1.3.0';
+    VC_REDIST         = 'vc_redist.%s.exe';
+    VC_DETECTOR       = 'vc_detector_%s.bat'; 
+    OS_CHECK_BAT      = 'check_os.bat';
+    VERSION_MAJOR     = 1;
+    VERSION_MINOR     = 3;
+    VERSION_PACTH     = 0;
     INIT_SUCCESSCODE  = '0';
+    MYSQL_USER        = 'zentao';
+    MYSQL_USER_ROOT   = 'root';
+    CONFIG_DB_USER    = '$config->db->user';
+    CONFIG_DB_PASS    = '$config->db->password';
     RANDOM_STR_SET    = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 var
@@ -188,6 +206,7 @@ implementation
 
 uses mainformunit;
 
+
 function GenRandomStr(len: integer): String;
 var
     i: integer;
@@ -205,12 +224,30 @@ var
     i           : integer;
 begin
     Result := False;
-    outputLines := ExcuteCommand(os.RunnerLocation + VC_DETECTOR);
+    outputLines := ExcuteCommand(os.RunnerLocation + format(VC_DETECTOR, [os.Architecture]));
     for i := 0 to (outputLines.Count - 1) do
     begin
         if Pos('INSTALLED', outputLines[i]) > 0 then begin
             Result := True;
             BREAK;
+        end;
+    end;
+end;
+
+function GetOsArch(): String;
+var
+    outputLines : TStringList;
+    i           : integer;
+begin
+    Result := 'x86';
+    if not userConfig.forceX86 then begin
+        outputLines := ExcuteShell(os.RunnerLocation + OS_CHECK_BAT);
+        for i := 0 to (outputLines.Count - 1) do
+        begin
+            if Pos('64', outputLines[i]) > 0 then begin
+                Result := 'x64';
+                BREAK;
+            end;
         end;
     end;
 end;
@@ -231,7 +268,7 @@ end;
 
 procedure InstallVC();
 begin
-    ExcuteCommand(os.RunnerLocation + VC_REDIST, False, False);
+    ExcuteCommand(os.RunnerLocation + format(VC_REDIST, [os.Architecture]), False, False);
 end;
 
 function addApacheUser(account: String; password: String): Boolean;
@@ -883,6 +920,7 @@ begin
 
     // mysql
     mysql.Exe              := os.Location + 'mysql\bin\mysqld.exe';
+    mysql.mysqlExe         := os.Location + 'mysql\bin\mysql.exe';
     mysql.ConfigFile       := os.Location + 'mysql\my.ini';
     mysql.ConfigFileTpl    := os.RunnerLocation + config.Get('mysql/configfile', 'res\mysql\my.ini');
     
@@ -1022,6 +1060,126 @@ begin
     end;
 end;
 
+function GetMySqlPassword(): string;
+var 
+    fileLines: TStringList;
+    i, position: integer;
+    line: string;
+    regex: TRegExpr;
+begin
+    Result := '';
+
+    fileLines := TStringList.Create;
+    try
+        fileLines.LoadFromFile(product.MyConfig);
+        if fileLines.Count > 0 then begin
+            regex := TRegExpr.Create;
+            regex.Expression := '\' + CONFIG_DB_PASS + '\s*=\s*[''"](\w*)[''"];';
+            for i := 0 to (fileLines.Count - 1) do
+            begin
+                line := fileLines[i];
+                if regex.Exec(line) then begin
+                    Result := regex.Match[1];
+                    ConsoleLn('> GetMySqlPassword', 'password:' + Result);
+                    BREAK;
+                end;
+            end;
+            regex.Free;
+        end;
+    except
+        ConsoleLn('   Can not open file.');
+    end;
+    fileLines.Free;
+end;
+
+function CheckMySqlPassword(): boolean;
+var
+    oldPassword: string;
+    isBadPassword: boolean;
+    userString  : string;
+begin
+    oldPassword := GetMySqlPassword;
+    isBadPassword := (oldPassword = '') or (oldPassword = '123456');
+    Result := False;
+    userString := GenRandomStr(10);
+
+    if isBadPassword and InputQuery(GetLang('message/changeMySqlPassword', '更改数据库密码'), GetLang('message/changeMySqlPasswordTip', '当前数据库密码太弱，继续使用旧的密码存在安全风险，建议立即修改密码为:'), userString) then begin
+        Result := ChangeMySqlPassword(userString);
+    end;
+end;
+
+function ConfirmMySqlPassword(): boolean;
+var
+    userString  : string;
+begin
+    userString := GetMySqlPassword;
+    Result := False;
+    if InputQuery(GetLang('message/changeMySqlPassword', '更改数据库密码'), GetLang('message/confirmMySqlPasswordTip', '请输入新密码:'), userString) then begin
+        Result := ChangeMySqlPassword(userString);
+    end;
+end;
+
+function ChangeMySqlPassword(password: string): boolean;
+var
+    oldPassword: String;
+begin
+    Result := False;
+    if (GetServiceStatus(mysql.serviceName) = 'running') then begin
+        oldPassword := GetMySqlPassword;
+        ConsoleLn('> ChangeMySqlPassword', 'password:' + password + ', oldPassword: ' + oldPassword);
+        ExcuteCommand(mysql.mysqlExe + ' --user=' + MYSQL_USER_ROOT 
+            + ' --password=' + oldPassword 
+            + ' --port=' + IntToStr(mysql.port) 
+            + ' -e "SET PASSWORD FOR ''' + MYSQL_USER_ROOT + '''@''localhost'' = PASSWORD(''' 
+            + password + ''');"');
+        if VERSION_MAJOR > 1 then begin
+            ExcuteCommand(mysql.mysqlExe + ' --user=' + MYSQL_USER 
+                + ' --password=' + oldPassword 
+                + ' --port=' + IntToStr(mysql.port) 
+                + ' -e "SET PASSWORD FOR ''' + MYSQL_USER + '''@''localhost'' = PASSWORD(''' 
+                + password + ''');"');
+        end;
+        UpdateMySqlPassword(product.MyConfig, password);
+        if product.pro <> '' then begin
+            UpdateMySqlPassword(product.ProMyConfig, password);
+        end;
+        Result := True;
+    end else begin
+        ConsoleLn('> ChangeMySqlPassword fail, mysql is stop. ', 'password:' + password + ', oldPassword: ' + oldPassword);
+        ShowMessage(GetLang('message/changeMySqlPasswordFail', '更改数据库密码失败，MySql 服务器没有运行，请先启动服务再试。'));
+    end;
+end;
+
+function UpdateMySqlPassword(configFile: string; password: string): boolean;
+var 
+    fileLines: TStringList;
+    i, position: integer;
+    line: string;
+begin
+    ConsoleLn('> UpdateMySqlPassword', 'password:' + password + ', configFile: ' + ConfigFile);
+    Result := False;
+
+    fileLines := TStringList.Create;
+    try
+        fileLines.LoadFromFile(configFile);
+        if fileLines.Count > 0 then begin
+            for i := 0 to (fileLines.Count - 1) do
+            begin
+                line := fileLines[i];
+                if Pos(CONFIG_DB_PASS, line) > 0 then begin
+                    fileLines[i] := CONFIG_DB_PASS + '    = ''' + password + ''';';
+                    Result := True;
+                    BREAK;
+                end;
+            end;
+            fileLines.SaveToFile(configFile);
+        end;
+    except
+        ConsoleLn('   Can not open file.');
+    end;
+    fileLines.Free;
+end;
+
 function UpdateConfigPort(serviceName: string; configFile: string): boolean;
 var
     oldPort, port: string;
@@ -1092,6 +1250,7 @@ begin
     end;
     if Result then begin
         PrintLn(Format(GetLang('message/isRunning', '%s正在运行，点击“访问”按钮来使用。'), [product.title]));
+        checkMySqlPassword;
     end else begin
         PrintLn(GetLang('message/failedAndTry', '启动失败，请稍后重试。'));
     end;
@@ -1166,13 +1325,9 @@ begin
     os.Exe                                 := Application.ExeName;
     os.Location                            := Application.Location;
     os.RunnerLocation                      := os.Location + APP_DIR + '/';
+    os.Architecture                        := GetOsArch;
     // os.Drive                               := Copy(os.Location, 0, 2);//F:\xampp\runner\
     // os.IsInXAMPP                           := (os.Location = (os.Drive + '\xampp\'));
-
-    consoleln('Application info:');
-    consoleln('    os.Exe           ', os.Exe);
-    consoleln('    os.Location      ', os.Location);
-    consoleln('    os.RunnerLocation', os.RunnerLocation);
 
     os.ConfigFile                          := os.RunnerLocation + CONFIG_FILE;
     os.UserConfigFile                      := os.RunnerLocation + CONFIG_USER_FILE;
@@ -1202,6 +1357,18 @@ begin
         end;
     finally
     end;
+
+    if VERSION_MAJOR = 1 then begin
+        userconfig.forceX86 := true;
+    end else begin
+        userconfig.forceX86 := config.Get('basic/force_x86', '') = 'true';
+    end;
+
+    consoleln('OS environment info:');
+    consoleln('    os.Architecture  ', os.Architecture);
+    consoleln('    os.Exe           ', os.Exe);
+    consoleln('    os.Location      ', os.Location);
+    consoleln('    os.RunnerLocation', os.RunnerLocation);
 end;
 
 { Load config }
@@ -1276,7 +1443,7 @@ begin
     end
     else
     begin
-        Result := Format(formatStr, [1, 3, 0, 0]);
+        Result := Format(formatStr, [VERSION_MAJOR, VERSION_MINOR, VERSION_PACTH]);
     end;
 end;
 

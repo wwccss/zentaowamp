@@ -132,6 +132,7 @@
         <Filename Value="authconfigdialogunit.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="AuthConfigDialogForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit6>
     </Units>

@@ -9,6 +9,7 @@ uses
     StdCtrls,
     LCLIntf, ExtCtrls,
     langunit,
+    Clipbrd,
     zentaounit, process, ServiceManager, ConfigPortDialogUnit, AuthConfigDialogUnit;
 
 type
@@ -16,6 +17,7 @@ type
     { TMainForm }
 
     TMainForm = class(TForm)
+      copyAuthPassword: TLabel;
       apacheAuthToggle: TCheckBox;
         ButtonRun                : TButton;
         ButtonVisit              : TButton;
@@ -28,6 +30,8 @@ type
         MemoMessager             : TMemo;
         MenuItem1                : TMenuItem;
         MenuItem2                : TMenuItem;
+        MenuItemConfirmMysqlPassword: TMenuItem;
+        MenuItemChangeAuthAccount: TMenuItem;
         MenuItemEn: TMenuItem;
         MenuItemZhtw: TMenuItem;
         MenuItemZhcn: TMenuItem;
@@ -57,12 +61,16 @@ type
         procedure ButtonVisitClick(Sender: TObject);
         procedure ButtonZtOfficalClick(Sender: TObject);
         procedure ChangeLangMenuItemClick(Sender: TObject);
+        procedure copyAuthPasswordClick(Sender: TObject);
+        procedure copyAuthPasswordMouseLeave(Sender: TObject);
         procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure FormWindowStateChange(Sender: TObject);
         procedure MenuItem10Click(Sender: TObject);
         procedure MenuItem2Click(Sender: TObject);
+        procedure MenuItemChangeAuthAccountClick(Sender: TObject);
+        procedure MenuItemConfirmMysqlPasswordClick(Sender: TObject);
         procedure MenuItemOfficialHelpClick(Sender: TObject);
         procedure MenuItemFlowChartClick(Sender: TObject);
         procedure MenuItemFaqClick(Sender: TObject);
@@ -239,6 +247,16 @@ begin
     ConfigPortDialog.ShowModal();
 end;
 
+procedure TMainForm.MenuItemChangeAuthAccountClick(Sender: TObject);
+begin
+    AuthConfigDialogForm.ShowModal();
+end;
+
+procedure TMainForm.MenuItemConfirmMysqlPasswordClick(Sender: TObject);
+begin
+    ConfirmMySqlPassword;
+end;
+
 procedure TMainForm.MenuItemOfficialHelpClick(Sender: TObject);
 begin
     OpenUrl(config.Get('product/helpdocument', 'http://www.cnezsoft.com/'));
@@ -359,6 +377,17 @@ begin
     ShowMessage(GetLang('message/applyLangTip', '重启程序来应用所有语言更改。'));
 end;
 
+procedure TMainForm.copyAuthPasswordClick(Sender: TObject);
+begin
+  Clipboard.AsText := userconfig.ApacheAuthPassword;
+  copyAuthPassword.Caption := GetLang('ui/copied', '已复制');
+end;
+
+procedure TMainForm.copyAuthPasswordMouseLeave(Sender: TObject);
+begin
+  copyAuthPassword.Caption := GetLang('ui/copyPassword', '复制密码');
+end;
+
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
     ExitZentao;
@@ -400,6 +429,8 @@ begin
     MenuItemForum.Caption            := GetLang('menu/forum', '官方论坛');
     MenuItemExit.Caption             := GetLang('menu/exit', '退出');
     MenuItemRunCommands.Caption      := GetLang('menu/runCommands', '执行命令');
+    MenuItemConfirmMysqlPassword.Caption := GetLang('message/changeMySqlPassword', '更改数据库密码');
+    MenuItemChangeAuthAccount.Caption:= GetLang('message/changeAuthAccount', '更改访问验证账号');
 
     ButtonVisit.Caption          := GetLang('UI/visitZentao', '访问') + product.Title;
     ButtonZtOffical.Caption      :=  product.Title + GetLang('UI/zentaoOfficial', '官网');
@@ -418,6 +449,7 @@ begin
     apacheAuthToggle.Caption := GetLang('ui/enableApacheAuth', '启用 Apache 用户访问验证');
     apacheAuthLabel.Caption := Format(GetLang('ui/apacheInfoLabel', '用户名:%s 密码:%s'), [userconfig.ApacheAuthAccount, userconfig.apacheAuthPassword]);
     apacheAuthChangeBtn.Caption := GetLang('ui/change', '修改');
+    copyAuthPassword.Caption := GetLang('ui/copyPassword', '复制密码');
     
     MenuItemZhcn.Checked := False;
     MenuItemEn.Checked   := False;
