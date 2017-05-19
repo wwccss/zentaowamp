@@ -1132,13 +1132,11 @@ begin
             + ' --port=' + IntToStr(mysql.port) 
             + ' -e "SET PASSWORD FOR ''' + MYSQL_USER_ROOT + '''@''localhost'' = PASSWORD(''' 
             + password + ''');"');
-        if VERSION_MAJOR > 1 then begin
-            ExcuteCommand(mysql.mysqlExe + ' --user=' + MYSQL_USER 
-                + ' --password=' + oldPassword 
-                + ' --port=' + IntToStr(mysql.port) 
-                + ' -e "SET PASSWORD FOR ''' + MYSQL_USER + '''@''localhost'' = PASSWORD(''' 
-                + password + ''');"');
-        end;
+        ExcuteCommand(mysql.mysqlExe + ' --user=' + MYSQL_USER 
+            + ' --password=' + oldPassword 
+            + ' --port=' + IntToStr(mysql.port) 
+            + ' -e "SET PASSWORD FOR ''' + MYSQL_USER + '''@''localhost'' = PASSWORD(''' 
+            + password + ''');"');
         UpdateMySqlPassword(product.MyConfig, password);
         if product.pro <> '' then begin
             UpdateMySqlPassword(product.ProMyConfig, password);
