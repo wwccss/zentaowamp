@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 995
+  Left = 929
   Height = 385
-  Top = 805
+  Top = 791
   Width = 551
   Caption = '禅道集成运行环境'
   ClientHeight = 355

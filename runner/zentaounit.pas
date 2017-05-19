@@ -170,7 +170,7 @@ const
     CONFIG_USER_FILE        = 'config.user.json';
     CONFIG_FILE             = 'config.ini';
     APP_DIR                 = 'runner';
-    DEBUG_MODE_DEFAULT      = 2;
+    DEBUG_MODE_DEFAULT      = 0;
     READ_BYTES              = 2048;
 
     FORCE_X86         = False;
@@ -1235,10 +1235,11 @@ end;
 { Start }
 function StartZentao(): boolean;
 begin
-    FixConfigPath;
-
     PrintLn;
     PrintLn(GetLang('message/starting', '正在启动......'));
+
+    FixConfigPath;
+    PrintLn(GetLang('message/applyServerConfig', '已应用服务器配置。'));
 
     Result := RestartService(apache.ServiceName, True);
     if not Result then Result := RestartService(apache.ServiceName, True, True);
@@ -1248,6 +1249,7 @@ begin
     end;
     if Result then begin
         PrintLn(Format(GetLang('message/isRunning', '%s正在运行，点击“访问”按钮来使用。'), [product.title]));
+        PrintLn('你也可以直接在浏览器访问：http://' + HOST + ':' + IntToStr(apache.port) + '/' + config.Get('product/main', ''));
         checkMySqlPassword;
     end else begin
         PrintLn(GetLang('message/failedAndTry', '启动失败，请稍后重试。'));
