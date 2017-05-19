@@ -79,7 +79,7 @@ $file->mkdir($output . '\htdocs');
 
 /* Process mysql. */
 /* Set mysql root password. */
-exec($xampp . '\mysql\bin\mysqld.exe --install tmpMysql --defaults-file="' . $xampp . '\mysql\bin\my.ini"');
+exec($xampp . '\mysql\bin\mysqld.exe --install tmpMysql');
 exec('net start tmpMysql ');
 exec($xampp . '\mysql\bin\mysqladmin.exe -uroot password 123456');
 exec($xampp . '\mysql\bin\mysql.exe -uroot -p123456 < ' . $buildDir . '\createuser.sql');
@@ -120,6 +120,8 @@ $file->copyFile($xampp . '\php\libsasl.dll',       $output . '\apache\bin\libsas
 $file->copyFile($xampp . '\php\libsasl.dll',       $output . '\php\libsasl.dll');
 $file->copyFile($xampp . '\php\libssh2.dll',       $output . '\php\libssh2.dll');
 $file->copyFile($xampp . '\php\libssh2.dll',       $output . '\apache\bin\libssh2.dll');
+$file->copyFile($xampp . '\php\nghttp2.dll',       $output . '\php\nghttp2.dll');
+$file->copyFile($xampp . '\php\nghttp2.dll',       $output . '\apache\bin\nghttp2.dll');
 $file->copyFile($xampp . '\php\php.exe',      	   $output . '\php\php.exe');
 $file->copyFile($xampp . '\php\php.gif',      	   $output . '\php\php.gif');
 
