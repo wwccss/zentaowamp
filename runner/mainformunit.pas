@@ -193,8 +193,10 @@ begin
     end;
 
     if not CheckVC then begin
-        if mrYes = MessageDlg(GetLang('UI/isInstallVC', '检查到没有安装VC++运行环境，将无法正常使用所有功能。是否立即安装？'), mtConfirmation, [mbYes, mbNo], 0) then begin
+        if mrYes = MessageDlg(GetLang('UI/isInstallVC', '检查到没有安装VC++运行环境，将无法继续使用。是否立即安装？'), mtConfirmation, [mbYes, mbNo], 0) then begin
             InstallVC;
+        end else begin
+            Close;
         end;
     end;
 
