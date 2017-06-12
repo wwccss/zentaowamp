@@ -125,7 +125,7 @@ procedure InitZentao();
 function BackupZentao(): string;
 function StartZentao(): boolean;
 function StopZentao(): boolean;
-function GetBuildVersion(formatStr: string = '%d.%d.%d'): string;
+function GetBuildVersion(formatStr: string = 'auto'): string;
 function LoadConfig(): boolean;
 function SaveConfig(destroy: boolean = False): boolean;
 procedure ExitZentao();
@@ -181,7 +181,7 @@ const
     OS_CHECK_BAT      = 'check_os.bat';
     VERSION_MAJOR     = 2;
     VERSION_MINOR     = 0;
-    VERSION_PACTH     = 0;
+    VERSION_PACTH     = 1;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
     MYSQL_USER_ROOT   = 'root';
@@ -1435,11 +1435,19 @@ begin
 end;
 
 { Get build version }
-function GetBuildVersion(formatStr: string = '%d.%d.%d'): string;
+function GetBuildVersion(formatStr: string = 'auto'): string;
 begin
     if formatStr = '%s' then
     begin
         Result := 'Release';
+    end
+    else if formatStr = 'auto' then
+    begin
+        if VERSION_PACTH = 0 then begin
+            Result := Format('%d.%d', [VERSION_MAJOR, VERSION_MINOR]);
+        end else begin
+            Result := Format('%d.%d.%d', [VERSION_MAJOR, VERSION_MINOR, VERSION_PACTH]);
+        end;
     end
     else
     begin
