@@ -1122,29 +1122,43 @@ end;
 function ChangeMySqlPassword(password: string): boolean;
 var
     oldPassword: String;
+    cmdOutput  : TStringList;
 begin
     Result := False;
     if (GetServiceStatus(mysql.serviceName) = 'running') then begin
         oldPassword := GetMySqlPassword;
         ConsoleLn('> ChangeMySqlPassword', 'password:' + password + ', oldPassword: ' + oldPassword);
-        ExcuteCommand(mysql.mysqlExe + ' --user=' + MYSQL_USER_ROOT 
-            + ' --password=' + oldPassword 
-            + ' --port=' + IntToStr(mysql.port) 
-            + ' -e "SET PASSWORD FOR ''' + MYSQL_USER_ROOT + '''@''localhost'' = PASSWORD(''' 
-            + password + ''');"');
-        ExcuteCommand(mysql.mysqlExe + ' --user=' + MYSQL_USER 
-            + ' --password=' + oldPassword 
-            + ' --port=' + IntToStr(mysql.port) 
-            + ' -e "SET PASSWORD FOR ''' + MYSQL_USER + '''@''localhost'' = PASSWORD(''' 
-            + password + ''');"');
-        UpdateMySqlPassword(product.MyConfig, password);
-        if product.pro <> '' then begin
-            UpdateMySqlPassword(product.ProMyConfig, password);
+        if oldPassword = password then begin
+            ConsoleLn('  Change mySql password faild, because new password is the same as old password.');
+        end else begin
+            ExcuteCommand(mysql.mysqlExe + ' --user=' + MYSQL_USER_ROOT 
+                + ' --password=' + oldPassword 
+                + ' --port=' + IntToStr(mysql.port) 
+                + ' -e "SET PASSWORD FOR ''' + MYSQL_USER_ROOT + '''@''localhost'' = PASSWORD(''' 
+                + password + ''');"');
+            ExcuteCommand(mysql.mysqlExe + ' --user=' + MYSQL_USER 
+                + ' --password=' + oldPassword 
+                + ' --port=' + IntToStr(mysql.port) 
+                + ' -e "SET PASSWORD FOR ''' + MYSQL_USER + '''@''localhost'' = PASSWORD(''' 
+                + password + ''');"');
+            cmdOutput := ExcuteCommand(mysql.mysqlExe + ' --user=' + MYSQL_USER_ROOT 
+                + ' --password=' + oldPassword 
+                + ' --port=' + IntToStr(mysql.port) 
+                + ' -e "flush privileges;"');
+            if (cmdOutput.count > 0) and (pos('error', LowerCase(cmdOutput[0])) > 0) then begin
+                ConsoleLn('  Change MySql Password fail');
+                ShowMessage(GetLang('message/changeMySqlPasswordFail', '更改数据库密码失败。') + cmdOutput[0]);
+            end else begin
+                UpdateMySqlPassword(product.MyConfig, password);
+                if product.pro <> '' then begin
+                    UpdateMySqlPassword(product.ProMyConfig, password);
+                end;
+                Result := True;
+            end;
         end;
-        Result := True;
     end else begin
         ConsoleLn('> ChangeMySqlPassword fail, mysql is stop. ', 'password:' + password + ', oldPassword: ' + oldPassword);
-        ShowMessage(GetLang('message/changeMySqlPasswordFail', '更改数据库密码失败，MySql 服务器没有运行，请先启动服务再试。'));
+        ShowMessage(GetLang('message/changeMySqlPasswordFailBeforeRunMysql', '更改数据库密码失败，MySql 服务器没有运行，请先启动服务再试。'));
     end;
 end;
 
