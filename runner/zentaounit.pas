@@ -170,7 +170,7 @@ const
     CONFIG_USER_FILE        = 'config.user.json';
     CONFIG_FILE             = 'config.ini';
     APP_DIR                 = 'runner';
-    DEBUG_MODE_DEFAULT      = 0;
+    DEBUG_MODE_DEFAULT      = 2;
     READ_BYTES              = 2048;
 
     FORCE_X86         = False;

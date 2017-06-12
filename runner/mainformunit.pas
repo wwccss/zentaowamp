@@ -197,6 +197,11 @@ begin
     if not CheckVC then begin
         if mrYes = MessageDlg(GetLang('UI/isInstallVC', '检查到没有安装VC++运行环境，将无法继续使用。是否立即安装？'), mtConfirmation, [mbYes, mbNo], 0) then begin
             InstallVC;
+            if not CheckVC then begin
+                ShowMessage(GetLang('message/VCInstallFail', 'VC++运行环境安装失败。'));
+                Application.Terminate;
+                Exit;
+            end;
         end else begin
             Application.Terminate;
             Exit;
@@ -379,7 +384,7 @@ var
 begin
     menuItem := Sender as TMenuItem;
     ChangeLanguage(menuItem.Hint);
-    ShowMessage(GetLang('message/applyLangTip', '重启程序来应用所有语言更改。'));
+    // ShowMessage(GetLang('message/applyLangTip', '重启程序来应用所有语言更改。'));
 end;
 
 procedure TMainForm.copyAuthPasswordClick(Sender: TObject);
@@ -435,7 +440,7 @@ begin
     MenuItemExit.Caption             := GetLang('menu/exit', '退出');
     MenuItemRunCommands.Caption      := GetLang('menu/runCommands', '执行命令');
     MenuItemConfirmMysqlPassword.Caption := GetLang('message/changeMySqlPassword', '数据库密码');
-    MenuItemChangeAuthAccount.Caption:= GetLang('message/changeAuthAccount', '访问验证账号');
+    MenuItemChangeAuthAccount.Caption:= GetLang('message/changeAuthAccount', 'Apache 访问密码');
 
     ButtonVisit.Caption          := GetLang('UI/visitZentao', '访问') + product.Title;
     ButtonZtOffical.Caption      :=  product.Title + GetLang('UI/zentaoOfficial', '官网');
@@ -470,6 +475,11 @@ procedure TMainForm.updateAuthStatus();
 begin
     apacheAuthToggle.Checked := userconfig.EnableApacheAuth;
     apacheAuthLabel.Caption := Format(GetLang('ui/apacheInfoLabel', '用户名:%s 密码:%s'), [userconfig.ApacheAuthAccount, userconfig.apacheAuthPassword]);
+    if userConfig.EnableApacheAuth then begin
+        apacheAuthLabel.Font.Color := clMaroon;
+    end else begin
+        apacheAuthLabel.Font.Color := clGray;
+    end;
     apacheAuthChangeBtn.Enabled := userconfig.EnableApacheAuth;
 end;
 

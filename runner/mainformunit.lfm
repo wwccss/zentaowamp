@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 503
+  Left = 393
   Height = 385
-  Top = 374
+  Top = 399
   Width = 551
   Caption = '禅道集成运行环境'
   ClientHeight = 365
@@ -4422,27 +4422,29 @@ object MainForm: TMainForm
     object apacheAuthLabel: TLabel
       Left = 99
       Height = 17
-      Top = 2
-      Width = 159
+      Top = 4
+      Width = 161
       Anchors = []
       BorderSpacing.Left = 5
-      BorderSpacing.Top = 2
+      BorderSpacing.Top = 4
       BorderSpacing.Right = 5
       BorderSpacing.Bottom = 2
       Caption = '用户名: zentao 密码: 123456'
-      Font.Color = clGrayText
+      Font.Color = clGray
+      Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
       OnClick = apacheAuthChangeBtnClick
     end
     object apacheAuthChangeBtn: TLabel
-      Left = 268
+      Cursor = crHandPoint
+      Left = 270
       Height = 17
-      Top = 2
+      Top = 4
       Width = 24
       Anchors = []
       BorderSpacing.Left = 5
-      BorderSpacing.Top = 2
+      BorderSpacing.Top = 4
       BorderSpacing.Right = 5
       BorderSpacing.Bottom = 2
       Caption = '修改'
@@ -4453,13 +4455,14 @@ object MainForm: TMainForm
       OnClick = apacheAuthChangeBtnClick
     end
     object copyAuthPassword: TLabel
-      Left = 302
+      Cursor = crHandPoint
+      Left = 304
       Height = 17
-      Top = 2
+      Top = 4
       Width = 48
       Anchors = []
       BorderSpacing.Left = 5
-      BorderSpacing.Top = 2
+      BorderSpacing.Top = 4
       BorderSpacing.Right = 5
       BorderSpacing.Bottom = 2
       Caption = '复制密码'
