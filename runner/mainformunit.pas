@@ -30,6 +30,7 @@ type
         MemoMessager             : TMemo;
         MenuItem1                : TMenuItem;
         MenuItem2                : TMenuItem;
+        MenuItem3: TMenuItem;
         MenuItemConfirmMysqlPassword: TMenuItem;
         MenuItemChangeAuthAccount: TMenuItem;
         MenuItemEn: TMenuItem;
@@ -189,14 +190,16 @@ begin
 
     if not CheckApplicationPath(Application.Location) then begin
         ShowMessage(GetLang('message/wrongAppLocationPath', '无法安装启动服务，因为当前程序所在路径包含中文等特殊字符。程序所在路径必须仅包含数字、大小写字母或下划线，请修改路径后重试。'));
-        Close;
+        Application.Terminate;
+        Exit;
     end;
 
     if not CheckVC then begin
         if mrYes = MessageDlg(GetLang('UI/isInstallVC', '检查到没有安装VC++运行环境，将无法继续使用。是否立即安装？'), mtConfirmation, [mbYes, mbNo], 0) then begin
             InstallVC;
         end else begin
-            Close;
+            Application.Terminate;
+            Exit;
         end;
     end;
 
@@ -431,8 +434,8 @@ begin
     MenuItemForum.Caption            := GetLang('menu/forum', '官方论坛');
     MenuItemExit.Caption             := GetLang('menu/exit', '退出');
     MenuItemRunCommands.Caption      := GetLang('menu/runCommands', '执行命令');
-    MenuItemConfirmMysqlPassword.Caption := GetLang('message/changeMySqlPassword', '更改数据库密码');
-    MenuItemChangeAuthAccount.Caption:= GetLang('message/changeAuthAccount', '更改访问验证账号');
+    MenuItemConfirmMysqlPassword.Caption := GetLang('message/changeMySqlPassword', '数据库密码');
+    MenuItemChangeAuthAccount.Caption:= GetLang('message/changeAuthAccount', '访问验证账号');
 
     ButtonVisit.Caption          := GetLang('UI/visitZentao', '访问') + product.Title;
     ButtonZtOffical.Caption      :=  product.Title + GetLang('UI/zentaoOfficial', '官网');

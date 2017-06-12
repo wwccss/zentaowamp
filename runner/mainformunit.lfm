@@ -1,10 +1,10 @@
 object MainForm: TMainForm
-  Left = 834
+  Left = 503
   Height = 385
-  Top = 923
+  Top = 374
   Width = 551
   Caption = '禅道集成运行环境'
-  ClientHeight = 355
+  ClientHeight = 365
   ClientWidth = 551
   Constraints.MinHeight = 130
   Constraints.MinWidth = 550
@@ -4364,7 +4364,7 @@ object MainForm: TMainForm
   end
   object MemoMessager: TMemo
     Left = 8
-    Height = 248
+    Height = 258
     Top = 64
     Width = 531
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -4380,7 +4380,7 @@ object MainForm: TMainForm
   object FlowPanel1: TFlowPanel
     Left = 8
     Height = 32
-    Top = 320
+    Top = 330
     Width = 529
     Anchors = [akLeft, akRight, akBottom]
     BevelOuter = bvNone
@@ -4409,9 +4409,9 @@ object MainForm: TMainForm
     TabOrder = 5
     object apacheAuthToggle: TCheckBox
       Left = 0
-      Height = 28
+      Height = 21
       Top = 0
-      Width = 136
+      Width = 94
       Anchors = [akLeft, akBottom]
       Caption = '启用访问验证'
       Checked = True
@@ -4420,10 +4420,10 @@ object MainForm: TMainForm
       TabOrder = 0
     end
     object apacheAuthLabel: TLabel
-      Left = 141
-      Height = 24
+      Left = 99
+      Height = 17
       Top = 2
-      Width = 237
+      Width = 159
       Anchors = []
       BorderSpacing.Left = 5
       BorderSpacing.Top = 2
@@ -4436,10 +4436,10 @@ object MainForm: TMainForm
       OnClick = apacheAuthChangeBtnClick
     end
     object apacheAuthChangeBtn: TLabel
-      Left = 388
-      Height = 24
+      Left = 268
+      Height = 17
       Top = 2
-      Width = 36
+      Width = 24
       Anchors = []
       BorderSpacing.Left = 5
       BorderSpacing.Top = 2
@@ -4453,10 +4453,10 @@ object MainForm: TMainForm
       OnClick = apacheAuthChangeBtnClick
     end
     object copyAuthPassword: TLabel
-      Left = 434
-      Height = 24
+      Left = 302
+      Height = 17
       Top = 2
-      Width = 72
+      Width = 48
       Anchors = []
       BorderSpacing.Left = 5
       BorderSpacing.Top = 2
@@ -4481,17 +4481,9 @@ object MainForm: TMainForm
     end
     object MenuItemService: TMenuItem
       Caption = '服务'
-      object MenuItemChangeAuthAccount: TMenuItem
-        Caption = '更改访问验证账号'
-        OnClick = MenuItemChangeAuthAccountClick
-      end
       object MenuItem2: TMenuItem
         Caption = '配置端口'
         OnClick = MenuItem2Click
-      end
-      object MenuItemConfirmMysqlPassword: TMenuItem
-        Caption = '修改数据库密码'
-        OnClick = MenuItemConfirmMysqlPasswordClick
       end
       object MenuItem1: TMenuItem
         Caption = '-'
@@ -4506,6 +4498,17 @@ object MainForm: TMainForm
         Caption = '卸载服务'
         ShortCut = 16469
         OnClick = MenuItemUninstallServiceClick
+      end
+    end
+    object MenuItem3: TMenuItem
+      Caption = '密码'
+      object MenuItemChangeAuthAccount: TMenuItem
+        Caption = '访问验证账号'
+        OnClick = MenuItemChangeAuthAccountClick
+      end
+      object MenuItemConfirmMysqlPassword: TMenuItem
+        Caption = '数据库密码'
+        OnClick = MenuItemConfirmMysqlPasswordClick
       end
     end
     object MenuItemTool: TMenuItem
