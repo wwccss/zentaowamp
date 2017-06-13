@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 393
+  Left = 442
   Height = 385
-  Top = 399
+  Top = 188
   Width = 551
   Caption = '禅道集成运行环境'
   ClientHeight = 365
@@ -4503,7 +4503,7 @@ object MainForm: TMainForm
         OnClick = MenuItemUninstallServiceClick
       end
     end
-    object MenuItem3: TMenuItem
+    object MenuItemPassword: TMenuItem
       Caption = '密码'
       object MenuItemChangeAuthAccount: TMenuItem
         Caption = '访问验证账号'
@@ -4512,6 +4512,29 @@ object MainForm: TMainForm
       object MenuItemConfirmMysqlPassword: TMenuItem
         Caption = '数据库密码'
         OnClick = MenuItemConfirmMysqlPasswordClick
+      end
+    end
+    object MenuItemLog: TMenuItem
+      Caption = '日志'
+      object MenuItemProductLog: TMenuItem
+        Caption = '站点日志'
+        OnClick = MenuItemProductLogClick
+      end
+      object MenuItemProductProLog: TMenuItem
+        Caption = '专业版日志'
+        OnClick = MenuItemProductProLogClick
+      end
+      object MenuItemApacheLog: TMenuItem
+        Caption = 'Apache 日志'
+        OnClick = MenuItemApacheLogClick
+      end
+      object MenuItemMysqlLog: TMenuItem
+        Caption = 'Mysql 日志'
+        OnClick = MenuItemMysqlLogClick
+      end
+      object MenuItemPhpLog: TMenuItem
+        Caption = 'PHP 日志'
+        OnClick = MenuItemPhpLogClick
       end
     end
     object MenuItemTool: TMenuItem

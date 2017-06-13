@@ -43,6 +43,7 @@ type
         Exe           : string;
         ConfigFile    : string;
         ConfigFileTpl : string;
+        logPath       : string;
     end;
 
     ApacheConfig = record
@@ -59,6 +60,7 @@ type
         AccessFileDir : string;
         AdminerPath   : String;
         htdocsPath    : String;
+        logPath       : String;
     end;
 
     MysqlConfig = record
@@ -75,6 +77,7 @@ type
         ServiceName       : string;
         Status            : string;
         Port              : integer;
+        logPath           : string;
         // SuggestPort       : integer;
     end;
 
@@ -96,6 +99,8 @@ type
         ProMyConfig    : string;
         ProConfigFile  : string;
         ProVersionFile : string;
+        logPath        : string;
+        proLogPath     : string;
     end;
 
     UserConfiguration = record
@@ -170,7 +175,7 @@ const
     CONFIG_USER_FILE        = 'config.user.json';
     CONFIG_FILE             = 'config.ini';
     APP_DIR                 = 'runner';
-    DEBUG_MODE_DEFAULT      = 2;
+    DEBUG_MODE_DEFAULT      = 0;
     READ_BYTES              = 2048;
 
     FORCE_X86         = False;
@@ -903,6 +908,7 @@ begin
     php.Exe                := os.Location + 'php\php.exe';
     php.ConfigFile         := os.Location + 'php\php.ini';
     php.ConfigFileTpl      := os.RunnerLocation + config.Get('php/configfile', 'res\php\php.ini');
+    php.logPath            := os.Location + 'php\logs\';
 
     // apache
     apache.Exe             := os.Location + 'apache\bin\httpd.exe';
@@ -917,6 +923,7 @@ begin
     apache.AccessFileDir   := os.RunnerLocation + config.Get('apache/AccessFileDir', 'res\ztaccess\');
     apache.AdminerPath     := os.Location + 'adminer\';
     apache.htdocsPath      := os.Location + 'htdocs\';
+    apache.logPath         := os.Location + 'apache\logs\';
 
     // mysql
     mysql.Exe              := os.Location + 'mysql\bin\mysqld.exe';
@@ -927,6 +934,7 @@ begin
     mysql.ServiceName      := 'mysqlzt';
     mysql.Status           := GetServiceStatus(mysql.ServiceName);
     mysql.Port             := userconfig.MysqlPort;
+    mysql.logPath          := os.Location + 'mysql\mysql_error.err';
     // mysql.SuggestPort      := GetConfigPort(mysql.ServiceName);
 
     // product, like zentao or chanzhi
@@ -936,6 +944,7 @@ begin
     product.Version        := GetProductVersion;
     product.path           := os.Location + product.ID + '\';
     product.BinPath        := os.Location + product.ID + '\bin\';
+    product.logPath        := os.Location + product.ID + '\tmp\log\';
     product.Pro            := config.Get('product/proversion', '');
     product.ProPath        := '';
     if product.Pro <> '' then begin
@@ -947,6 +956,7 @@ begin
         product.ProVersionFile    := os.Location + product.Pro + '\VERSION';
         product.ProMyConfig       := os.Location + product.Pro + '\' + config.Get('product/myconfig', 'config\my.php');
         product.ProVersion        := GetProductVersion(product.ProVersionFile);
+        product.proLogPath        := os.Location + product.Pro + '\tmp\log\';
     end;
 
     product.InitBat        := config.Get('product/initbat');
@@ -1279,6 +1289,7 @@ var
 begin
     if product.BackupFile = '' then Exit;
 
+    Result := '';
     PrintLn;
     PrintLn(GetLang('message/bakuping', '正在备份......'));
     outputLines := ExcuteCommand(php.Exe + ' "' + product.BackupFile + '"');

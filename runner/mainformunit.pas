@@ -30,7 +30,13 @@ type
         MemoMessager             : TMemo;
         MenuItem1                : TMenuItem;
         MenuItem2                : TMenuItem;
-        MenuItem3: TMenuItem;
+        MenuItemProductProLog: TMenuItem;
+        MenuItemApacheLog: TMenuItem;
+        MenuItemMysqlLog: TMenuItem;
+        MenuItemPhpLog: TMenuItem;
+        MenuItemProductLog: TMenuItem;
+        MenuItemLog: TMenuItem;
+        MenuItemPassword: TMenuItem;
         MenuItemConfirmMysqlPassword: TMenuItem;
         MenuItemChangeAuthAccount: TMenuItem;
         MenuItemEn: TMenuItem;
@@ -70,12 +76,17 @@ type
         procedure FormWindowStateChange(Sender: TObject);
         procedure MenuItem10Click(Sender: TObject);
         procedure MenuItem2Click(Sender: TObject);
+        procedure MenuItemApacheLogClick(Sender: TObject);
         procedure MenuItemChangeAuthAccountClick(Sender: TObject);
         procedure MenuItemConfirmMysqlPasswordClick(Sender: TObject);
+        procedure MenuItemMysqlLogClick(Sender: TObject);
         procedure MenuItemOfficialHelpClick(Sender: TObject);
         procedure MenuItemFlowChartClick(Sender: TObject);
         procedure MenuItemFaqClick(Sender: TObject);
         procedure MenuItemForumClick(Sender: TObject);
+        procedure MenuItemPhpLogClick(Sender: TObject);
+        procedure MenuItemProductLogClick(Sender: TObject);
+        procedure MenuItemProductProLogClick(Sender: TObject);
         procedure MenuItemViewServiceClick(Sender: TObject);
         procedure MenuItemUninstallServiceClick(Sender: TObject);
         procedure MenuItemExitClick(Sender: TObject);
@@ -137,13 +148,17 @@ begin
         Exit;
     end;
 
-    if mysql.Status <> 'running' then begin
-        ShowMessage(GetLang('message/mysqlNotRunning', '未启动mysql，只备份文件数据。'));
-    end;
-
-    deskDir := BackupZentao();
-    if mrYes = MessageDlg(Format(GetLang('message/backupCompleteTip', '成功备份到%s目录, 是否进入该目录查看？'), [deskDir]), mtConfirmation, [mbYes, mbNo], 0) then begin
-        ExcuteCommand('explorer ' + deskDir, False, False);
+    if (apache.Status = 'running') and (mysql.Status = 'running') then begin
+        deskDir := BackupZentao();
+        if deskDir <> deskDir then begin
+            if mrYes = MessageDlg(Format(GetLang('message/backupCompleteTip', '成功备份到%s目录, 是否进入该目录查看？'), [deskDir]), mtConfirmation, [mbYes, mbNo], 0) then begin
+                ExcuteCommand('explorer ' + deskDir, False, False);
+            end;
+        end else begin
+            ShowMessage(GetLang('message/backupFailed', '备份失败，详情参见面板输出信息。'));
+        end;
+    end else Begin
+        ShowMessage(GetLang('message/backupWithServerNotRunning', '备份失败，因为服务没有运行，请启动服务后进行备份。'));
     end;
 end;
 
@@ -257,6 +272,11 @@ begin
     ConfigPortDialog.ShowModal();
 end;
 
+procedure TMainForm.MenuItemApacheLogClick(Sender: TObject);
+begin
+    ExcuteCommand('explorer ' + apache.logPath, False, False);
+end;
+
 procedure TMainForm.MenuItemChangeAuthAccountClick(Sender: TObject);
 begin
     AuthConfigDialogForm.ShowModal();
@@ -265,6 +285,11 @@ end;
 procedure TMainForm.MenuItemConfirmMysqlPasswordClick(Sender: TObject);
 begin
     ConfirmMySqlPassword;
+end;
+
+procedure TMainForm.MenuItemMysqlLogClick(Sender: TObject);
+begin
+    ExcuteCommand('notepad.exe ' + mysql.logPath, False, False);
 end;
 
 procedure TMainForm.MenuItemOfficialHelpClick(Sender: TObject);
@@ -285,6 +310,21 @@ end;
 procedure TMainForm.MenuItemForumClick(Sender: TObject);
 begin
     OpenUrl(config.Get('product/forum', 'http://www.cnezsoft.com/'));
+end;
+
+procedure TMainForm.MenuItemPhpLogClick(Sender: TObject);
+begin
+    ExcuteCommand('notepad.exe ' + php.logPath, False, False);
+end;
+
+procedure TMainForm.MenuItemProductLogClick(Sender: TObject);
+begin
+    ExcuteCommand('explorer ' + product.logPath, False, False);
+end;
+
+procedure TMainForm.MenuItemProductProLogClick(Sender: TObject);
+begin
+    ExcuteCommand('explorer ' + product.proLogPath, False, False);
 end;
 
 procedure TMainForm.MenuItemViewServiceClick(Sender: TObject);
@@ -414,25 +454,29 @@ begin
 end;
 
 procedure TMainForm.ChangeLanguage(langSetting: string);
+var
+    productName: String;
 begin
     SetLanguage(langSetting);
 
-    Caption := product.Title + GetLang('ui/title', '集成运行环境') + ' ' + GetBuildVersion;
+    productName := GetLang('product/' + product.id, product.Title);
+    Caption := Format(GetLang('ui/titleFormat', '%s集成运行环境 %s'), [productName, GetBuildVersion()]);
 
     MenuItemService.Caption          := GetLang('menu/service', '服务');
     MenuItem2.Caption                := GetLang('menu/configPort', '配置端口');
     MenuItemViewService.Caption      := GetLang('menu/viewService', '查看服务');
     MenuItemUninstallService.Caption := GetLang('menu/uninstallService', '卸载服务');
+    MenuItemPassword.Caption         := GetLang('menu/password', '密码');
     MenuItemTool.Caption             := GetLang('menu/tool', '工具');
     MenuItemInitBat.Caption          := GetLang('menu/initBat', '生成脚本');
     MenuItemDatabase.Caption         := GetLang('menu/database', '数 据 库');
-    MenuItemBackup.Caption           := GetLang('menu/backup', '备份') + product.Title;
+    MenuItemBackup.Caption           := GetLang('menu/backup', '备份') + productName;
     MenuItemLang.Caption             := GetLang('menu/lang', '语言');
     MenuItemZhcn.Caption             := GetLang('menu/zhcn', '中文简体');
     MenuItemZhtw.Caption             := GetLang('menu/zhtw', '中文繁体');
     MenuItemEn.Caption               := GetLang('menu/en', 'English');
     MenuItemHelp.Caption             := GetLang('menu/help', '帮助');
-    MenuItemOfficialSite.Caption     := product.Title + GetLang('menu/officialSite', '官网');
+    MenuItemOfficialSite.Caption     := GetLang('menu/officialSite', '官方网站');
     MenuItemOfficialHelp.Caption     := GetLang('menu/officialHelp', '帮助文档');
     MenuItemFlowChart.Caption        := GetLang('menu/flowChart', '流 程 图');
     MenuItemFaq.Caption              := GetLang('menu/faq', '常见问题');
@@ -440,10 +484,21 @@ begin
     MenuItemExit.Caption             := GetLang('menu/exit', '退出');
     MenuItemRunCommands.Caption      := GetLang('menu/runCommands', '执行命令');
     MenuItemConfirmMysqlPassword.Caption := GetLang('message/changeMySqlPassword', '数据库密码');
-    MenuItemChangeAuthAccount.Caption:= GetLang('message/changeAuthAccount', 'Apache 访问密码');
+    MenuItemChangeAuthAccount.Caption    := GetLang('message/changeAuthAccount', 'Apache 访问密码');
+    MenuItemProductLog.Caption           := Format(GetLang('menu/productLog', '%s日志'), [productName]);
+    if product.Pro <> '' then begin
+        MenuItemProductProLog.Visible := True;
+        MenuItemProductProLog.Caption := Format(GetLang('menu/productProLog', '%s专业版日志'), [productName]);
+    end else begin
+        MenuItemProductProLog.Visible := True;
+    end;
+    MenuItemMysqlLog.Caption          := GetLang('menu/mysqlLog', 'Mysql 日志');
+    MenuItemPhpLog.Caption            := GetLang('menu/phpLog', 'PHP 日志');
+    MenuItemApacheLog.Caption         := GetLang('menu/apacheLog', 'Apache 日志');
+    MenuItemLog.Caption               := GetLang('menu/log', '日志');
 
-    ButtonVisit.Caption          := GetLang('UI/visitZentao', '访问') + product.Title;
-    ButtonZtOffical.Caption      :=  product.Title + GetLang('UI/zentaoOfficial', '官网');
+    ButtonVisit.Caption          := Format(GetLang('UI/visitProduct', '访问%s'), [productName]);
+    ButtonZtOffical.Caption      := Format(GetLang('UI/productOfficial', '%s官网'), [productName]);
     if ButtonStop.Enabled then begin
         ButtonStop.Caption := GetLang('UI/stop', ButtonStop.Caption);
     end else begin
