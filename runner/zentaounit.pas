@@ -1160,14 +1160,19 @@ begin
                 + ' --user=' + MYSQL_USER_ROOT 
                 + ' --password=' + oldPassword 
                 + ' --port=' + IntToStr(mysql.port) 
-                + ' -e "SET PASSWORD FOR ''' + MYSQL_USER_ROOT + '''@''localhost'' = PASSWORD(''' 
-                + password + ''');"', true);
+                + ' -e "UPDATE mysql.user SET password=PASSWORD(''' + password + ''')'
+                + ' WHERE user=''' + MYSQL_USER_ROOT + ''';"', true);
             ExcuteCommand(mysql.mysqlExe 
                 + ' --user=' + MYSQL_USER 
                 + ' --password=' + oldPassword 
                 + ' --port=' + IntToStr(mysql.port) 
-                + ' -e "SET PASSWORD FOR ''' + MYSQL_USER + '''@''localhost'' = PASSWORD(''' 
-                + password + ''');"', true);
+                + ' -e "UPDATE mysql.user SET password=PASSWORD(''' + password + ''')'
+                + ' WHERE user=''' + MYSQL_USER + ''';"', true);
+            ExcuteCommand(mysql.mysqlExe 
+                + ' --user=' + MYSQL_USER_ROOT 
+                + ' --password=' + oldPassword 
+                + ' --port=' + IntToStr(mysql.port) 
+                + ' -e "flush privileges;"', true);
             cmdOutput := ExcuteCommand(mysql.mysqlExe 
                 + ' --user=' + MYSQL_USER_ROOT 
                 + ' --password=' + password 
