@@ -836,30 +836,45 @@ begin
         MemStream := TMemoryStream.Create;
         BytesRead := 0;
         Execute;
+
         while True do
         begin
-          // make sure we have room
-          MemStream.SetSize(BytesRead + READ_BYTES);
-       
-          // try reading it
-          NumBytes := Output.Read((MemStream.Memory + BytesRead)^, READ_BYTES);
-          if NumBytes > 0 // All read() calls will block, except the final one.
-          then
-          begin
-            Inc(BytesRead, NumBytes);
-          end
-          else BREAK; // Program has finished execution.
+            // make sure we have room
+            MemStream.SetSize(BytesRead + READ_BYTES);
+            // try reading it
+            NumBytes := Output.Read((MemStream.Memory + BytesRead)^, READ_BYTES);
+            if NumBytes > 0 then begin // All read() calls will block, except the final one.
+                Inc(BytesRead, NumBytes);
+            end
+            else BREAK; // Program has finished execution.
         end;
+
+        while True do
+        begin
+            // make sure we have room
+            MemStream.SetSize(BytesRead + READ_BYTES);
+            // try reading it
+            NumBytes := Stderr.Read((MemStream.Memory + BytesRead)^, READ_BYTES);
+            if NumBytes > 0 then begin // All read() calls will block, except the final one.
+                Inc(BytesRead, NumBytes);
+            end
+            else BREAK; // Program has finished execution.
+        end;
+
         if BytesRead > 0 then ConsoleLn;
         MemStream.SetSize(BytesRead);
 
         Result := TStringList.Create;
-        Result.LoadFromStream(MemStream);
+        Result.LoadFromStream(MemStream); 
 
         if debugMode > 1 then begin
-            for BytesRead := 0 to (Result.Count - 1) do
-            begin
-                ConsoleLn(' - ' + Result[BytesRead]);
+            ConsoleLn('   Exit code: ' + inttostr(ExitStatus));
+            ConsoleLn('   Output length: ' + inttostr(Result.Count));
+            if Result.Count > 0 then begin
+                for BytesRead := 0 to (Result.Count - 1) do
+                begin
+                    ConsoleLn(' - ' + Result[BytesRead]);
+                end;
             end;
         end;
 
