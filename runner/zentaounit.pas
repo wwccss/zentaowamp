@@ -1156,20 +1156,23 @@ begin
         if oldPassword = password then begin
             ConsoleLn('  Change mySql password faild, because new password is the same as old password.');
         end else begin
-            ExcuteCommand(mysql.mysqlExe + ' --user=' + MYSQL_USER_ROOT 
+            ExcuteCommand(mysql.mysqlExe 
+                + ' --user=' + MYSQL_USER_ROOT 
                 + ' --password=' + oldPassword 
                 + ' --port=' + IntToStr(mysql.port) 
                 + ' -e "SET PASSWORD FOR ''' + MYSQL_USER_ROOT + '''@''localhost'' = PASSWORD(''' 
-                + password + ''');"');
-            ExcuteCommand(mysql.mysqlExe + ' --user=' + MYSQL_USER 
+                + password + ''');"', true);
+            ExcuteCommand(mysql.mysqlExe 
+                + ' --user=' + MYSQL_USER 
                 + ' --password=' + oldPassword 
                 + ' --port=' + IntToStr(mysql.port) 
                 + ' -e "SET PASSWORD FOR ''' + MYSQL_USER + '''@''localhost'' = PASSWORD(''' 
-                + password + ''');"');
-            cmdOutput := ExcuteCommand(mysql.mysqlExe + ' --user=' + MYSQL_USER_ROOT 
-                + ' --password=' + oldPassword 
+                + password + ''');"', true);
+            cmdOutput := ExcuteCommand(mysql.mysqlExe 
+                + ' --user=' + MYSQL_USER_ROOT 
+                + ' --password=' + password 
                 + ' --port=' + IntToStr(mysql.port) 
-                + ' -e "flush privileges;"');
+                + ' -e "flush privileges;"', true);
             if (cmdOutput.count > 0) and (pos('error', LowerCase(cmdOutput[0])) > 0) then begin
                 ConsoleLn('  Change MySql Password fail');
                 ShowMessage(GetLang('message/changeMySqlPasswordFail', '更改数据库密码失败。') + cmdOutput[0]);
