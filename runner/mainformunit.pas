@@ -289,7 +289,7 @@ end;
 
 procedure TMainForm.MenuItemMysqlLogClick(Sender: TObject);
 begin
-    ExcuteCommand('notepad.exe ' + mysql.logPath, False, False);
+    ExcuteCommand('explorer ' + mysql.logPath, False, False);
 end;
 
 procedure TMainForm.MenuItemOfficialHelpClick(Sender: TObject);
@@ -314,7 +314,7 @@ end;
 
 procedure TMainForm.MenuItemPhpLogClick(Sender: TObject);
 begin
-    ExcuteCommand('notepad.exe ' + php.logPath, False, False);
+    ExcuteCommand('explorer ' + php.logPath, False, False);
 end;
 
 procedure TMainForm.MenuItemProductLogClick(Sender: TObject);
