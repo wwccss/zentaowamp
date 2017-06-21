@@ -171,7 +171,7 @@ begin
     if InputQuery(GetLang('message/runCommands', '执行命令'), GetLang('message/inputCommandTip', '请输入要执行的命令(不支持IO重定向)，例如：cmd.exe /c "echo Hello world!"'), userString) then begin
         PrintLn;
         PrintLn('> ' + GetLang('message/startRunCommands', '开始执行命令：'));
-        outputLines := ExcuteCommand(userString);
+        outputLines := ExcuteCommand(userString, true, false);
         for i := 0 to (outputLines.Count - 1) do
         begin
             PrintLn(outputLines[i]);
