@@ -949,7 +949,7 @@ begin
     mysql.ServiceName      := 'mysqlzt';
     mysql.Status           := GetServiceStatus(mysql.ServiceName);
     mysql.Port             := userconfig.MysqlPort;
-    mysql.logPath          := os.Location + 'mysql\mysql_error.err';
+    mysql.logPath          := os.Location + 'mysql\';
     // mysql.SuggestPort      := GetConfigPort(mysql.ServiceName);
 
     // product, like zentao or chanzhi
