@@ -245,7 +245,7 @@ var
     i           : integer;
 begin
     Result := 'x86';
-    if not userConfig.forceX86 then begin
+    if (not userConfig.forceX86) and (VERSION_MAJOR > 1) then begin
         outputLines := ExcuteShell(os.RunnerLocation + OS_CHECK_BAT);
         for i := 0 to (outputLines.Count - 1) do
         begin
