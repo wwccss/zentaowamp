@@ -186,7 +186,7 @@ const
     OS_CHECK_BAT      = 'check_os.bat';
     VERSION_MAJOR     = 2;
     VERSION_MINOR     = 0;
-    VERSION_PACTH     = 1;
+    VERSION_PACTH     = 3;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
     MYSQL_USER_ROOT   = 'root';
@@ -1163,7 +1163,7 @@ begin
                 + ' -e "UPDATE mysql.user SET password=PASSWORD(''' + password + ''')'
                 + ' WHERE user=''' + MYSQL_USER_ROOT + ''';"', true);
             ExcuteCommand(mysql.mysqlExe 
-                + ' --user=' + MYSQL_USER 
+                + ' --user=' + MYSQL_USER_ROOT 
                 + ' --password=' + oldPassword 
                 + ' --port=' + IntToStr(mysql.port) 
                 + ' -e "UPDATE mysql.user SET password=PASSWORD(''' + password + ''')'
