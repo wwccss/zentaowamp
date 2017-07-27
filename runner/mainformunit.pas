@@ -30,6 +30,7 @@ type
         MemoMessager             : TMemo;
         MenuItem1                : TMenuItem;
         MenuItem2                : TMenuItem;
+        MenuItemAll3Log: TMenuItem;
         MenuItemProductProLog: TMenuItem;
         MenuItemApacheLog: TMenuItem;
         MenuItemMysqlLog: TMenuItem;
@@ -76,6 +77,7 @@ type
         procedure FormWindowStateChange(Sender: TObject);
         procedure MenuItem10Click(Sender: TObject);
         procedure MenuItem2Click(Sender: TObject);
+        procedure MenuItemAll3LogClick(Sender: TObject);
         procedure MenuItemApacheLogClick(Sender: TObject);
         procedure MenuItemChangeAuthAccountClick(Sender: TObject);
         procedure MenuItemConfirmMysqlPasswordClick(Sender: TObject);
@@ -272,6 +274,11 @@ begin
     ConfigPortDialog.ShowModal();
 end;
 
+procedure TMainForm.MenuItemAll3LogClick(Sender: TObject);
+begin
+    ExcuteCommand('explorer ' + productRanzhi.logPath, False, False);
+end;
+
 procedure TMainForm.MenuItemApacheLogClick(Sender: TObject);
 begin
     ExcuteCommand('explorer ' + apache.logPath, False, False);
@@ -319,12 +326,20 @@ end;
 
 procedure TMainForm.MenuItemProductLogClick(Sender: TObject);
 begin
-    ExcuteCommand('explorer ' + product.logPath, False, False);
+    if product.id = 'all' then begin
+        ExcuteCommand('explorer ' + productZentao.logPath, False, False);
+    end else begin
+        ExcuteCommand('explorer ' + product.logPath, False, False);
+    end;
 end;
 
 procedure TMainForm.MenuItemProductProLogClick(Sender: TObject);
 begin
-    ExcuteCommand('explorer ' + product.proLogPath, False, False);
+    if product.id = 'all' then begin
+        ExcuteCommand('explorer ' + productChanzhi.logPath, False, False);
+    end else begin
+        ExcuteCommand('explorer ' + product.proLogPath, False, False);
+    end;
 end;
 
 procedure TMainForm.MenuItemViewServiceClick(Sender: TObject);
@@ -485,13 +500,24 @@ begin
     MenuItemRunCommands.Caption      := GetLang('menu/runCommands', '执行命令');
     MenuItemConfirmMysqlPassword.Caption := GetLang('message/changeMySqlPassword', '数据库密码');
     MenuItemChangeAuthAccount.Caption    := GetLang('message/changeAuthAccount', 'Apache 访问密码');
-    MenuItemProductLog.Caption           := Format(GetLang('menu/productLog', '%s日志'), [productName]);
-    if product.Pro <> '' then begin
-        MenuItemProductProLog.Visible := True;
-        MenuItemProductProLog.Caption := Format(GetLang('menu/productProLog', '%s专业版日志'), [productName]);
+
+    if product.id = 'all' then begin
+        MenuItemProductLog.Caption        := Format(GetLang('menu/productLog', '%s日志'), [productZentao.title]);
+        MenuItemProductProLog.Caption     := Format(GetLang('menu/productLog', '%s日志'), [productChanzhi.title]);
+        MenuItemAll3Log.Caption           := Format(GetLang('menu/productLog', '%s日志'), [productRanzhi.title]);
+        MenuItemProductProLog.Visible     := True;
+        MenuItemAll3Log.Visible           := True;
     end else begin
-        MenuItemProductProLog.Visible := True;
+        MenuItemProductLog.Caption           := Format(GetLang('menu/productLog', '%s日志'), [productName]);
+        if product.Pro <> '' then begin
+            MenuItemProductProLog.Visible := True;
+            MenuItemProductProLog.Caption := Format(GetLang('menu/productProLog', '%s专业版日志'), [productName]);
+        end else begin
+            MenuItemProductProLog.Visible := True;
+        end;
+        MenuItemAll3Log.Visible := false;
     end;
+
     MenuItemMysqlLog.Caption          := GetLang('menu/mysqlLog', 'Mysql 日志');
     MenuItemPhpLog.Caption            := GetLang('menu/phpLog', 'PHP 日志');
     MenuItemApacheLog.Caption         := GetLang('menu/apacheLog', 'Apache 日志');

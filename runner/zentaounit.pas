@@ -184,9 +184,9 @@ const
     VC_REDIST         = 'vc_redist.%s.exe';
     VC_DETECTOR       = 'vc_detector_%s.bat'; 
     OS_CHECK_BAT      = 'check_os.bat';
-    VERSION_MAJOR     = 2;
-    VERSION_MINOR     = 0;
-    VERSION_PACTH     = 3;
+    VERSION_MAJOR     = 1;
+    VERSION_MINOR     = 3;
+    VERSION_PACTH     = 4;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
     MYSQL_USER_ROOT   = 'root';
@@ -201,6 +201,9 @@ var
     apache         : ApacheConfig;
     mysql          : MysqlConfig;
     product        : ProductSystemConfig;
+    productChanzhi : ProductSystemConfig;
+    productRanzhi  : ProductSystemConfig;
+    productZentao  : ProductSystemConfig;
     userConfig     : UserConfiguration;
     isFirstRun     : boolean;
     config         : TIniFile;
@@ -298,11 +301,18 @@ begin
         ExcuteCommand(apache.htpasswd + ' -b ' + apache.authFile + ' ' + userconfig.ApacheAuthAccount + ' ' + userconfig.ApacheAuthPassword);
     end;
 
-    FixConfigFile(apache.AccessFileDir + 'default.ztaccess', product.path + 'www/.ztaccess');
     FixConfigFile(apache.AccessFileDir + 'adminer.ztaccess', apache.AdminerPath + '.ztaccess');
     FixConfigFile(apache.AccessFileDir + 'htdocs.ztaccess', apache.htdocsPath + '.ztaccess');
-    if product.ProPath <> '' then begin
-        FixConfigFile(apache.AccessFileDir + 'pro.ztaccess', product.ProPath + 'www/.ztaccess');
+
+    if product.id = 'all' then begin
+        FixConfigFile(apache.AccessFileDir + productZentao.id + '.ztaccess', productZentao.path + 'www/.ztaccess');
+        FixConfigFile(apache.AccessFileDir + productRanzhi.id + '.ztaccess', productRanzhi.path + 'www/.ztaccess');
+        FixConfigFile(apache.AccessFileDir + productChanzhi.id + '.ztaccess', productChanzhi.path + 'www/.ztaccess');
+    end else begin
+        FixConfigFile(apache.AccessFileDir + 'default.ztaccess', product.path + 'www/.ztaccess');
+        if product.ProPath <> '' then begin
+            FixConfigFile(apache.AccessFileDir + 'pro.ztaccess', product.ProPath + 'www/.ztaccess');
+        end;
     end;
 
     MainForm.updateAuthStatus;
@@ -355,9 +365,16 @@ begin
     FixConfigFile(mysql.ConfigFileTpl, mysql.ConfigFile);
     FixConfigFile(php.ConfigFileTpl, php.ConfigFile);
     FixConfigFile(apache.ConfigFileTpl, apache.ConfigFile);
-    UpdateConfigPort(mysql.ServiceName, product.MyConfig);
-    if product.pro <> '' then begin
-        UpdateConfigPort(mysql.ServiceName, product.ProMyConfig);
+
+    if product.id = 'all' then begin
+        UpdateConfigPort(mysql.ServiceName, productRanzhi.MyConfig);
+        UpdateConfigPort(mysql.ServiceName, productZentao.MyConfig);
+        UpdateConfigPort(mysql.ServiceName, productChanzhi.MyConfig);
+    end else begin
+        UpdateConfigPort(mysql.ServiceName, product.MyConfig);
+        if product.pro <> '' then begin
+            UpdateConfigPort(mysql.ServiceName, product.ProMyConfig);
+        end;
     end;
 
     Result := true;
@@ -950,28 +967,58 @@ begin
     mysql.Status           := GetServiceStatus(mysql.ServiceName);
     mysql.Port             := userconfig.MysqlPort;
     mysql.logPath          := os.Location + 'mysql\';
-    // mysql.SuggestPort      := GetConfigPort(mysql.ServiceName);
 
     // product, like zentao or chanzhi
     product.ID             := config.Get('product/id', 'zentao');
-    // product.ConfigFile     := os.Location + product.ID + '\' + config.Get('product/config', 'config\config.php');
-    product.VersionFile    := os.Location + product.ID + '\VERSION';
-    product.Version        := GetProductVersion;
-    product.path           := os.Location + product.ID + '\';
-    product.BinPath        := os.Location + product.ID + '\bin\';
-    product.logPath        := os.Location + product.ID + '\tmp\log\';
-    product.Pro            := config.Get('product/proversion', '');
-    product.ProPath        := '';
-    if product.Pro <> '' then begin
-        product.ProPath := os.Location + product.Pro + '\';
-    end;
-    product.MyConfig       := os.Location + product.ID + '\' + config.Get('product/myconfig', 'config\my.php');
-    if product.Pro <> '' then begin
-        product.ProConfigFile     := os.Location + product.Pro + '\' + config.Get('product/config', 'config\config.php');
-        product.ProVersionFile    := os.Location + product.Pro + '\VERSION';
-        product.ProMyConfig       := os.Location + product.Pro + '\' + config.Get('product/myconfig', 'config\my.php');
-        product.ProVersion        := GetProductVersion(product.ProVersionFile);
-        product.proLogPath        := os.Location + product.Pro + '\tmp\log\';
+    product.Title          := config.Get('product/title');
+
+    if product.ID <> 'all' then begin
+        product.VersionFile    := os.Location + product.ID + '\VERSION';
+        product.Version        := GetProductVersion;
+        product.path           := os.Location + product.ID + '\';
+        product.BinPath        := os.Location + product.ID + '\bin\';
+        product.logPath        := os.Location + product.ID + '\tmp\log\';
+        product.Pro            := config.Get('product/proversion', '');
+        product.ProPath        := '';
+        if product.Pro <> '' then begin
+            product.ProPath := os.Location + product.Pro + '\';
+        end;
+        product.MyConfig       := os.Location + product.ID + '\' + config.Get('product/myconfig', 'config\my.php');
+        if product.Pro <> '' then begin
+            product.ProVersionFile    := os.Location + product.Pro + '\VERSION';
+            product.ProMyConfig       := os.Location + product.Pro + '\' + config.Get('product/myconfig', 'config\my.php');
+            product.ProVersion        := GetProductVersion(product.ProVersionFile);
+            product.proLogPath        := os.Location + product.Pro + '\tmp\log\';
+        end;
+    end else begin
+        product.myconfig := config.Get('product/myconfig', 'config\my.php');
+
+        productChanzhi.id             := 'chanzhi';
+        productChanzhi.Title          := config.Get('product/' + productChanzhi.id + 'Title');
+        productChanzhi.VersionFile    := os.Location + productChanzhi.ID + '\VERSION';
+        productChanzhi.Version        := GetProductVersion(productChanzhi.VersionFile);
+        productChanzhi.MyConfig       := os.Location + productChanzhi.ID + '\system\' + product.myconfig;
+        productChanzhi.path           := os.Location + productChanzhi.ID + '\';
+        productChanzhi.BinPath        := os.Location + productChanzhi.ID + '\bin\';
+        productChanzhi.logPath        := os.Location + productChanzhi.ID + '\tmp\log\';
+
+        productZentao.id             := 'zentao';
+        productZentao.Title          := config.Get('product/' + productZentao.id + 'Title');
+        productZentao.VersionFile    := os.Location + productZentao.ID + '\VERSION';
+        productZentao.Version        := GetProductVersion(productZentao.VersionFile);
+        productZentao.MyConfig       := os.Location + productZentao.ID + '\' + product.myconfig;
+        productZentao.path           := os.Location + productZentao.ID + '\';
+        productZentao.BinPath        := os.Location + productZentao.ID + '\bin\';
+        productZentao.logPath        := os.Location + productZentao.ID + '\tmp\log\';
+
+        productRanzhi.id             := 'ranzhi';
+        productRanzhi.Title          := config.Get('product/' + productRanzhi.id + 'Title');
+        productRanzhi.VersionFile    := os.Location + productRanzhi.ID + '\VERSION';
+        productRanzhi.Version        := GetProductVersion(productRanzhi.VersionFile);
+        productRanzhi.MyConfig       := os.Location + productRanzhi.ID + '\' + product.myconfig;
+        productRanzhi.path           := os.Location + productRanzhi.ID + '\';
+        productRanzhi.BinPath        := os.Location + productRanzhi.ID + '\bin\';
+        productRanzhi.logPath        := os.Location + productRanzhi.ID + '\tmp\log\';
     end;
 
     product.InitBat        := config.Get('product/initbat');
@@ -984,13 +1031,20 @@ begin
         product.BackupFile := os.Location + product.ID + '\' + product.BackupFile;
     end;
 
-    product.Title          := config.Get('product/title');
-
     FixConfigPath;
 
     php.Version            := GetVersion('php', True);
     apache.Version         := GetVersion('apache', True);
     mysql.Version          := GetVersion('mysql', True);
+
+    if product.ID = 'all' then begin
+        PrintLn(GetLang('message/version', '%s版本：%s'), [productZentao.Title, productZentao.Version]);
+        PrintLn(GetLang('message/version', '%s版本：%s'), [productRanzhi.Title, productRanzhi.Version]);
+        PrintLn(GetLang('message/version', '%s版本：%s'), [productChanzhi.Title, productChanzhi.Version]);
+    end else begin
+        PrintLn(GetLang('message/version', '%s版本：%s'), [product.Title, product.Version]);
+    end;
+
 
     if userConfig.ApacheAuthAccount = '' then begin
         userConfig.ApacheAuthAccount := product.ID;
@@ -1078,9 +1132,16 @@ begin
     end else begin
         FixConfigFile(php.ConfigFileTpl, php.ConfigFile); 
         FixConfigFile(mysql.ConfigFileTpl, mysql.ConfigFile);
-        UpdateConfigPort(serviceName, product.MyConfig);
-        if product.pro <> '' then begin
-            UpdateConfigPort(serviceName, product.ProMyConfig);
+
+        if product.id = 'all' then begin
+            UpdateConfigPort(serviceName, productZentao.MyConfig);
+            UpdateConfigPort(serviceName, productChanzhi.MyConfig);
+            UpdateConfigPort(serviceName, productRanzhi.MyConfig);
+        end else begin
+            UpdateConfigPort(serviceName, product.MyConfig);
+            if product.pro <> '' then begin
+                UpdateConfigPort(serviceName, product.ProMyConfig);
+            end;
         end;
     end;
 end;
@@ -1096,7 +1157,12 @@ begin
 
     fileLines := TStringList.Create;
     try
-        fileLines.LoadFromFile(product.MyConfig);
+        if product.id = 'all' then begin
+            fileLines.LoadFromFile(productZentao.MyConfig);
+        end else begin
+            fileLines.LoadFromFile(product.MyConfig);
+        end;
+        
         if fileLines.Count > 0 then begin
             regex := TRegExpr.Create;
             regex.Expression := '\' + CONFIG_DB_PASS + '\s*=\s*[''"](\w*)[''"];';
@@ -1182,9 +1248,15 @@ begin
                 ConsoleLn('  Change MySql Password fail');
                 ShowMessage(GetLang('message/changeMySqlPasswordFail', '更改数据库密码失败。') + cmdOutput[0]);
             end else begin
-                UpdateMySqlPassword(product.MyConfig, password);
-                if product.pro <> '' then begin
-                    UpdateMySqlPassword(product.ProMyConfig, password);
+                if product.id = 'all' then begin
+                    UpdateMySqlPassword(productZentao.MyConfig, password);
+                    UpdateMySqlPassword(productRanzhi.MyConfig, password);
+                    UpdateMySqlPassword(productChanzhi.MyConfig, password);
+                end else begin
+                    UpdateMySqlPassword(product.MyConfig, password);
+                    if product.pro <> '' then begin
+                        UpdateMySqlPassword(product.ProMyConfig, password);
+                    end;
                 end;
                 Result := True;
             end;
