@@ -473,6 +473,7 @@ var
     productName: String;
 begin
     SetLanguage(langSetting);
+    userconfig.Language := langSetting;
 
     productName := GetLang('product/' + product.id, product.Title);
     Caption := Format(GetLang('ui/titleFormat', '%s集成运行环境 %s'), [productName, GetBuildVersion()]);
