@@ -477,6 +477,7 @@ begin
 
     productName := GetLang('product/' + product.id, product.Title);
     Caption := Format(GetLang('ui/titleFormat', '%s集成运行环境 %s'), [productName, GetBuildVersion()]);
+    TrayIcon1.Hint := Caption;
 
     MenuItemService.Caption          := GetLang('menu/service', '服务');
     MenuItem2.Caption                := GetLang('menu/configPort', '配置端口');
