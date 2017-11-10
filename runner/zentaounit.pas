@@ -186,12 +186,13 @@ const
     OS_CHECK_BAT      = 'check_os.bat';
     VERSION_MAJOR     = 1;
     VERSION_MINOR     = 3;
-    VERSION_PACTH     = 5;
+    VERSION_PACTH     = 6;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
     MYSQL_USER_ROOT   = 'root';
     CONFIG_DB_USER    = '$config->db->user';
     CONFIG_DB_PASS    = '$config->db->password';
+    CONFIG_DB_PORT    = '$config->db->port';
     RANDOM_STR_SET    = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 var
@@ -1325,12 +1326,10 @@ begin
             for i := 0 to (fileLines.Count - 1) do
             begin
                 line := fileLines[i];
-                if regex.Exec(line) then begin
-                    lastWord := regex.Match[4];
-                    ConsoleLn(' * ' + line + ' > ');
-                    fileLines[i] := regex.Replace(line, '$1$2', True) + port + lastWord;
-                    Console(fileLines[i]);
+                if Pos(CONFIG_DB_PORT, line) > 0 then begin
+                    fileLines[i] := CONFIG_DB_PORT + '        = ''' + port + ''';';
                     Result := True;
+                    BREAK;
                 end;
             end;
             fileLines.SaveToFile(configFile);
