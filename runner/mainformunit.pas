@@ -420,9 +420,9 @@ var
     url : String;
 begin
     url := 'http://';
-    if userconfig.EnableApacheAuth then begin
-        url := url + userconfig.apacheAuthAccount + ':' + userconfig.apacheAuthPassword + '@';
-    end;
+    // if userconfig.EnableApacheAuth then begin
+    //     url := url + userconfig.apacheAuthAccount + ':' + userconfig.apacheAuthPassword + '@';
+    // end;
     url := url + HOST + ':' + IntToStr(apache.port) + '/' + config.Get('product/main', '');
     ConsoleLn(LineEnding + 'OpenUrl> ' + url + LineEnding);
     OpenUrl(url);
