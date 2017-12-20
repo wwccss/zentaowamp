@@ -201,9 +201,9 @@ procedure TMainForm.FormCreate(Sender: TObject);
 begin
     FirstShow := True;
     LoadConfig();
-    SetLanguage(config.Get('common/defaultLang', 'zh_cn'), false, os.RunnerLocation);
+    SetLanguage(userconfig.Language, false, os.RunnerLocation);
 
-    PrintLn(product.Title + Format(GetLang('message/zentaoControl', '控制面板 %s'), [GetBuildVersion]));
+    PrintLn(GetProductTitle() + Format(GetLang('message/zentaoControl', '控制面板 %s'), [GetBuildVersion]));
 
     if not CheckApplicationPath(Application.Location) then begin
         ShowMessage(GetLang('message/wrongAppLocationPath', '无法安装启动服务，因为当前程序所在路径包含中文等特殊字符。程序所在路径必须仅包含数字、大小写字母或下划线，请修改路径后重试。'));
@@ -301,7 +301,7 @@ end;
 
 procedure TMainForm.MenuItemOfficialHelpClick(Sender: TObject);
 begin
-    OpenUrl(config.Get('product/helpdocument', 'http://www.cnezsoft.com/'));
+    OpenUrl(GetProductLink('helpdocument', 'http://www.cnezsoft.com/'));
 end;
 
 procedure TMainForm.MenuItemFlowChartClick(Sender: TObject);
@@ -311,12 +311,12 @@ end;
 
 procedure TMainForm.MenuItemFaqClick(Sender: TObject);
 begin
-    OpenUrl(config.Get('product/feedback', 'http://www.cnezsoft.com/'));
+    OpenUrl(GetProductLink('feedback', 'http://www.cnezsoft.com/'));
 end;
 
 procedure TMainForm.MenuItemForumClick(Sender: TObject);
 begin
-    OpenUrl(config.Get('product/forum', 'http://www.cnezsoft.com/'));
+    OpenUrl(GetProductLink('forum', 'http://www.cnezsoft.com/'));
 end;
 
 procedure TMainForm.MenuItemPhpLogClick(Sender: TObject);
@@ -359,7 +359,7 @@ begin
     ButtonStop.Enabled  := False;
     ButtonStop.Caption  := GetLang('UI/stopped', '已停止');
     ButtonRun.Enabled   := True;
-    ButtonRun.Caption   := GetLang('UI/startZentao', '启动') + product.Title;
+    ButtonRun.Caption   := Format(GetLang('UI/startProduct', '启动'), [GetProductTitle]);
 end;
 
 procedure TMainForm.ButtonStopClick(Sender: TObject);
@@ -372,7 +372,7 @@ begin
         ButtonStop.Enabled  := False;
         ButtonStop.Caption  := GetLang('UI/stopped', '已停止');
         ButtonRun.Enabled   := True;
-        ButtonRun.Caption   := GetLang('UI/startZentao', '启动') + product.Title;
+        ButtonRun.Caption   := Format(GetLang('UI/startProduct', '启动'), [GetProductTitle]);
     end else begin
         ButtonVisit.Enabled := True;
         ButtonStop.Enabled  := True;
@@ -399,7 +399,7 @@ begin
         ButtonStop.Enabled  := False;
         ButtonStop.Caption  := GetLang('UI/stopped', '已停止');
         ButtonRun.Enabled   := True;
-        ButtonRun.Caption   := GetLang('UI/startZentao', '启动') + product.Title;
+        ButtonRun.Caption   := Format(GetLang('UI/startProduct', '启动'), [GetProductTitle]);
     end;
     Cursor := crDefault;
 end;
@@ -430,7 +430,7 @@ end;
 
 procedure TMainForm.ButtonZtOfficalClick(Sender: TObject);
 begin
-    OpenUrl(config.Get('product/official', 'http://www.cnezsoft.com/'));
+    OpenUrl(GetProductLink('official', 'http://www.cnezsoft.com/'));
 end;
 
 procedure TMainForm.ChangeLangMenuItemClick(Sender: TObject);
@@ -475,7 +475,7 @@ begin
     SetLanguage(langSetting);
     userconfig.Language := langSetting;
 
-    productName := GetLang('product/' + product.id, product.Title);
+    productName := GetProductTitle;
     Caption := Format(GetLang('ui/titleFormat', '%s集成运行环境 %s'), [productName, GetBuildVersion()]);
     TrayIcon1.Hint := Caption;
 
@@ -534,7 +534,7 @@ begin
     end;
 
     if ButtonRun.Enabled then begin
-        ButtonRun.Caption := GetLang('UI/startZentao', ButtonRun.Caption);
+        ButtonRun.Caption := Format(GetLang('UI/startProduct', '启动'), [GetProductTitle]);
     end else begin
         ButtonRun.Caption := GetLang('UI/runing', ButtonRun.Caption);
     end;

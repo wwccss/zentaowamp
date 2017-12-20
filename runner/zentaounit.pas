@@ -164,6 +164,8 @@ function GenRandomStr(len: integer): String;
 function addApacheUser(account: String; password: String): Boolean;
 procedure ResetAuthConfig();
 function GetOsArch(): String;
+function GetProductTitle(): String;
+function GetProductLink(linkName: String; defaultLink: String): String;
 function ChangeMySqlPassword(password: string): boolean;
 function UpdateMySqlPassword(configFile: string; password: string): boolean;
 function CheckMySqlPassword(): boolean;
@@ -184,9 +186,9 @@ const
     VC_REDIST         = 'vc_redist.%s.exe';
     VC_DETECTOR       = 'vc_detector_%s.bat'; 
     OS_CHECK_BAT      = 'check_os.bat';
-    VERSION_MAJOR     = 1;
-    VERSION_MINOR     = 3;
-    VERSION_PACTH     = 6;
+    VERSION_MAJOR     = 2;
+    VERSION_MINOR     = 0;
+    VERSION_PACTH     = 8;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
     MYSQL_USER_ROOT   = 'root';
@@ -259,6 +261,22 @@ begin
             end;
         end;
     end;
+end;
+
+function GetProductTitle(): String;
+begin
+    Result := config.Get('product/title_' + userconfig.Language, GetLang('product/' + product.id, product.Title));
+end;
+
+function GetProductLink(linkName: String; defaultLink: String): String;
+var
+    linkUrl: String;
+begin
+    linkUrl := config.Get('product/' + linkName + '_' + userconfig.Language, '');
+    if linkUrl = '' then begin
+        linkUrl := config.Get('product/' + linkName, defaultLink);
+    end;
+    Result := linkUrl;
 end;
 
 function CommondResultHas(outputlines: TStringList; theValue: string): boolean;
@@ -1043,7 +1061,7 @@ begin
         PrintLn(GetLang('message/version', '%s版本：%s'), [productRanzhi.Title, productRanzhi.Version]);
         PrintLn(GetLang('message/version', '%s版本：%s'), [productChanzhi.Title, productChanzhi.Version]);
     end else begin
-        PrintLn(GetLang('message/version', '%s版本：%s'), [product.Title, product.Version]);
+        PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle(), product.Version]);
     end;
 
 
@@ -1366,9 +1384,9 @@ begin
         if not Result then Result := RestartService(mysql.ServiceName, True, True);
     end;
     if Result then begin
-        PrintLn(Format(GetLang('message/isRunning', '%s正在运行，点击“访问”按钮来使用。'), [product.title]));
-        PrintLn('你也可以直接在浏览器访问：http://' + HOST + ':' + IntToStr(apache.port) + '/' + config.Get('product/main', ''));
-        checkMySqlPassword;
+        PrintLn(Format(GetLang('message/isRunning', '%s正在运行，点击“访问”按钮来使用。'), [GetProductTitle()]));
+        PrintLn(Format(GetLang('message/viewInBrowserDirectly', '你也可以直接在浏览器访问：%s'), ['http://' + HOST + ':' + IntToStr(apache.port) + '/' + config.Get('product/main', '')]));
+        CheckMySqlPassword;
     end else begin
         PrintLn(GetLang('message/failedAndTry', '启动失败，请稍后重试。'));
     end;
