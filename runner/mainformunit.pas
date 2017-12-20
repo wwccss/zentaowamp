@@ -515,7 +515,7 @@ begin
             MenuItemProductProLog.Visible := True;
             MenuItemProductProLog.Caption := Format(GetLang('menu/productProLog', '%s专业版日志'), [productName]);
         end else begin
-            MenuItemProductProLog.Visible := True;
+            MenuItemProductProLog.Visible := False;
         end;
         MenuItemAll3Log.Visible := false;
     end;
