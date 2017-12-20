@@ -152,7 +152,7 @@ begin
 
     if (apache.Status = 'running') and (mysql.Status = 'running') then begin
         deskDir := BackupZentao();
-        if deskDir <> deskDir then begin
+        if deskDir <> '' then begin
             if mrYes = MessageDlg(Format(GetLang('message/backupCompleteTip', '成功备份到%s目录, 是否进入该目录查看？'), [deskDir]), mtConfirmation, [mbYes, mbNo], 0) then begin
                 ExcuteCommand('explorer ' + deskDir, False, False);
             end;
