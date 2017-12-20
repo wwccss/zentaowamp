@@ -1463,7 +1463,7 @@ begin
         userconfig.LastRunTime        := userConfigFile.GetValue('/LastRunTime', 0);
         userconfig.ApachePort         := userConfigFile.GetValue('apache/port', 80);
         userconfig.MysqlPort          := userConfigFile.GetValue('mysql/port', 3306);
-        userconfig.Language           := userConfigFile.GetValue('/language', 'zh_cn');
+        userconfig.Language           := userConfigFile.GetValue('/language', config.Get('common/defaultLang', 'zh_cn'));
         userconfig.AutoChangePort     := userConfigFile.GetValue('/AutoChangePort', False);
         userconfig.EnableApacheAuth   := userConfigFile.GetValue('/EnableApacheAuth', True);
         userconfig.ApacheAuthAccount  := userConfigFile.GetValue('/ApacheAuthAccount', '');
