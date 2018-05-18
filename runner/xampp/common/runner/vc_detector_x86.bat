@@ -17,6 +17,8 @@ reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersi
 reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{74d0e5db-b326-4dae-a6b2-445b9de1836e}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 Redistributable (x86) - 14.0.23026
 reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{A2563E55-3BEC-3828-8D67-E5E8B9E8B675}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 x86 Minimum Runtime - 14.0.23026
 reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{BE960C1C-7BAD-3DE6-8B1A-2616FE532845}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 x86 Additional Runtime - 14.0.23026
+reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{8FD71E98-EE44-3844-9DAD-9CB0BBBC603C}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 x86 Redistributable - 14.0.24210
+reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{65E5BD06-6392-3027-8C26-853107D3CF1A}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 x86 Additional Runtime - 14.0.24210
 
 reg query %HKLMU%\{58b3beca-b999-4f6f-a48c-81681136a620}>nul 2>nul&&set VC=Microsoft Visual C++ 2017 Redistributable (x86) - 14.10.25017
 reg query %HKLMU%\{582EA838-9199-3518-A05C-DB09462F68EC}>nul 2>nul&&set VC=Microsoft Visual C++ 2017 x86 Minimum Runtime - 14.10.25017
@@ -33,6 +35,9 @@ reg query %HKLMU%\{03AC7A79-F8AF-38FC-9DA0-98DAB4F4B1CD}>nul 2>nul&&set VC=Micro
 reg query %HKLMU%\{74d0e5db-b326-4dae-a6b2-445b9de1836e}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 Redistributable (x86) - 14.0.23026
 reg query %HKLMU%\{A2563E55-3BEC-3828-8D67-E5E8B9E8B675}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 x86 Minimum Runtime - 14.0.23026
 reg query %HKLMU%\{BE960C1C-7BAD-3DE6-8B1A-2616FE532845}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 x86 Additional Runtime - 14.0.23026
+reg query %HKLMU%\{8FD71E98-EE44-3844-9DAD-9CB0BBBC603C}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 Redistributable (x86) - 14.0.24210
+reg query %HKLMU%\{65E5BD06-6392-3027-8C26-853107D3CF1A}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 x86 Additional Runtime - 14.0.24210
+
 
 :: { Old Visual C++ }
 reg query %HKLMU%\{b64ca997-b626-4abb-a046-5ca2d92ed659}>nul 2>nul&&set VC=Microsoft Visual C++ 2012 Redistributable X86

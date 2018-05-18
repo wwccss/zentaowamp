@@ -33,6 +33,8 @@ reg query HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
 reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{e46eca4f-393b-40df-9f49-076faf788d83}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 Redistributable (x64) - 14.0.23026
 reg query HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{0D3E9E15-DE7A-300B-96F1-B4AF12B96488}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 x64 Minimum Runtime - 14.0.23026
 reg query HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{BC958BD2-5DAC-3862-BB1A-C1BE0790438D}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 x64 Additional Runtime - 14.0.23026
+reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{C0B2C673-ECAA-372D-94E5-E89440D087AD}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 Redistributable (x64) - 14.0.24210
+reg query HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{36F68A90-239C-34DF-B58C-64B30153CE35}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 x64 Additional Runtime - 14.0.24210
 
 reg query %HKLCID%\{e9d78d68-c26c-4da7-9158-99355d8ef3ad}>nul 2>nul&&set VC=Microsoft Visual C++ 2017 Redistributable (x64) - 14.10.25017
 reg query %HKLCID%\{8D4F7A6D-6B81-3DC8-9C21-6008E4866727}>nul 2>nul&&set VC=Microsoft Visual C++ 2017 x64 Minimum Runtime - 14.10.25017
@@ -49,6 +51,8 @@ reg query %HKLCID%\{21134089-9B59-34C8-BE11-929D26AD5207}>nul 2>nul&&set VC=Micr
 reg query %HKLCID%\{e46eca4f-393b-40df-9f49-076faf788d83}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 Redistributable (x64) - 14.0.23026
 reg query %HKLCID%\{0D3E9E15-DE7A-300B-96F1-B4AF12B96488}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 x64 Minimum Runtime - 14.0.23026
 reg query %HKLCID%\{BC958BD2-5DAC-3862-BB1A-C1BE0790438D}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 x64 Additional Runtime - 14.0.23026
+reg query %HKLCID%\{C0B2C673-ECAA-372D-94E5-E89440D087AD}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 Redistributable (x64) - 14.0.24210
+reg query %HKLCID%\{36F68A90-239C-34DF-B58C-64B30153CE35}>nul 2>nul&&set VC=Microsoft Visual C++ 2015 x64 Additional Runtime - 14.0.24210
 reg query %HKLCID%\{f1e7e313-06df-4c56-96a9-99fdfd149c51}>nul 2>nul&&set VC=Microsoft Visual C++ 2017 Redistributable x64
 
 reg query "%HKLCID%\,,amd64,14.0,bundle">nul 2>nul&&set VC=Microsoft Visual C++ 2017 Redistributable x64
