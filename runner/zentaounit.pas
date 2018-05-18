@@ -120,6 +120,8 @@ type
         ApacheAuthAccount: string;
         ApacheAuthPassword: string;
         forceX86       : Boolean;
+        SkipCheckVC    : Boolean;
+        TrySkipCheckVC : Boolean;
     end;
 
 function GetVersion(soft: string; display: Boolean = False): string;
@@ -195,7 +197,7 @@ const
     OS_CHECK_BAT      = 'check_os.bat';
     VERSION_MAJOR     = 1;
     VERSION_MINOR     = 3;
-    VERSION_PACTH     = 9;
+    VERSION_PACTH     = 10;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
     MYSQL_USER_ROOT   = 'root';
@@ -241,6 +243,11 @@ var
     outputLines : TStringList;
     i           : integer;
 begin
+    if userConfig.SkipCheckVC then begin
+        Result := True;
+        Exit;
+    end;
+
     Result := False;
     outputLines := ExcuteCommand(os.RunnerLocation + format(VC_DETECTOR, [os.Architecture]));
     for i := 0 to (outputLines.Count - 1) do
@@ -1088,6 +1095,10 @@ begin
         end;
     end;
 
+    if userConfig.TrySkipCheckVC then begin
+        userConfig.SkipCheckVC := true;
+    end;
+
 
     if userConfig.ApacheAuthAccount = '' then begin
         userConfig.ApacheAuthAccount := product.ID;
@@ -1095,8 +1106,9 @@ begin
 
     if userConfig.ApacheAuthPassword = '' then begin
         userConfig.ApacheAuthPassword := GenRandomStr(10);
-        SaveConfig();
     end;
+
+    SaveConfig();
 
     resetAuthConfig();
 
@@ -1516,6 +1528,8 @@ begin
         userconfig.EnableApacheAuth   := userConfigFile.GetValue('/EnableApacheAuth', True);
         userconfig.ApacheAuthAccount  := userConfigFile.GetValue('/ApacheAuthAccount', '');
         userconfig.ApacheAuthPassword := userConfigFile.GetValue('/ApacheAuthPassword', '');
+        userConfig.SkipCheckVC        := userConfigFile.GetValue('/SkipCheckVC', false);
+        userconfig.TrySkipCheckVC     := false;
 
         if userconfig.LastRunTime > 0 then
         begin
@@ -1552,6 +1566,7 @@ begin
         userConfigFile.SetValue('/EnableApacheAuth', userconfig.EnableApacheAuth);
         userConfigFile.SetValue('/ApacheAuthAccount', userconfig.ApacheAuthAccount);
         userConfigFile.SetValue('/ApacheAuthPassword', userconfig.ApacheAuthPassword);
+        userConfigFile.SetValue('/SkipCheckVC', userConfig.SkipCheckVC);
 
         userConfigFile.Flush;
         Result := True;
