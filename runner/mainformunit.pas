@@ -276,7 +276,11 @@ end;
 
 procedure TMainForm.MenuItemAll3LogClick(Sender: TObject);
 begin
-    ExcuteCommand('explorer ' + productRanzhi.logPath, False, False);
+    if product.id = 'all' then begin
+        ExcuteCommand('explorer ' + productRanzhi.logPath, False, False);
+    end else begin
+        ExcuteCommand('explorer ' + product.EpLogPath, False, False);
+    end;
 end;
 
 procedure TMainForm.MenuItemApacheLogClick(Sender: TObject);
@@ -517,7 +521,12 @@ begin
         end else begin
             MenuItemProductProLog.Visible := False;
         end;
-        MenuItemAll3Log.Visible := false;
+        if product.Pro <> '' then begin
+            MenuItemAll3Log.Visible := True;
+            MenuItemAll3Log.Caption := Format(GetLang('menu/productEpLog', '%s企业版日志'), [productName]);
+        end else begin
+            MenuItemAll3Log.Visible := False;
+        end;
     end;
 
     MenuItemMysqlLog.Caption          := GetLang('menu/mysqlLog', 'Mysql 日志');

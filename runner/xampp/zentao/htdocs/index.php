@@ -18,6 +18,10 @@ $lang->cn->links['zentaopro']['link']    = '/pro/';
 $lang->cn->links['zentaopro']['text']    = '专业版';
 $lang->cn->links['zentaopro']['target']  = '_self';
 
+$lang->cn->links['zentaoep']['link']    = '/enterprise/';
+$lang->cn->links['zentaoep']['text']    = '企业版';
+$lang->cn->links['zentaoep']['target']  = '_self';
+
 $lang->cn->title    = '欢迎使用禅道集成运行环境！';
 $lang->cn->xampp    = " <a href='http://www.apachefriends.org/en/xampp.html' target='_blank'>xampp</a>";
 $lang->cn->official = " <a href='http://www.zentao.net' target='_blank'>禅道官网</a>";
@@ -28,12 +32,12 @@ $lang->en->links['zentao']['text']       = 'Zentao';
 $lang->en->links['zentao']['target']     = '_self';
 
 $lang->en->links['zentaopro']['link']    = '/pro/';
-$lang->en->links['zentaopro']['text']    = 'ZenTao Pro';
+$lang->en->links['zentaopro']['text']    = 'Pro version';
 $lang->en->links['zentaopro']['target']  = '_self';
 
-$lang->en->title    = 'Welcome to ZenTao!';
+$lang->en->title    = 'Welcome to use zentao!';
 $lang->en->xampp    = " <a href='http://www.apachefriends.org/en/xampp.html' target='_blank'>xampp</a> ";
-$lang->en->official = " <a href='http://www.zentao.pm/forum/' target='_blank'>Community</a>";
+$lang->en->official = " <a href='http://www.zentao.net/en' target='_blank'>Community</a>";
 $lang->en->adminer  = "<a href='/adminer/' target='_blank'>MySQL</a>";
 
 $acceptLang = stripos($_SERVER['HTTP_ACCEPT_LANGUAGE'], 'zh-CN') !== false ? 'cn' : 'en';

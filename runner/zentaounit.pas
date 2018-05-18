@@ -99,6 +99,13 @@ type
         ProMyConfig    : string;
         ProConfigFile  : string;
         ProVersionFile : string;
+        Enterprise     : string;
+        EpVersion      : string;
+        EpMyConfig     : string;
+        EpConfigFile   : string;
+        EpVersionFile  : string;
+        EpLogPath      : string;
+        EpPath         : string;
         logPath        : string;
         proLogPath     : string;
     end;
@@ -188,7 +195,7 @@ const
     OS_CHECK_BAT      = 'check_os.bat';
     VERSION_MAJOR     = 1;
     VERSION_MINOR     = 3;
-    VERSION_PACTH     = 8;
+    VERSION_PACTH     = 9;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
     MYSQL_USER_ROOT   = 'root';
@@ -331,6 +338,9 @@ begin
         FixConfigFile(apache.AccessFileDir + 'default.ztaccess', product.path + 'www/.ztaccess');
         if product.ProPath <> '' then begin
             FixConfigFile(apache.AccessFileDir + 'pro.ztaccess', product.ProPath + 'www/.ztaccess');
+        end;
+        if product.EpPath <> '' then begin
+            FixConfigFile(apache.AccessFileDir + 'enterprise.ztaccess', product.EpPath + 'www/.ztaccess');
         end;
     end;
 
@@ -999,15 +1009,23 @@ begin
         product.logPath        := os.Location + product.ID + '\tmp\log\';
         product.Pro            := config.Get('product/proversion', '');
         product.ProPath        := '';
-        if product.Pro <> '' then begin
-            product.ProPath := os.Location + product.Pro + '\';
-        end;
+        product.Enterprise     := config.Get('product/epversion', '');
+        product.EpPath         := '';
+
         product.MyConfig       := os.Location + product.ID + '\' + config.Get('product/myconfig', 'config\my.php');
         if product.Pro <> '' then begin
+            product.ProPath := os.Location + product.Pro + '\';
             product.ProVersionFile    := os.Location + product.Pro + '\VERSION';
             product.ProMyConfig       := os.Location + product.Pro + '\' + config.Get('product/myconfig', 'config\my.php');
             product.ProVersion        := GetProductVersion(product.ProVersionFile);
             product.proLogPath        := os.Location + product.Pro + '\tmp\log\';
+        end;
+        if product.Enterprise <> '' then begin
+            product.EpPath := os.Location + product.Enterprise + '\';
+            product.EpVersionFile    := os.Location + product.Enterprise + '\VERSION';
+            product.EpMyConfig       := os.Location + product.Enterprise + '\' + config.Get('product/myconfig', 'config\my.php');
+            product.EpVersion        := GetProductVersion(product.EpVersionFile);
+            product.EpLogPath        := os.Location + product.Enterprise + '\tmp\log\';
         end;
     end else begin
         product.myconfig := config.Get('product/myconfig', 'config\my.php');
@@ -1062,6 +1080,12 @@ begin
         PrintLn(GetLang('message/version', '%s版本：%s'), [productChanzhi.Title, productChanzhi.Version]);
     end else begin
         PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle(), product.Version]);
+        if product.pro <> '' then begin
+            PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle() + ' ' + GetLang('product/pro', '专业版'), product.ProVersion]);
+        end;
+        if product.enterprise <> '' then begin
+            PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle() + ' ' + GetLang('product/enterprise', '企业版'), product.EpVersion]);
+        end;
     end;
 
 
@@ -1160,6 +1184,9 @@ begin
             UpdateConfigPort(serviceName, product.MyConfig);
             if product.pro <> '' then begin
                 UpdateConfigPort(serviceName, product.ProMyConfig);
+            end;
+            if product.Enterprise <> '' then begin
+                UpdateConfigPort(serviceName, product.EpMyConfig);
             end;
         end;
     end;
@@ -1275,6 +1302,9 @@ begin
                     UpdateMySqlPassword(product.MyConfig, password);
                     if product.pro <> '' then begin
                         UpdateMySqlPassword(product.ProMyConfig, password);
+                    end;
+                    if product.Enterprise <> '' then begin
+                        UpdateMySqlPassword(product.EpMyConfig, password);
                     end;
                 end;
                 Result := True;
