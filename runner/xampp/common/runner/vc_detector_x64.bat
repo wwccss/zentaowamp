@@ -52,4 +52,4 @@ reg query %HKLCID%\{BC958BD2-5DAC-3862-BB1A-C1BE0790438D}>nul 2>nul&&set VC=Micr
 reg query %HKLCID%\{f1e7e313-06df-4c56-96a9-99fdfd149c51}>nul 2>nul&&set VC=Microsoft Visual C++ 2017 Redistributable x64
 
 reg query "%HKLCID%\,,amd64,14.0,bundle">nul 2>nul&&set VC=Microsoft Visual C++ 2017 Redistributable x64
-if defined VC (echo INSTALLED: %VC%)
+if defined VC echo INSTALLED: %VC%

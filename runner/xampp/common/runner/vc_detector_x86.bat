@@ -46,4 +46,6 @@ reg query %HKLMU%\{4B6C7001-C7D6-3710-913E-5BC23FCE91E6}>nul 2>nul&&set VC=Micro
 reg query %HKLMU%\{2B547B43-DB50-3139-9EBE-37D419E0F5FA}>nul 2>nul&&set VC=Microsoft Visual C++ 2008 Redistributable IA64
 reg query %HKLMU%\{5827ECE1-AEB0-328E-B813-6FC68622C1F9}>nul 2>nul&&set VC=Microsoft Visual C++ 2008 SP1 Redistributable IA64
 reg query %HKLMU%\{977AD349-C2A8-39DD-9273-285C08987C7B}>nul 2>nul&&set VC=Microsoft Visual C++ 2008 SP1 Redistributable ATL Security Update IA64
-if defined VC (echo INSTALLED: %VC%)
+if defined VC echo INSTALLED: %VC%
+
+
