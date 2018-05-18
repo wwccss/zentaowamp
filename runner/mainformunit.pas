@@ -215,13 +215,21 @@ begin
         if mrYes = MessageDlg(GetLang('UI/isInstallVC', '检查到没有安装VC++运行环境，将无法继续使用。是否立即安装？'), mtConfirmation, [mbYes, mbNo], 0) then begin
             InstallVC;
             if not CheckVC then begin
-                ShowMessage(GetLang('message/VCInstallFail', 'VC++运行环境安装失败。'));
+                if mrYes = MessageDlg(GetLang('message/VCInstallFailConfigSkip', 'VC++运行环境安装失败，是否忽略VC++环境检查并继续运行？继续运行程序有可能会自动退出。'), mtConfirmation, [mbYes, mbNo], 0) then begin
+                    userconfig.TrySkipCheckVC := true;
+                end else begin
+                    ShowMessage(GetLang('message/VCInstallFail', 'VC++运行环境安装失败。'));
+                    Application.Terminate;
+                    Exit;
+                end;
+            end;
+        end else begin
+            if mrYes = MessageDlg(GetLang('message/VCInstallFailConfigSkip', 'VC++运行环境安装失败，是否忽略VC++环境检查并继续运行？继续运行程序有可能会自动退出。'), mtConfirmation, [mbYes, mbNo], 0) then begin
+                userconfig.TrySkipCheckVC := true;
+            end else begin
                 Application.Terminate;
                 Exit;
             end;
-        end else begin
-            Application.Terminate;
-            Exit;
         end;
     end;
 

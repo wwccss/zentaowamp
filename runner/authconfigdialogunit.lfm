@@ -1,7 +1,7 @@
 object AuthConfigDialogForm: TAuthConfigDialogForm
-  Left = 1055
+  Left = 1407
   Height = 223
-  Top = 200
+  Top = 267
   Width = 320
   BorderStyle = bsToolWindow
   Caption = '设置访问验证账号'
