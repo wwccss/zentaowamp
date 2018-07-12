@@ -196,8 +196,8 @@ const
     VC_REDIST         = 'vc_redist.%s.exe';
     VC_DETECTOR       = 'vc_detector_%s.bat'; 
     OS_CHECK_BAT      = 'check_os.bat';
-    VERSION_MAJOR     = 2;
-    VERSION_MINOR     = 0;
+    VERSION_MAJOR     = 1;
+    VERSION_MINOR     = 3;
     VERSION_PACTH     = 11;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
