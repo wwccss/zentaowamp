@@ -124,7 +124,7 @@ begin
     if product.InitBat = '' then Exit;
 
     if InitBat then begin
-        if mrYes = MessageDlg(Format(GetLang('message/initBatSuccessfully', '成功生成批处理文件，是否到%s目录下查看？'), [product.BinPath]), mtConfirmation, [mbYes, mbNo], 0) then begin
+        if mrYes = QuestionDlg (GetLang('UI/confirmation', '确认'), GetLang('message/initBatSuccessfully', '成功生成批处理文件，是否到%s目录下查看？'), mtCustom, [mrYes, GetLang('UI/yes', '是'), mrNo, GetLang('UI/no', '否'), 'IsDefault'], '') then begin
             ExcuteCommand('explorer ' + product.BinPath, False, False);
         end;
     end else begin
@@ -153,7 +153,7 @@ begin
     if (apache.Status = 'running') and (mysql.Status = 'running') then begin
         deskDir := BackupZentao();
         if deskDir <> '' then begin
-            if mrYes = MessageDlg(Format(GetLang('message/backupCompleteTip', '成功备份到%s目录, 是否进入该目录查看？'), [deskDir]), mtConfirmation, [mbYes, mbNo], 0) then begin
+            if mrYes = QuestionDlg (GetLang('UI/confirmation', '确认'), GetLang('message/backupCompleteTip', '成功备份到%s目录, 是否进入该目录查看？'), mtCustom, [mrYes, GetLang('UI/yes', '是'), mrNo, GetLang('UI/no', '否'), 'IsDefault'], '') then begin
                 ExcuteCommand('explorer ' + deskDir, False, False);
             end;
         end else begin
@@ -212,10 +212,10 @@ begin
     end;
 
     if not CheckVC then begin
-        if mrYes = MessageDlg(GetLang('UI/isInstallVC', '检查到没有安装VC++运行环境，将无法继续使用。是否立即安装？'), mtConfirmation, [mbYes, mbNo], 0) then begin
+        if mrYes = QuestionDlg (GetLang('UI/confirmation', '确认'), GetLang('UI/isInstallVC', '检查到没有安装VC++运行环境，将无法继续使用。是否立即安装？'), mtCustom, [mrYes, GetLang('UI/yes', '是'), mrNo, GetLang('UI/no', '否'), 'IsDefault'], '') then begin
             InstallVC;
             if not CheckVC then begin
-                if mrYes = MessageDlg(GetLang('message/VCInstallFailConfigSkip', 'VC++运行环境安装失败，是否忽略VC++环境检查并继续运行？继续运行程序有可能会自动退出。'), mtConfirmation, [mbYes, mbNo], 0) then begin
+                if mrYes = QuestionDlg (GetLang('UI/confirmation', '确认'), GetLang('message/VCInstallFailConfigSkip', 'VC++运行环境安装失败，是否忽略VC++环境检查并继续运行？继续运行程序有可能会自动退出。'), mtCustom, [mrYes, GetLang('UI/yes', '是'), mrNo, GetLang('UI/no', '否'), 'IsDefault'], '') then begin
                     userconfig.TrySkipCheckVC := true;
                 end else begin
                     ShowMessage(GetLang('message/VCInstallFail', 'VC++运行环境安装失败。'));
@@ -224,7 +224,7 @@ begin
                 end;
             end;
         end else begin
-            if mrYes = MessageDlg(GetLang('message/VCInstallFailConfigSkip', 'VC++运行环境安装失败，是否忽略VC++环境检查并继续运行？继续运行程序有可能会自动退出。'), mtConfirmation, [mbYes, mbNo], 0) then begin
+            if mrYes = QuestionDlg (GetLang('UI/confirmation', '确认'), GetLang('message/VCInstallFailConfigSkip', 'VC++运行环境安装失败，是否忽略VC++环境检查并继续运行？继续运行程序有可能会自动退出。'), mtCustom, [mrYes, GetLang('UI/yes', '是'), mrNo, GetLang('UI/no', '否'), 'IsDefault'], '') then begin
                 userconfig.TrySkipCheckVC := true;
             end else begin
                 Application.Terminate;

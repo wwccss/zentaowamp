@@ -195,8 +195,8 @@ const
     VC_REDIST         = 'vc_redist.%s.exe';
     VC_DETECTOR       = 'vc_detector_%s.bat'; 
     OS_CHECK_BAT      = 'check_os.bat';
-    VERSION_MAJOR     = 1;
-    VERSION_MINOR     = 3;
+    VERSION_MAJOR     = 2;
+    VERSION_MINOR     = 0;
     VERSION_PACTH     = 10;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
@@ -538,7 +538,6 @@ begin
         Sleep(3000);
         serviceStatus := GetServiceStatus(serviceName);
     end else if serviceStatus = 'failed' then begin
-        // PrintLn('服务' + serviceName + '没有安装。');
         if force then begin
             InstallService(serviceName);
             Sleep(3000);
@@ -547,8 +546,8 @@ begin
     end;
 
     if not checkSevicePath(ServiceName) then begin
-        PrintLn(GetLang('message/wrongService', '服务安装路径不正确。'));
-        if mrYes = MessageDlg(GetLang('message/wrongServiceTip', '服务安装路径不正确。是否重新安装？'), mtConfirmation, [mbYes, mbNo], 0) then begin
+        PrintLn(serviceName + ' ' + GetLang('message/wrongService', '服务安装路径不正确。'));
+        if mrYes = QuestionDlg(GetLang('UI/confirmation', '确认'), serviceName + ' ' + GetLang('message/wrongServiceTip', '服务安装路径不正确。是否重新安装？'), mtCustom, [mrYes, GetLang('UI/yes', '是'), mrNo, GetLang('UI/no', '否'), 'IsDefault'], '') then begin
             UninstallService(serviceName);
             Sleep(3000);
             InstallService(serviceName);
