@@ -1087,10 +1087,10 @@ begin
     end else begin
         PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle(), product.Version]);
         if product.pro <> '' then begin
-            PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle() + ' ' + GetLang('product/pro', '专业版'), product.ProVersion]);
+            PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle() + GetLang('product/pro', '专业版'), product.ProVersion]);
         end;
         if product.enterprise <> '' then begin
-            PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle() + ' ' + GetLang('product/enterprise', '企业版'), product.EpVersion]);
+            PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle() + GetLang('product/enterprise', '企业版'), product.EpVersion]);
         end;
     end;
 
