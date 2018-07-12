@@ -36,6 +36,7 @@ type
         IsInXAMPP      : boolean;
         RunnerLocation : string;
         Architecture   : string;
+        IconFile       : string;
     end;
 
     PhpConfig = record
@@ -197,7 +198,7 @@ const
     OS_CHECK_BAT      = 'check_os.bat';
     VERSION_MAJOR     = 2;
     VERSION_MINOR     = 0;
-    VERSION_PACTH     = 10;
+    VERSION_PACTH     = 11;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
     MYSQL_USER_ROOT   = 'root';
@@ -1503,6 +1504,7 @@ begin
     os.Exe                                 := Application.ExeName;
     os.Location                            := Application.Location;
     os.RunnerLocation                      := os.Location + APP_DIR + '/';
+    os.IconFile                            := os.RunnerLocation + 'icon.ico';
     os.Architecture                        := GetOsArch;
     // os.Drive                               := Copy(os.Location, 0, 2);//F:\xampp\runner\
     // os.IsInXAMPP                           := (os.Location = (os.Drive + '\xampp\'));

@@ -20,9 +20,9 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
-      <RevisionNr Value="10"/>
+      <RevisionNr Value="11"/>
       <Language Value="0804"/>
-      <StringTable ProductName="集成运行环境" ProductVersion="2.0.10"/>
+      <StringTable CompanyName="青岛易软天创网络科技有限公司" ProductName="集成运行环境" ProductVersion="2.0.11"/>
     </VersionInfo>
     <BuildModes Count="3">
       <Item1 Name="Default" Default="True"/>
@@ -31,7 +31,7 @@
           <Version Value="11"/>
           <PathDelim Value="\"/>
           <Target>
-            <Filename Value="zentaorunner-win64"/>
+            <Filename Value="start-win64"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -58,7 +58,7 @@
           <Version Value="11"/>
           <PathDelim Value="\"/>
           <Target>
-            <Filename Value="zentaorunner-win32"/>
+            <Filename Value="start-win32"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
