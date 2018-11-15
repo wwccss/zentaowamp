@@ -101,6 +101,7 @@ $file->copyFile('./xampp/apache/binold/libeay32.dll',      './xampp/apache/bin/l
 $file->copyFile('./xampp/apache/binold/ssleay32.dll',      './xampp/apache/bin/ssleay32.dll');
 $file->copyFile('./xampp/apache/binold/pcre.dll',          './xampp/apache/bin/pcre.dll');
 $file->copyFile('./xampp/apache/binold/msvcr100.dll',      './xampp/apache/bin/msvcr100.dll');
+$file->copyFile('./xampp/apache/binold/rotatelogs.exe',    './xampp/apache/bin/rotatelogs.exe');
 $file->removeDir('./xampp/apache/binold');
 
 /* Process the apache's config file. */
@@ -233,8 +234,9 @@ $file->removeDir('./xampp/php/extold');
 /* Process phpmyadmin. */
 $file->removeDir('./xampp/phpMyAdmin');
 $file->mkdir('./xampp/adminer');
-$file->copyFile(dirname(__FILE__) . '/adminer.php', './xampp/adminer/index.php');
-$file->copyFile(dirname(__FILE__) . '/adminer.css', './xampp/adminer/adminer.php');
+$file->copyFile(dirname(__FILE__) . '/adminer.php', './xampp/adminer/adminer.php');
+$file->copyFile(dirname(__FILE__) . "/adminer.{$product}.php", './xampp/adminer/index.php');
+$file->copyFile(dirname(__FILE__) . '/adminer.css', './xampp/adminer/adminer.css');
 
 /* Process the svn. */
 if($product == 'zentao')
