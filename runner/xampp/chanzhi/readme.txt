@@ -12,7 +12,7 @@
      32位系统下载：http://www.microsoft.com/downloads/details.aspx?FamilyID=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF
      64位系统下载：http://www.microsoft.com/download/en/details.aspx?displaylang=en&id=15336 
   2.3 蝉知系统默认的管理员帐号是admin，密码是123456。
-  2.4 数据库默认的密码是root，密码为空。
+  2.4 数据库默认的管理员帐号是root，密码为123456。
   2.5 蝉知的访问路径：http://localhost/ 其他机器访问将localhost换成ip地址。如果端口号不是80，还需要加上端口号。
   2.6 数据库管理请访问：http://localhost/phpmyadmin/。phpmyadmin只能在蝉知机器上面访问。
 

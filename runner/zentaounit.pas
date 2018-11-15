@@ -25,6 +25,8 @@ uses
     SysUtils;
 
 type
+    TIntegerArray = Array of Integer;
+
     OsEnvironment = record
         Exe            : string;
         Drive          : string;
@@ -33,6 +35,8 @@ type
         UserConfigFile : string;
         IsInXAMPP      : boolean;
         RunnerLocation : string;
+        Architecture   : string;
+        IconFile       : string;
     end;
 
     PhpConfig = record
@@ -40,22 +44,30 @@ type
         Exe           : string;
         ConfigFile    : string;
         ConfigFileTpl : string;
+        logPath       : string;
     end;
 
     ApacheConfig = record
         Version       : string;
         Exe           : string;
+        htpasswd      : string;
+        authFile      : string;
         ConfigFile    : string;
         ServiceName   : string;
         Status        : string;
         Port          : integer;
         // SuggestPort   : integer;
         ConfigFileTpl : string;
+        AccessFileDir : string;
+        AdminerPath   : String;
+        htdocsPath    : String;
+        logPath       : String;
     end;
 
     MysqlConfig = record
         Version           : string;
         Exe               : string;
+        mysqlExe          : String;
         ConfigFile        : string;
         ConfigFileTpl     : string;
         // MyConfig          : string;
@@ -63,17 +75,11 @@ type
         TaskConfig        : string;
         TestConfig        : string;
         ProConfig         : string;
-        PhpmyadminConfig  : string;
-        PhpmyadminCfgTpl  : string;
         ServiceName       : string;
         Status            : string;
         Port              : integer;
+        logPath           : string;
         // SuggestPort       : integer;
-    end;
-
-    PhpmyadminConfig = record
-        Readme  : string;
-        Version : string;
     end;
 
     ProductSystemConfig = record
@@ -84,6 +90,8 @@ type
         UpdaterUrl     : string;
         InitBat        : string;
         BinPath        : string;
+        Path           : String;
+        ProPath        : String;
         BackupFile     : string;
         ID             : string;
         Title          : string;
@@ -92,6 +100,15 @@ type
         ProMyConfig    : string;
         ProConfigFile  : string;
         ProVersionFile : string;
+        Enterprise     : string;
+        EpVersion      : string;
+        EpMyConfig     : string;
+        EpConfigFile   : string;
+        EpVersionFile  : string;
+        EpLogPath      : string;
+        EpPath         : string;
+        logPath        : string;
+        proLogPath     : string;
     end;
 
     UserConfiguration = record
@@ -100,6 +117,12 @@ type
         MysqlPort      : Integer;
         Language       : string;
         AutoChangePort : boolean;
+        EnableApacheAuth: boolean;
+        ApacheAuthAccount: string;
+        ApacheAuthPassword: string;
+        forceX86       : Boolean;
+        SkipCheckVC    : Boolean;
+        TrySkipCheckVC : Boolean;
     end;
 
 function GetVersion(soft: string; display: Boolean = False): string;
@@ -117,7 +140,7 @@ procedure InitZentao();
 function BackupZentao(): string;
 function StartZentao(): boolean;
 function StopZentao(): boolean;
-function GetBuildVersion(formatStr: string = '%d.%d.%d'): string;
+function GetBuildVersion(formatStr: string = 'auto'): string;
 function LoadConfig(): boolean;
 function SaveConfig(destroy: boolean = False): boolean;
 procedure ExitZentao();
@@ -143,10 +166,20 @@ function GetLocalIP(): string;
 function InitBat(): boolean;
 function FixConfigPath(): boolean;
 function FixConfigFile(src: string; dest: string): boolean;
-function CheckVC2008(): boolean;
-procedure InstallVC2008();
+function CheckVC(): boolean;
+procedure InstallVC();
 function StrReplace(source: string; find: string; forReplace: string): string;
 function formatDir(source: string): string;
+function GenRandomStr(len: integer): String;
+function addApacheUser(account: String; password: String): Boolean;
+procedure ResetAuthConfig();
+function GetOsArch(): String;
+function GetProductTitle(): String;
+function GetProductLink(linkName: String; defaultLink: String): String;
+function ChangeMySqlPassword(password: string): boolean;
+function UpdateMySqlPassword(configFile: string; password: string): boolean;
+function CheckMySqlPassword(): boolean;
+function ConfirmMySqlPassword(): boolean;
 
 const
     ONE_DAY_MILLION_SECONDS = 24 * 60 * 60 * 1000;
@@ -157,13 +190,22 @@ const
     DEBUG_MODE_DEFAULT      = 0;
     READ_BYTES              = 2048;
 
+    FORCE_X86         = False;
     MAX_PORT          = 65535;
     HOST              = '127.0.0.1';
-    VC_REDIST_2005    = 'vcredist_x86_sp1.exe';
-    VC_REDIST_2008    = 'vcredist_x86.exe';
-    VC_DETECTOR       = 'vc2008_detector.bat';
-    VERSION           = '1.2.4';
+    VC_REDIST         = 'vc_redist.%s.exe';
+    VC_DETECTOR       = 'vc_detector_%s.bat'; 
+    OS_CHECK_BAT      = 'check_os.bat';
+    VERSION_MAJOR     = 1;
+    VERSION_MINOR     = 3;
+    VERSION_PACTH     = 11;
     INIT_SUCCESSCODE  = '0';
+    MYSQL_USER        = 'zentao';
+    MYSQL_USER_ROOT   = 'root';
+    CONFIG_DB_USER    = '$config->db->user';
+    CONFIG_DB_PASS    = '$config->db->password';
+    CONFIG_DB_PORT    = '$config->db->port';
+    RANDOM_STR_SET    = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 var
     // debug_mode : integer;
@@ -171,8 +213,10 @@ var
     php            : PhpConfig;
     apache         : ApacheConfig;
     mysql          : MysqlConfig;
-    phpmyadmin     : PhpmyadminConfig;
     product        : ProductSystemConfig;
+    productChanzhi : ProductSystemConfig;
+    productRanzhi  : ProductSystemConfig;
+    productZentao  : ProductSystemConfig;
     userConfig     : UserConfiguration;
     isFirstRun     : boolean;
     config         : TIniFile;
@@ -183,13 +227,30 @@ implementation
 
 uses mainformunit;
 
-function CheckVC2008(): boolean;
+
+function GenRandomStr(len: integer): String;
+var
+    i: integer;
+begin
+    Result := '';
+    For i := 0 to len do
+    begin
+        Result := Result + RANDOM_STR_SET[Random(Length(RANDOM_STR_SET))];
+    end;
+end;
+
+function CheckVC(): boolean;
 var
     outputLines : TStringList;
     i           : integer;
 begin
+    if userConfig.SkipCheckVC then begin
+        Result := True;
+        Exit;
+    end;
+
     Result := False;
-    outputLines := ExcuteCommand(os.RunnerLocation + VC_DETECTOR);
+    outputLines := ExcuteCommand(os.RunnerLocation + format(VC_DETECTOR, [os.Architecture]));
     for i := 0 to (outputLines.Count - 1) do
     begin
         if Pos('INSTALLED', outputLines[i]) > 0 then begin
@@ -197,6 +258,40 @@ begin
             BREAK;
         end;
     end;
+end;
+
+function GetOsArch(): String;
+var
+    outputLines : TStringList;
+    i           : integer;
+begin
+    Result := 'x86';
+    if (not userConfig.forceX86) and (VERSION_MAJOR > 1) then begin
+        outputLines := ExcuteShell(os.RunnerLocation + OS_CHECK_BAT);
+        for i := 0 to (outputLines.Count - 1) do
+        begin
+            if Pos('64', outputLines[i]) > 0 then begin
+                Result := 'x64';
+                BREAK;
+            end;
+        end;
+    end;
+end;
+
+function GetProductTitle(): String;
+begin
+    Result := config.Get('product/title_' + userconfig.Language, GetLang('product/' + product.id, product.Title));
+end;
+
+function GetProductLink(linkName: String; defaultLink: String): String;
+var
+    linkUrl: String;
+begin
+    linkUrl := config.Get('product/' + linkName + '_' + userconfig.Language, '');
+    if linkUrl = '' then begin
+        linkUrl := config.Get('product/' + linkName, defaultLink);
+    end;
+    Result := linkUrl;
 end;
 
 function CommondResultHas(outputlines: TStringList; theValue: string): boolean;
@@ -213,9 +308,51 @@ begin
     end;
 end;
 
-procedure InstallVC2008();
+procedure InstallVC();
 begin
-    ExcuteCommand(os.RunnerLocation + VC_REDIST_2008, False, False);
+    ExcuteCommand(os.RunnerLocation + format(VC_REDIST, [os.Architecture]), False, False);
+end;
+
+function addApacheUser(account: String; password: String): Boolean;
+var
+    emptyLines: TStringList;
+begin
+    emptyLines := TStringList.Create;
+    emptyLines.SaveToFile(apache.authFile);
+    emptyLines.Free;
+    ExcuteCommand(apache.htpasswd + ' -b ' + apache.authFile + ' ' + account + ' ' + password);
+end;
+
+procedure resetAuthConfig();
+var
+    emptyLines: TStringList;
+begin
+    emptyLines := TStringList.Create;
+    emptyLines.SaveToFile(apache.authFile);
+    emptyLines.Free;
+
+    if userconfig.EnableApacheAuth then begin
+        ExcuteCommand(apache.htpasswd + ' -b ' + apache.authFile + ' ' + userconfig.ApacheAuthAccount + ' ' + userconfig.ApacheAuthPassword);
+    end;
+
+    FixConfigFile(apache.AccessFileDir + 'adminer.ztaccess', apache.AdminerPath + '.ztaccess');
+    FixConfigFile(apache.AccessFileDir + 'htdocs.ztaccess', apache.htdocsPath + '.ztaccess');
+
+    if product.id = 'all' then begin
+        FixConfigFile(apache.AccessFileDir + productZentao.id + '.ztaccess', productZentao.path + 'www/.ztaccess');
+        FixConfigFile(apache.AccessFileDir + productRanzhi.id + '.ztaccess', productRanzhi.path + 'www/.ztaccess');
+        FixConfigFile(apache.AccessFileDir + productChanzhi.id + '.ztaccess', productChanzhi.path + 'www/.ztaccess');
+    end else begin
+        FixConfigFile(apache.AccessFileDir + 'default.ztaccess', product.path + 'www/.ztaccess');
+        if product.ProPath <> '' then begin
+            FixConfigFile(apache.AccessFileDir + 'pro.ztaccess', product.ProPath + 'www/.ztaccess');
+        end;
+        if product.EpPath <> '' then begin
+            FixConfigFile(apache.AccessFileDir + 'enterprise.ztaccess', product.EpPath + 'www/.ztaccess');
+        end;
+    end;
+
+    MainForm.updateAuthStatus;
 end;
 
 { Generage config file from template }
@@ -225,14 +362,22 @@ var
     i           : integer;
     line        : string;
     osLocation  : string;
+    authConfig  : String;
 begin
-    ConsoleLn('\n> FixConfigFile');
+    src  := formatDir(src);
+    dest := formatDir(dest);
+    ConsoleLn(LineEnding + '> FixConfigFile');
     ConsoleLn('    src: ' + src);
     ConsoleLn('    dest:' + dest);
 
-    if (debugMode > 99) and (mysql.ConfigFileTpl = src) then begin
-        Exit;
+    authConfig := 'Require all granted';
+    if userconfig.EnableApacheAuth then begin
+        authConfig := 'AuthName "' + product.id + ' runner authentication required"'
+            + LineEnding + 'AuthType Basic'
+            + LineEnding + 'AuthUserFile "' + formatDir(apache.authFile) + '"'
+            + LineEnding + 'Require valid-user';
     end;
+
     osLocation := formatDir(os.Location);
     fileLines := TStringList.Create;
     fileLines.LoadFromFile(src);
@@ -242,6 +387,7 @@ begin
         line := StrReplace(line, '%APACHE_PORT%', inttostr(apache.Port));
         line := StrReplace(line, '%MYSQL_PORT%', inttostr(mysql.Port));
         line := StrReplace(line, '%PRODUCT_ID%', product.id);
+        line := StrReplace(line, '%AUTH_CONFIG%', authConfig);
         fileLines[i] := line;
     end;
     fileLines.SaveToFile(dest);
@@ -256,10 +402,16 @@ begin
     FixConfigFile(mysql.ConfigFileTpl, mysql.ConfigFile);
     FixConfigFile(php.ConfigFileTpl, php.ConfigFile);
     FixConfigFile(apache.ConfigFileTpl, apache.ConfigFile);
-    FixConfigFile(mysql.PhpmyadminCfgTpl, mysql.PhpmyadminConfig);
-    UpdateConfigPort(mysql.ServiceName, product.MyConfig);
-    if product.pro <> '' then begin
-        UpdateConfigPort(mysql.ServiceName, product.ProMyConfig);
+
+    if product.id = 'all' then begin
+        UpdateConfigPort(mysql.ServiceName, productRanzhi.MyConfig);
+        UpdateConfigPort(mysql.ServiceName, productZentao.MyConfig);
+        UpdateConfigPort(mysql.ServiceName, productChanzhi.MyConfig);
+    end else begin
+        UpdateConfigPort(mysql.ServiceName, product.MyConfig);
+        if product.pro <> '' then begin
+            UpdateConfigPort(mysql.ServiceName, product.ProMyConfig);
+        end;
     end;
 
     Result := true;
@@ -384,24 +536,23 @@ begin
     serviceStatus := GetServiceStatus(serviceName);
     if serviceStatus = 'running' then begin
         StopService(ServiceName);
-        Sleep(1000);
+        Sleep(3000);
         serviceStatus := GetServiceStatus(serviceName);
     end else if serviceStatus = 'failed' then begin
-        // PrintLn('服务' + serviceName + '没有安装。');
         if force then begin
             InstallService(serviceName);
-            Sleep(1000);
+            Sleep(3000);
             serviceStatus := GetServiceStatus(serviceName);
         end;
     end;
 
     if not checkSevicePath(ServiceName) then begin
-        PrintLn(GetLang('message/wrongService', '服务安装路径不正确。'));
-        if mrYes = MessageDlg(GetLang('message/wrongServiceTip', '服务安装路径不正确。是否重新安装？'), mtConfirmation, [mbYes, mbNo], 0) then begin
+        PrintLn(serviceName + ' ' + GetLang('message/wrongService', '服务安装路径不正确。'));
+        if mrYes = QuestionDlg(GetLang('UI/confirmation', '确认'), serviceName + ' ' + GetLang('message/wrongServiceTip', '服务安装路径不正确。是否重新安装？'), mtCustom, [mrYes, GetLang('UI/yes', '是'), mrNo, GetLang('UI/no', '否'), 'IsDefault'], '') then begin
             UninstallService(serviceName);
-            Sleep(1000);
+            Sleep(3000);
             InstallService(serviceName);
-            Sleep(1000);
+            Sleep(3000);
             serviceStatus := GetServiceStatus(serviceName);
         end else begin
             Result := false;
@@ -417,7 +568,7 @@ begin
         end;
         port := FixPort(ServiceName, retry);
         ExcuteCommand('net start ' + serviceName).Free;
-        Sleep(1000);
+        Sleep(3000);
         
         serviceStatus := GetServiceStatus(serviceName);
         if serviceStatus = 'running' then begin
@@ -738,30 +889,45 @@ begin
         MemStream := TMemoryStream.Create;
         BytesRead := 0;
         Execute;
+
         while True do
         begin
-          // make sure we have room
-          MemStream.SetSize(BytesRead + READ_BYTES);
-       
-          // try reading it
-          NumBytes := Output.Read((MemStream.Memory + BytesRead)^, READ_BYTES);
-          if NumBytes > 0 // All read() calls will block, except the final one.
-          then
-          begin
-            Inc(BytesRead, NumBytes);
-          end
-          else BREAK; // Program has finished execution.
+            // make sure we have room
+            MemStream.SetSize(BytesRead + READ_BYTES);
+            // try reading it
+            NumBytes := Output.Read((MemStream.Memory + BytesRead)^, READ_BYTES);
+            if NumBytes > 0 then begin // All read() calls will block, except the final one.
+                Inc(BytesRead, NumBytes);
+            end
+            else BREAK; // Program has finished execution.
         end;
+
+        while True do
+        begin
+            // make sure we have room
+            MemStream.SetSize(BytesRead + READ_BYTES);
+            // try reading it
+            NumBytes := Stderr.Read((MemStream.Memory + BytesRead)^, READ_BYTES);
+            if NumBytes > 0 then begin // All read() calls will block, except the final one.
+                Inc(BytesRead, NumBytes);
+            end
+            else BREAK; // Program has finished execution.
+        end;
+
         if BytesRead > 0 then ConsoleLn;
         MemStream.SetSize(BytesRead);
 
         Result := TStringList.Create;
-        Result.LoadFromStream(MemStream);
+        Result.LoadFromStream(MemStream); 
 
         if debugMode > 1 then begin
-            for BytesRead := 0 to (Result.Count - 1) do
-            begin
-                ConsoleLn(' - ' + Result[BytesRead]);
+            ConsoleLn('   Exit code: ' + inttostr(ExitStatus));
+            ConsoleLn('   Output length: ' + inttostr(Result.Count));
+            if Result.Count > 0 then begin
+                for BytesRead := 0 to (Result.Count - 1) do
+                begin
+                    ConsoleLn(' - ' + Result[BytesRead]);
+                end;
             end;
         end;
 
@@ -778,43 +944,22 @@ var
     text    : string;
     output  : TStringList;
 begin
-    if Result = '' then
+    if soft = 'php' then
     begin
-        if soft = 'php' then
-        begin
-            command := php.Exe + ' --version';
-        end
-        else if soft = 'mysql' then
-        begin
-            command := mysql.Exe + ' --version';
-        end
-        else if soft = 'apache' then
-        begin
-            command := apache.Exe + ' -v';
-        end;
-        
-        if soft = 'phpmyadmin' then
-        begin
-            output := TStringList.Create;
-            output.LoadFromFile(phpmyadmin.Readme);
-            for i := 0 to (output.Count - 1) do
-            begin
-                text := output[i];
-                if (text <> '') and (Pos('version ', LowerCase(text)) = 1) then
-                begin
-                    Result := text;
-                    break;
-                end;
-            end;
-            output.Free;
-        end
-        else
-        begin
-            output := ExcuteCommand(command, True);
-            Result := output[0];
-            output.Free;
-        end;
+        command := php.Exe + ' --version';
+    end
+    else if soft = 'mysql' then
+    begin
+        command := mysql.Exe + ' --version';
+    end
+    else if soft = 'apache' then
+    begin
+        command := apache.Exe + ' -v';
     end;
+    
+    output := ExcuteCommand(command, True);
+    Result := output[0];
+    output.Free;
 
     if display then
     begin
@@ -831,6 +976,7 @@ begin
     php.Exe                := os.Location + 'php\php.exe';
     php.ConfigFile         := os.Location + 'php\php.ini';
     php.ConfigFileTpl      := os.RunnerLocation + config.Get('php/configfile', 'res\php\php.ini');
+    php.logPath            := os.Location + 'php\logs\';
 
     // apache
     apache.Exe             := os.Location + 'apache\bin\httpd.exe';
@@ -839,37 +985,84 @@ begin
     apache.ServiceName     := 'apachezt';
     apache.Status          := GetServiceStatus(apache.ServiceName);
     apache.Port            := userconfig.ApachePort;
+    apache.htpasswd        := os.Location + 'apache\bin\htpasswd.exe';
+    apache.authFile        := os.Location + 'apache\auth\.htaccess';
     // apache.SuggestPort     := GetConfigPort(apache.ServiceName);
+    apache.AccessFileDir   := os.RunnerLocation + config.Get('apache/AccessFileDir', 'res\ztaccess\');
+    apache.AdminerPath     := os.Location + 'adminer\';
+    apache.htdocsPath      := os.Location + 'htdocs\';
+    apache.logPath         := os.Location + 'apache\logs\';
 
     // mysql
     mysql.Exe              := os.Location + 'mysql\bin\mysqld.exe';
+    mysql.mysqlExe         := os.Location + 'mysql\bin\mysql.exe';
     mysql.ConfigFile       := os.Location + 'mysql\my.ini';
     mysql.ConfigFileTpl    := os.RunnerLocation + config.Get('mysql/configfile', 'res\mysql\my.ini');
     
-    mysql.PhpmyadminConfig := os.Location + 'phpmyadmin\config.inc.php';
-    mysql.PhpmyadminCfgTpl := os.RunnerLocation + config.Get('phpmyadmin/configfile', 'res\phpmyadmin\config.inc.php');
     mysql.ServiceName      := 'mysqlzt';
     mysql.Status           := GetServiceStatus(mysql.ServiceName);
     mysql.Port             := userconfig.MysqlPort;
-    // mysql.SuggestPort      := GetConfigPort(mysql.ServiceName);
-
-    // phpmyadmin
-    phpmyadmin.Readme      := os.Location + '\phpmyadmin\README';
-    phpmyadmin.Version     := GetVersion('phpmyadmin', True);
+    mysql.logPath          := os.Location + 'mysql\';
 
     // product, like zentao or chanzhi
     product.ID             := config.Get('product/id', 'zentao');
-    // product.ConfigFile     := os.Location + product.ID + '\' + config.Get('product/config', 'config\config.php');
-    product.VersionFile    := os.Location + product.ID + '\VERSION';
-    product.Version        := GetProductVersion;
-    product.BinPath        := os.Location + product.ID + '\bin\';
-    product.Pro            := config.Get('product/proversion', '');
-    product.MyConfig       := os.Location + product.ID + '\' + config.Get('product/myconfig', 'config\my.php');
-    if product.Pro <> '' then begin
-        product.ProConfigFile     := os.Location + product.Pro + '\' + config.Get('product/config', 'config\config.php');
-        product.ProVersionFile    := os.Location + product.Pro + '\VERSION';
-        product.ProMyConfig       := os.Location + product.Pro + '\' + config.Get('product/myconfig', 'config\my.php');
-        product.ProVersion        := GetProductVersion(product.ProVersionFile);
+    product.Title          := config.Get('product/title');
+
+    if product.ID <> 'all' then begin
+        product.VersionFile    := os.Location + product.ID + '\VERSION';
+        product.Version        := GetProductVersion;
+        product.path           := os.Location + product.ID + '\';
+        product.BinPath        := os.Location + product.ID + '\bin\';
+        product.logPath        := os.Location + product.ID + '\tmp\log\';
+        product.Pro            := config.Get('product/proversion', '');
+        product.ProPath        := '';
+        product.Enterprise     := config.Get('product/epversion', '');
+        product.EpPath         := '';
+
+        product.MyConfig       := os.Location + product.ID + '\' + config.Get('product/myconfig', 'config\my.php');
+        if product.Pro <> '' then begin
+            product.ProPath := os.Location + product.Pro + '\';
+            product.ProVersionFile    := os.Location + product.Pro + '\VERSION';
+            product.ProMyConfig       := os.Location + product.Pro + '\' + config.Get('product/myconfig', 'config\my.php');
+            product.ProVersion        := GetProductVersion(product.ProVersionFile);
+            product.proLogPath        := os.Location + product.Pro + '\tmp\log\';
+        end;
+        if product.Enterprise <> '' then begin
+            product.EpPath := os.Location + product.Enterprise + '\';
+            product.EpVersionFile    := os.Location + product.Enterprise + '\VERSION';
+            product.EpMyConfig       := os.Location + product.Enterprise + '\' + config.Get('product/myconfig', 'config\my.php');
+            product.EpVersion        := GetProductVersion(product.EpVersionFile);
+            product.EpLogPath        := os.Location + product.Enterprise + '\tmp\log\';
+        end;
+    end else begin
+        product.myconfig := config.Get('product/myconfig', 'config\my.php');
+
+        productChanzhi.id             := 'chanzhi';
+        productChanzhi.Title          := config.Get('product/' + productChanzhi.id + 'Title');
+        productChanzhi.VersionFile    := os.Location + productChanzhi.ID + '\VERSION';
+        productChanzhi.Version        := GetProductVersion(productChanzhi.VersionFile);
+        productChanzhi.MyConfig       := os.Location + productChanzhi.ID + '\system\' + product.myconfig;
+        productChanzhi.path           := os.Location + productChanzhi.ID + '\';
+        productChanzhi.BinPath        := os.Location + productChanzhi.ID + '\bin\';
+        productChanzhi.logPath        := os.Location + productChanzhi.ID + '\tmp\log\';
+
+        productZentao.id             := 'zentao';
+        productZentao.Title          := config.Get('product/' + productZentao.id + 'Title');
+        productZentao.VersionFile    := os.Location + productZentao.ID + '\VERSION';
+        productZentao.Version        := GetProductVersion(productZentao.VersionFile);
+        productZentao.MyConfig       := os.Location + productZentao.ID + '\' + product.myconfig;
+        productZentao.path           := os.Location + productZentao.ID + '\';
+        productZentao.BinPath        := os.Location + productZentao.ID + '\bin\';
+        productZentao.logPath        := os.Location + productZentao.ID + '\tmp\log\';
+
+        productRanzhi.id             := 'ranzhi';
+        productRanzhi.Title          := config.Get('product/' + productRanzhi.id + 'Title');
+        productRanzhi.VersionFile    := os.Location + productRanzhi.ID + '\VERSION';
+        productRanzhi.Version        := GetProductVersion(productRanzhi.VersionFile);
+        productRanzhi.MyConfig       := os.Location + productRanzhi.ID + '\' + product.myconfig;
+        productRanzhi.path           := os.Location + productRanzhi.ID + '\';
+        productRanzhi.BinPath        := os.Location + productRanzhi.ID + '\bin\';
+        productRanzhi.logPath        := os.Location + productRanzhi.ID + '\tmp\log\';
     end;
 
     product.InitBat        := config.Get('product/initbat');
@@ -882,12 +1075,42 @@ begin
         product.BackupFile := os.Location + product.ID + '\' + product.BackupFile;
     end;
 
-    product.Title          := config.Get('product/title');
-
     FixConfigPath;
+
     php.Version            := GetVersion('php', True);
     apache.Version         := GetVersion('apache', True);
     mysql.Version          := GetVersion('mysql', True);
+
+    if product.ID = 'all' then begin
+        PrintLn(GetLang('message/version', '%s版本：%s'), [productZentao.Title, productZentao.Version]);
+        PrintLn(GetLang('message/version', '%s版本：%s'), [productRanzhi.Title, productRanzhi.Version]);
+        PrintLn(GetLang('message/version', '%s版本：%s'), [productChanzhi.Title, productChanzhi.Version]);
+    end else begin
+        PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle(), product.Version]);
+        if product.pro <> '' then begin
+            PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle() + GetLang('product/pro', '专业版'), product.ProVersion]);
+        end;
+        if product.enterprise <> '' then begin
+            PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle() + GetLang('product/enterprise', '企业版'), product.EpVersion]);
+        end;
+    end;
+
+    if userConfig.TrySkipCheckVC then begin
+        userConfig.SkipCheckVC := true;
+    end;
+
+
+    if userConfig.ApacheAuthAccount = '' then begin
+        userConfig.ApacheAuthAccount := product.ID;
+    end;
+
+    if userConfig.ApacheAuthPassword = '' then begin
+        userConfig.ApacheAuthPassword := GenRandomStr(10);
+    end;
+
+    SaveConfig();
+
+    resetAuthConfig();
 
     PrintLn;
     PrintLn(GetLang('message/currentLocation', '当前目录：%s'), [os.Location]);
@@ -964,12 +1187,175 @@ begin
     end else begin
         FixConfigFile(php.ConfigFileTpl, php.ConfigFile); 
         FixConfigFile(mysql.ConfigFileTpl, mysql.ConfigFile);
-        FixConfigFile(mysql.PhpmyadminCfgTpl, mysql.PhpmyadminConfig);
-        UpdateConfigPort(serviceName, product.MyConfig);
-        if product.pro <> '' then begin
-            UpdateConfigPort(serviceName, product.ProMyConfig);
+
+        if product.id = 'all' then begin
+            UpdateConfigPort(serviceName, productZentao.MyConfig);
+            UpdateConfigPort(serviceName, productChanzhi.MyConfig);
+            UpdateConfigPort(serviceName, productRanzhi.MyConfig);
+        end else begin
+            UpdateConfigPort(serviceName, product.MyConfig);
+            if product.pro <> '' then begin
+                UpdateConfigPort(serviceName, product.ProMyConfig);
+            end;
+            if product.Enterprise <> '' then begin
+                UpdateConfigPort(serviceName, product.EpMyConfig);
+            end;
         end;
     end;
+end;
+
+function GetMySqlPassword(): string;
+var 
+    fileLines: TStringList;
+    i, position: integer;
+    line: string;
+    regex: TRegExpr;
+begin
+    Result := '';
+
+    fileLines := TStringList.Create;
+    try
+        if product.id = 'all' then begin
+            fileLines.LoadFromFile(productZentao.MyConfig);
+        end else begin
+            fileLines.LoadFromFile(product.MyConfig);
+        end;
+        
+        if fileLines.Count > 0 then begin
+            regex := TRegExpr.Create;
+            regex.Expression := '\' + CONFIG_DB_PASS + '\s*=\s*[''"](\w*)[''"];';
+            for i := 0 to (fileLines.Count - 1) do
+            begin
+                line := fileLines[i];
+                if regex.Exec(line) then begin
+                    Result := regex.Match[1];
+                    ConsoleLn('> GetMySqlPassword', 'password:' + Result);
+                    BREAK;
+                end;
+            end;
+            regex.Free;
+        end;
+    except
+        ConsoleLn('   Can not open file.');
+    end;
+    fileLines.Free;
+end;
+
+function CheckMySqlPassword(): boolean;
+var
+    oldPassword: string;
+    isBadPassword: boolean;
+    userString  : string;
+begin
+    oldPassword := GetMySqlPassword;
+    isBadPassword := (oldPassword = '') or (oldPassword = '123456');
+    Result := False;
+    userString := GenRandomStr(10);
+
+    if isBadPassword and InputQuery(GetLang('message/changeMySqlPassword', '更改数据库密码'), GetLang('message/changeMySqlPasswordTip', '当前数据库密码太弱，继续使用旧的密码存在安全风险，建议立即修改密码为:'), userString) then begin
+        Result := ChangeMySqlPassword(userString);
+    end;
+end;
+
+function ConfirmMySqlPassword(): boolean;
+var
+    userString  : string;
+begin
+    userString := GetMySqlPassword;
+    Result := False;
+    if InputQuery(GetLang('message/changeMySqlPassword', '更改数据库密码'), GetLang('message/confirmMySqlPasswordTip', '请输入新密码:'), userString) then begin
+        Result := ChangeMySqlPassword(userString);
+    end;
+end;
+
+function ChangeMySqlPassword(password: string): boolean;
+var
+    oldPassword: String;
+    cmdOutput  : TStringList;
+begin
+    Result := False;
+    if (GetServiceStatus(mysql.serviceName) = 'running') then begin
+        oldPassword := GetMySqlPassword;
+        ConsoleLn('> ChangeMySqlPassword', 'password:' + password + ', oldPassword: ' + oldPassword);
+        if oldPassword = password then begin
+            ConsoleLn('  Change mySql password faild, because new password is the same as old password.');
+        end else begin
+            ExcuteCommand(mysql.mysqlExe 
+                + ' --user=' + MYSQL_USER_ROOT 
+                + ' --password=' + oldPassword 
+                + ' --port=' + IntToStr(mysql.port) 
+                + ' -e "UPDATE mysql.user SET password=PASSWORD(''' + password + ''')'
+                + ' WHERE user=''' + MYSQL_USER_ROOT + ''';"', true);
+            ExcuteCommand(mysql.mysqlExe 
+                + ' --user=' + MYSQL_USER_ROOT 
+                + ' --password=' + oldPassword 
+                + ' --port=' + IntToStr(mysql.port) 
+                + ' -e "UPDATE mysql.user SET password=PASSWORD(''' + password + ''')'
+                + ' WHERE user=''' + MYSQL_USER + ''';"', true);
+            ExcuteCommand(mysql.mysqlExe 
+                + ' --user=' + MYSQL_USER_ROOT 
+                + ' --password=' + oldPassword 
+                + ' --port=' + IntToStr(mysql.port) 
+                + ' -e "flush privileges;"', true);
+            cmdOutput := ExcuteCommand(mysql.mysqlExe 
+                + ' --user=' + MYSQL_USER_ROOT 
+                + ' --password=' + password 
+                + ' --port=' + IntToStr(mysql.port) 
+                + ' -e "flush privileges;"', true);
+            if (cmdOutput.count > 0) and (pos('error', LowerCase(cmdOutput[0])) > 0) then begin
+                ConsoleLn('  Change MySql Password fail');
+                ShowMessage(GetLang('message/changeMySqlPasswordFail', '更改数据库密码失败。') + cmdOutput[0]);
+            end else begin
+                if product.id = 'all' then begin
+                    UpdateMySqlPassword(productZentao.MyConfig, password);
+                    UpdateMySqlPassword(productRanzhi.MyConfig, password);
+                    UpdateMySqlPassword(productChanzhi.MyConfig, password);
+                end else begin
+                    UpdateMySqlPassword(product.MyConfig, password);
+                    if product.pro <> '' then begin
+                        UpdateMySqlPassword(product.ProMyConfig, password);
+                    end;
+                    if product.Enterprise <> '' then begin
+                        UpdateMySqlPassword(product.EpMyConfig, password);
+                    end;
+                end;
+                Result := True;
+            end;
+        end;
+    end else begin
+        ConsoleLn('> ChangeMySqlPassword fail, mysql is stop. ', 'password:' + password + ', oldPassword: ' + oldPassword);
+        ShowMessage(GetLang('message/changeMySqlPasswordFailBeforeRunMysql', '更改数据库密码失败，MySql 服务器没有运行，请先启动服务再试。'));
+    end;
+end;
+
+function UpdateMySqlPassword(configFile: string; password: string): boolean;
+var 
+    fileLines: TStringList;
+    i, position: integer;
+    line: string;
+begin
+    ConsoleLn('> UpdateMySqlPassword', 'password:' + password + ', configFile: ' + ConfigFile);
+    Result := False;
+
+    fileLines := TStringList.Create;
+    try
+        fileLines.LoadFromFile(configFile);
+        if fileLines.Count > 0 then begin
+            for i := 0 to (fileLines.Count - 1) do
+            begin
+                line := fileLines[i];
+                if Pos(CONFIG_DB_PASS, line) > 0 then begin
+                    fileLines[i] := CONFIG_DB_PASS + '    = ''' + password + ''';';
+                    Result := True;
+                    BREAK;
+                end;
+            end;
+            fileLines.SaveToFile(configFile);
+        end;
+    except
+        ConsoleLn('   Can not open file.');
+    end;
+    fileLines.Free;
 end;
 
 function UpdateConfigPort(serviceName: string; configFile: string): boolean;
@@ -1000,12 +1386,10 @@ begin
             for i := 0 to (fileLines.Count - 1) do
             begin
                 line := fileLines[i];
-                if regex.Exec(line) then begin
-                    lastWord := regex.Match[4];
-                    ConsoleLn(' * ' + line + ' > ');
-                    fileLines[i] := regex.Replace(line, '$1$2', True) + port + lastWord;
-                    Console(fileLines[i]);
+                if Pos(CONFIG_DB_PORT, line) > 0 then begin
+                    fileLines[i] := CONFIG_DB_PORT + '        = ''' + port + ''';';
                     Result := True;
+                    BREAK;
                 end;
             end;
             fileLines.SaveToFile(configFile);
@@ -1032,6 +1416,9 @@ begin
     PrintLn;
     PrintLn(GetLang('message/starting', '正在启动......'));
 
+    FixConfigPath;
+    PrintLn(GetLang('message/applyServerConfig', '已应用服务器配置。'));
+
     Result := RestartService(apache.ServiceName, True);
     if not Result then Result := RestartService(apache.ServiceName, True, True);
     if Result then begin
@@ -1039,7 +1426,9 @@ begin
         if not Result then Result := RestartService(mysql.ServiceName, True, True);
     end;
     if Result then begin
-        PrintLn(Format(GetLang('message/isRunning', '%s正在运行，点击“访问”按钮来使用。'), [product.title]));
+        PrintLn(Format(GetLang('message/isRunning', '%s正在运行，点击“访问”按钮来使用。'), [GetProductTitle()]));
+        PrintLn(Format(GetLang('message/viewInBrowserDirectly', '你也可以直接在浏览器访问：%s'), ['http://' + HOST + ':' + IntToStr(apache.port) + '/' + config.Get('product/main', '')]));
+        CheckMySqlPassword;
     end else begin
         PrintLn(GetLang('message/failedAndTry', '启动失败，请稍后重试。'));
     end;
@@ -1054,6 +1443,7 @@ var
 begin
     if product.BackupFile = '' then Exit;
 
+    Result := '';
     PrintLn;
     PrintLn(GetLang('message/bakuping', '正在备份......'));
     outputLines := ExcuteCommand(php.Exe + ' "' + product.BackupFile + '"');
@@ -1107,17 +1497,17 @@ function LoadConfig(): boolean;
 var
     LastRunTime: TDateTime;
 begin
+    // This way we generate a new sequence every time the program is run
+    Randomize;
+
     // os
     os.Exe                                 := Application.ExeName;
     os.Location                            := Application.Location;
     os.RunnerLocation                      := os.Location + APP_DIR + '/';
+    os.IconFile                            := os.RunnerLocation + 'icon.ico';
+    os.Architecture                        := GetOsArch;
     // os.Drive                               := Copy(os.Location, 0, 2);//F:\xampp\runner\
     // os.IsInXAMPP                           := (os.Location = (os.Drive + '\xampp\'));
-
-    consoleln('Application info:');
-    consoleln('    os.Exe           ', os.Exe);
-    consoleln('    os.Location      ', os.Location);
-    consoleln('    os.RunnerLocation', os.RunnerLocation);
 
     os.ConfigFile                          := os.RunnerLocation + CONFIG_FILE;
     os.UserConfigFile                      := os.RunnerLocation + CONFIG_USER_FILE;
@@ -1131,11 +1521,16 @@ begin
     try
         userConfigFile.FileName := os.UserConfigFile;
 
-        userconfig.LastRunTime    := userConfigFile.GetValue('/LastRunTime', 0);
-        userconfig.ApachePort     := userConfigFile.GetValue('apache/port', 80);
-        userconfig.MysqlPort      := userConfigFile.GetValue('mysql/port', 3306);
-        userconfig.Language       := userConfigFile.GetValue('/language', 'zh_cn');
-        userconfig.AutoChangePort := userConfigFile.GetValue('/AutoChangePort', False);
+        userconfig.LastRunTime        := userConfigFile.GetValue('/LastRunTime', 0);
+        userconfig.ApachePort         := userConfigFile.GetValue('apache/port', 80);
+        userconfig.MysqlPort          := userConfigFile.GetValue('mysql/port', 3306);
+        userconfig.Language           := userConfigFile.GetValue('/language', config.Get('common/defaultLang', 'zh_cn'));
+        userconfig.AutoChangePort     := userConfigFile.GetValue('/AutoChangePort', False);
+        userconfig.EnableApacheAuth   := userConfigFile.GetValue('/EnableApacheAuth', True);
+        userconfig.ApacheAuthAccount  := userConfigFile.GetValue('/ApacheAuthAccount', '');
+        userconfig.ApacheAuthPassword := userConfigFile.GetValue('/ApacheAuthPassword', '');
+        userConfig.SkipCheckVC        := userConfigFile.GetValue('/SkipCheckVC', false);
+        userconfig.TrySkipCheckVC     := false;
 
         if userconfig.LastRunTime > 0 then
         begin
@@ -1144,6 +1539,18 @@ begin
         end;
     finally
     end;
+
+    if VERSION_MAJOR = 1 then begin
+        userconfig.forceX86 := true;
+    end else begin
+        userconfig.forceX86 := config.Get('basic/force_x86', '') = 'true';
+    end;
+
+    consoleln('OS environment info:');
+    consoleln('    os.Architecture  ', os.Architecture);
+    consoleln('    os.Exe           ', os.Exe);
+    consoleln('    os.Location      ', os.Location);
+    consoleln('    os.RunnerLocation', os.RunnerLocation);
 end;
 
 { Load config }
@@ -1157,6 +1564,10 @@ begin
         userConfigFile.SetValue('apache/port', userconfig.ApachePort);
         userConfigFile.SetValue('mysql/port', userconfig.MysqlPort);
         userConfigFile.SetValue('/AutoChangePort', userconfig.AutoChangePort);
+        userConfigFile.SetValue('/EnableApacheAuth', userconfig.EnableApacheAuth);
+        userConfigFile.SetValue('/ApacheAuthAccount', userconfig.ApacheAuthAccount);
+        userConfigFile.SetValue('/ApacheAuthPassword', userconfig.ApacheAuthPassword);
+        userConfigFile.SetValue('/SkipCheckVC', userConfig.SkipCheckVC);
 
         userConfigFile.Flush;
         Result := True;
@@ -1207,15 +1618,23 @@ begin
 end;
 
 { Get build version }
-function GetBuildVersion(formatStr: string = '%d.%d.%d'): string;
+function GetBuildVersion(formatStr: string = 'auto'): string;
 begin
     if formatStr = '%s' then
     begin
         Result := 'Release';
     end
+    else if formatStr = 'auto' then
+    begin
+        if VERSION_PACTH = 0 then begin
+            Result := Format('%d.%d', [VERSION_MAJOR, VERSION_MINOR]);
+        end else begin
+            Result := Format('%d.%d.%d', [VERSION_MAJOR, VERSION_MINOR, VERSION_PACTH]);
+        end;
+    end
     else
     begin
-        Result := Format(formatStr, [1, 2, 8, 0]);
+        Result := Format(formatStr, [VERSION_MAJOR, VERSION_MINOR, VERSION_PACTH]);
     end;
 end;
 
