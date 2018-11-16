@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "fs-extra": "^6.0.1",
-    "rcedit": "^1.1.0"
+    "rcedit": "^1.1.0",
+    "winresourcer": "^0.9.0"
   }
 }
