@@ -421,7 +421,9 @@ end;
 procedure TMainForm.apacheAuthToggleChange(Sender: TObject);
 begin
     userconfig.EnableApacheAuth := apacheAuthToggle.Checked;
+    SaveConfig();
     resetAuthConfig;
+    
 end;
 
 procedure TMainForm.apacheAuthChangeBtnClick(Sender: TObject);
@@ -488,6 +490,7 @@ var
 begin
     SetLanguage(langSetting);
     userconfig.Language := langSetting;
+    SaveConfig();
 
     productName := GetProductTitle;
     Caption := Format(GetLang('ui/titleFormat', '%s集成运行环境 %s'), [productName, GetBuildVersion()]);
