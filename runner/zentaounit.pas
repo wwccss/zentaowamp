@@ -198,7 +198,7 @@ const
     OS_CHECK_BAT      = 'check_os.bat';
     VERSION_MAJOR     = 1;
     VERSION_MINOR     = 3;
-    VERSION_PACTH     = 11;
+    VERSION_PACTH     = 12;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
     MYSQL_USER_ROOT   = 'root';
@@ -1110,10 +1110,10 @@ begin
     end else begin
         PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle('n'), product.Version]);
         if product.pro <> '' then begin
-            PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle('pro') + GetLang('product/pro', '专业版'), product.ProVersion]);
+            PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle('pro'), product.ProVersion]);
         end;
         if product.enterprise <> '' then begin
-            PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle('ep') + GetLang('product/enterprise', '企业版'), product.EpVersion]);
+            PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle('ep'), product.EpVersion]);
         end;
     end;
 

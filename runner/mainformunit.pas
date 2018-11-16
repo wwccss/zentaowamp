@@ -527,16 +527,16 @@ begin
         MenuItemProductProLog.Visible     := True;
         MenuItemAll3Log.Visible           := True;
     end else begin
-        MenuItemProductLog.Caption           := Format(GetLang('menu/productLog', '%s日志'), [productName]);
+        MenuItemProductLog.Caption           := Format(GetLang('menu/productLog', '%s日志'), [GetProductTitle('n')]);
         if product.Pro <> '' then begin
             MenuItemProductProLog.Visible := True;
-            MenuItemProductProLog.Caption := Format(GetLang('menu/productProLog', '%s专业版日志'), [productName]);
+            MenuItemProductProLog.Caption := Format(GetLang('menu/productLog', '%s日志'), [GetProductTitle('pro')]);
         end else begin
             MenuItemProductProLog.Visible := False;
         end;
-        if product.Pro <> '' then begin
+        if product.enterprise <> '' then begin
             MenuItemAll3Log.Visible := True;
-            MenuItemAll3Log.Caption := Format(GetLang('menu/productEpLog', '%s企业版日志'), [productName]);
+            MenuItemAll3Log.Caption := Format(GetLang('menu/productLog', '%s日志'), [GetProductTitle('ep')]);
         end else begin
             MenuItemAll3Log.Visible := False;
         end;
