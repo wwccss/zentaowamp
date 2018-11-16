@@ -174,7 +174,7 @@ function GenRandomStr(len: integer): String;
 function addApacheUser(account: String; password: String): Boolean;
 procedure ResetAuthConfig();
 function GetOsArch(): String;
-function GetProductTitle(): String;
+function GetProductTitle(productType: string = ''): String;
 function GetProductLink(linkName: String; defaultLink: String): String;
 function ChangeMySqlPassword(password: string): boolean;
 function UpdateMySqlPassword(configFile: string; password: string): boolean;
@@ -278,9 +278,31 @@ begin
     end;
 end;
 
-function GetProductTitle(): String;
+function GetProductTitle(productType: string = ''): String;
+var
+    needSuffix: Boolean;
 begin
-    Result := config.Get('product/title_' + userconfig.Language, GetLang('product/' + product.id, product.Title));
+    Result := '';
+    needSuffix := false;
+    if productType <> '' then begin
+        Result := config.Get('product/' + productType + '_title_' + userconfig.Language, '');
+        if Result = ''  then begin
+            needSuffix := true;
+        end;
+    end;
+    if Result = ''  then begin
+        Result := config.Get('product/title_' + userconfig.Language, '');
+    end;
+    if Result = ''  then begin
+        Result := GetLang('product/' + product.id, product.Title);
+    end;
+    if needSuffix then begin
+        if productType = 'pro' then begin
+            Result := Result + GetLang('product/pro', '专业版');
+        end else if productType = 'ep' then begin
+            Result := Result + GetLang('product/enterprise', '企业版');
+        end;
+    end;
 end;
 
 function GetProductLink(linkName: String; defaultLink: String): String;
@@ -1086,12 +1108,12 @@ begin
         PrintLn(GetLang('message/version', '%s版本：%s'), [productRanzhi.Title, productRanzhi.Version]);
         PrintLn(GetLang('message/version', '%s版本：%s'), [productChanzhi.Title, productChanzhi.Version]);
     end else begin
-        PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle(), product.Version]);
+        PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle('n'), product.Version]);
         if product.pro <> '' then begin
-            PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle() + GetLang('product/pro', '专业版'), product.ProVersion]);
+            PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle('pro') + GetLang('product/pro', '专业版'), product.ProVersion]);
         end;
         if product.enterprise <> '' then begin
-            PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle() + GetLang('product/enterprise', '企业版'), product.EpVersion]);
+            PrintLn(GetLang('message/version', '%s版本：%s'), [GetProductTitle('ep') + GetLang('product/enterprise', '企业版'), product.EpVersion]);
         end;
     end;
 
