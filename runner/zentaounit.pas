@@ -123,6 +123,20 @@ type
         forceX86       : Boolean;
         SkipCheckVC    : Boolean;
         TrySkipCheckVC : Boolean;
+        xxdProcessID   : Integer;
+    end;
+
+    XXDConfig = record
+        enabled: boolean;
+        path: string;
+        exe: string;
+        Status: string;
+        ServiceName: string;
+        Config: TIniFile;
+        ConfigFile: string;
+        Port: integer;
+        serverUrl: string;
+        process: TProcess;
     end;
 
 function GetVersion(soft: string; display: Boolean = False): string;
@@ -140,6 +154,8 @@ procedure InitZentao();
 function BackupZentao(): string;
 function StartZentao(): boolean;
 function StopZentao(): boolean;
+function StartXXD(): boolean;
+function StopXXD(): boolean;
 function GetBuildVersion(formatStr: string = 'auto'): string;
 function LoadConfig(): boolean;
 function SaveConfig(destroy: boolean = False): boolean;
@@ -197,8 +213,8 @@ const
     VC_DETECTOR       = 'vc_detector_%s.bat'; 
     OS_CHECK_BAT      = 'check_os.bat';
     VERSION_MAJOR     = 1;
-    VERSION_MINOR     = 3;
-    VERSION_PACTH     = 12;
+    VERSION_MINOR     = 4;
+    VERSION_PACTH     = 0;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
     MYSQL_USER_ROOT   = 'root';
@@ -218,6 +234,7 @@ var
     productRanzhi  : ProductSystemConfig;
     productZentao  : ProductSystemConfig;
     userConfig     : UserConfiguration;
+    xxd            : XXDConfig;
     isFirstRun     : boolean;
     config         : TIniFile;
     userConfigFile : TJSONConfig;
@@ -553,7 +570,11 @@ begin
 
     if serviceName = apache.ServiceName then begin
         port := apache.Port;
-    end else port := mysql.Port;
+    end else if  serviceName = mysql.ServiceName then begin
+        port := mysql.Port;
+    end else if  serviceName = xxd.ServiceName then begin
+        port := xxd.Port;
+    end;
 
     serviceStatus := GetServiceStatus(serviceName);
     if serviceStatus = 'running' then begin
@@ -659,6 +680,11 @@ begin
     begin
         process        := 'mysqld';
         installCommand := os.Location + 'mysql\bin\mysqld.exe --install ' + mysql.serviceName + ' --defaults-file="' + mysql.configfile + '"';
+    end else if serviceName = xxd.ServiceName then begin
+        process        := 'xxd';
+        installCommand := 'sc create ' + xxd.ServiceName + ' binPath="' + xxd.exe + '" start=demand displayname="zentao wamp xxd"'
+    end else begin
+        Exit;
     end;
 
     PrintLn(GetLang('message/installingSerivce', '正在安装服务：%s...'), [serviceName]);
@@ -735,6 +761,8 @@ begin
     if not Result then Result := UninstallService(apache.ServiceName);
     Result := UninstallService(mysql.ServiceName);
     if not Result then Result := UninstallService(mysql.ServiceName);
+    Result := UninstallService(xxd.ServiceName);
+    if not Result then Result := UninstallService(xxd.ServiceName);
 end;
 
 { Get service status }
@@ -770,8 +798,10 @@ begin
 
     if serviceName = apache.ServiceName then begin
         apache.Status := Result;
-    end else begin
+    end else if serviceName = mysql.ServiceName then begin
         mysql.Status := Result;
+    end else if serviceName = xxd.ServiceName then begin
+        xxd.Status := Result;
     end;
 
     ConsoleLn('> GetServiceStatus:' + serviceName, Result);
@@ -798,6 +828,9 @@ begin
                 end else if ServiceName = mysql.ServiceName then begin
                     Result := Pos(mysql.exe, text) > 0;
                     ConsoleLn('mysql result: ' + BooleanStr(Result) + ', mysql: ' + mysql.exe)
+                end else if ServiceName = xxd.ServiceName then begin
+                    Result := Pos(xxd.exe, text) > 0;
+                    ConsoleLn('xxd result: ' + BooleanStr(Result) + ', xxd: ' + xxd.exe)
                 end;
                 Break;
             end;
@@ -856,7 +889,7 @@ begin
             Result := apache.Port;
             SetConfigPort(apache.serviceName);
         end;
-    end else begin
+    end else if serviceName = mysql.ServiceName then begin
         Result := mysql.Port;
         // fix mysql port
         if userconfig.AutoChangePort and (forceChange or (not CheckPort(mysql.Port))) then
@@ -1025,6 +1058,32 @@ begin
     mysql.Status           := GetServiceStatus(mysql.ServiceName);
     mysql.Port             := userconfig.MysqlPort;
     mysql.logPath          := os.Location + 'mysql\';
+
+    // xxd
+    xxd.ServiceName        := 'xxdzt';
+    xxd.path               := config.Get('xxd/path', '');
+    if xxd.path <> '' then begin
+        xxd.path       := os.Location + xxd.path;
+        xxd.exe        := config.Get('xxd/exe', xxd.path + '\xxd.exe');
+        xxd.enabled    := true;
+        xxd.status     := 'stopped';
+        xxd.ConfigFile := config.Get('xxd/configFile', xxd.path + '\config\xxd.conf');
+        xxd.config     := TIniFile.Create(xxd.ConfigFile);
+        xxd.port       := StrToInt(xxd.config.Get('server/commonPort'));
+        if xxd.config.get('server/isHttps') = '1' then begin
+            xxd.serverUrl := 'https://' + xxd.config.Get('server/ip') + ':' + IntToStr(xxd.port);
+        end else begin
+            xxd.serverUrl := 'http://' + xxd.config.Get('server/ip') + ':' + IntToStr(xxd.port);
+        end;
+        if userconfig.xxdProcessID > 0 then begin
+            KillProcess(IntToStr(userconfig.xxdProcessID));
+            userconfig.xxdProcessID := 0;
+            SaveConfig();
+        end;
+    end else begin
+        xxd.enabled := false;
+        xxd.status  := 'disabled';
+    end;
 
     // product, like zentao or chanzhi
     product.ID             := config.Get('product/id', 'zentao');
@@ -1456,6 +1515,78 @@ begin
     end;
 end;
 
+function startXXD(): boolean;
+var
+    xxdProcess: TProcess;
+begin
+    if xxd.process <> nil then begin
+        exit;
+    end;
+
+    PrintLn;
+    PrintLn(GetLang('message/startingXXD', '正在启动XXD......'));
+    
+    // Use Service
+    // Result := RestartService(xxd.ServiceName, True);                                                                                
+    // if not Result then Result := RestartService(xxd.ServiceName, True, True);
+    // if Result then begin
+    //     PrintLn(Format(GetLang('message/XXDisRunning', 'XXD 正在运行，服务器地址为 %s。'), [xxd.serverUrl]));
+    // end else begin
+    //     PrintLn(GetLang('message/XXDfailedAndTry', '启动XXD失败，请稍后重试。'));
+    // end;
+
+    // Use TProcess
+    try
+        xxdProcess := TProcess.create(nil);
+        xxdProcess.CurrentDirectory := xxd.path + '\';
+        xxdProcess.Executable := xxd.path + '\' + 'xxd.exe';
+        xxdProcess.Execute();
+    finally 
+        if xxdProcess <> nil then begin
+            if xxdProcess.Running then begin
+                Result := True;
+                xxd.process := xxdProcess;
+            end else begin
+                Result := False;
+                xxdProcess.Free;
+            end;
+        end else begin
+            Result := False;
+        end;
+
+        if Result then begin
+            userconfig.xxdProcessID := xxdProcess.ProcessID;
+            xxd.status := 'running';
+            PrintLn(Format(GetLang('message/XXDisRunning', 'XXD 正在运行，服务器地址为 %s。'), [xxd.serverUrl]));
+        end else begin
+            userconfig.xxdProcessID := 0;
+            xxd.status := 'stopped';
+            PrintLn(GetLang('message/XXDfailedAndTry', '启动XXD失败，请稍后重试。'));
+        end;
+        SaveConfig();
+    end;
+end;
+
+function stopXXD(): boolean;
+begin
+    PrintLn;
+    PrintLn(GetLang('message/stopingXXD', '正在停止 XXD......'));
+    // Result := StopService(xxd.ServiceName);
+
+    if xxd.process <> nil then begin
+        if xxd.process.running then begin
+            xxd.process.Terminate(0);
+        end;
+        xxd.process.Free();
+    end;
+    xxd.status := 'stopped';
+    xxd.process := nil;
+    Result := TRUE;
+    userconfig.xxdProcessID := 0;
+    SaveConfig();
+    PrintLn(GetLang('message/stoppedXXD', '已停止 XXD。'));
+end;
+
 function BackupZentao(): string;
 var
     outputLines : TStringList;
@@ -1552,6 +1683,7 @@ begin
         userconfig.ApacheAuthAccount  := userConfigFile.GetValue('/ApacheAuthAccount', '');
         userconfig.ApacheAuthPassword := userConfigFile.GetValue('/ApacheAuthPassword', '');
         userConfig.SkipCheckVC        := userConfigFile.GetValue('/SkipCheckVC', false);
+        userconfig.xxdProcessID       := userConfigFile.GetValue('xxd/processID', 0);
         userconfig.TrySkipCheckVC     := false;
 
         if userconfig.LastRunTime > 0 then
@@ -1590,6 +1722,7 @@ begin
         userConfigFile.SetValue('/ApacheAuthAccount', userconfig.ApacheAuthAccount);
         userConfigFile.SetValue('/ApacheAuthPassword', userconfig.ApacheAuthPassword);
         userConfigFile.SetValue('/SkipCheckVC', userConfig.SkipCheckVC);
+        userConfigFile.SetValue('xxd/processID', userConfig.xxdProcessID);
 
         userConfigFile.Flush;
         Result := True;

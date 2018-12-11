@@ -17,6 +17,7 @@ type
     { TMainForm }
 
     TMainForm = class(TForm)
+      ButtonStartXXD: TButton;
       copyAuthPassword: TLabel;
       apacheAuthToggle: TCheckBox;
         ButtonRun                : TButton;
@@ -65,6 +66,7 @@ type
         procedure apacheAuthChangeBtnClick(Sender: TObject);
         procedure apacheAuthToggleChange(Sender: TObject);
         procedure ButtonRunClick(Sender: TObject);
+        procedure ButtonStartXXDClick(Sender: TObject);
         procedure ButtonStopClick(Sender: TObject);
         procedure ButtonVisitClick(Sender: TObject);
         procedure ButtonZtOfficalClick(Sender: TObject);
@@ -253,6 +255,9 @@ begin
         ButtonRun.Caption   := GetLang('UI/running', '正在运行');
         updateAuthStatus();
     end;
+
+    ButtonStartXXD.Visible := xxd.enabled;
+    ButtonStartXXD.Enabled := xxd.enabled;
 end;
 
 procedure TMainForm.FormShow(Sender: TObject);
@@ -374,6 +379,8 @@ begin
     ButtonStop.Caption  := GetLang('UI/stopped', '已停止');
     ButtonRun.Enabled   := True;
     ButtonRun.Caption   := Format(GetLang('UI/startProduct', '启动'), [GetProductTitle]);
+    ButtonStartXXD.Caption := GetLang('UI/startXXD', '启动XXD');
+    ButtonStartXXD.Enabled := xxd.enabled;
 end;
 
 procedure TMainForm.ButtonStopClick(Sender: TObject);
@@ -418,12 +425,38 @@ begin
     Cursor := crDefault;
 end;
 
+procedure TMainForm.ButtonStartXXDClick(Sender: TObject);
+begin
+    if xxd.enabled and ButtonStartXXD.Enabled then begin
+        if (xxd.status = 'stopped') or (xxd.status = 'failed') then begin
+            ButtonStartXXD.Enabled := false;
+            ButtonStartXXD.Caption := GetLang('UI/startingXXD', 'XXD...');
+            
+            if startXXD() then begin
+                ButtonStartXXD.Caption := GetLang('UI/stopXXD', '停止XXD');
+            end else begin
+                ButtonStartXXD.Caption := GetLang('UI/startXXD', '启动XXD');
+            end;
+            ButtonStartXXD.Enabled := true;
+        end else if xxd.status = 'running' then begin
+            ButtonStartXXD.Enabled := false;
+            ButtonStartXXD.Caption := GetLang('UI/startingXXD', 'XXD...');
+            if stopXXD() then begin
+                ButtonStartXXD.Caption := GetLang('UI/startXXD', '启动XXD');
+            end else begin
+                ButtonStartXXD.Caption := GetLang('UI/startXXD', '启动XXD');
+                ButtonStartXXD.Caption := GetLang('UI/stopXXD', '停止XXD');
+            end;
+            ButtonStartXXD.Enabled := true;
+        end;
+    end;
+end;
+
 procedure TMainForm.apacheAuthToggleChange(Sender: TObject);
 begin
     userconfig.EnableApacheAuth := apacheAuthToggle.Checked;
     SaveConfig();
     resetAuthConfig;
-    
 end;
 
 procedure TMainForm.apacheAuthChangeBtnClick(Sender: TObject);
@@ -559,6 +592,12 @@ begin
         ButtonRun.Caption := Format(GetLang('UI/startProduct', '启动'), [GetProductTitle]);
     end else begin
         ButtonRun.Caption := GetLang('UI/runing', ButtonRun.Caption);
+    end;
+
+    if  xxd.status = 'running' then begin
+        ButtonStartXXD.Caption := GetLang('UI/stopXXD', '停止XXD');
+    end else begin
+        ButtonStartXXD.Caption := GetLang('UI/startXXD', '启动XXD');
     end;
 
     apacheAuthToggle.Caption := GetLang('ui/enableApacheAuth', '启用 Apache 用户访问验证');

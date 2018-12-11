@@ -1,11 +1,11 @@
 object MainForm: TMainForm
-  Left = 412
+  Left = 429
   Height = 370
-  Top = 203
-  Width = 551
+  Top = 145
+  Width = 650
   Caption = '禅道集成运行环境'
-  ClientHeight = 350
-  ClientWidth = 551
+  ClientHeight = 340
+  ClientWidth = 650
   Constraints.MinHeight = 130
   Constraints.MinWidth = 550
   Menu = MainMenu
@@ -25,7 +25,7 @@ object MainForm: TMainForm
     TabOrder = 0
   end
   object ButtonVisit: TButton
-    Left = 151
+    Left = 143
     Height = 40
     Top = 11
     Width = 112
@@ -35,7 +35,7 @@ object MainForm: TMainForm
     TabOrder = 1
   end
   object ButtonStop: TButton
-    Left = 287
+    Left = 270
     Height = 40
     Top = 11
     Width = 112
@@ -45,7 +45,7 @@ object MainForm: TMainForm
     TabOrder = 2
   end
   object ButtonZtOffical: TButton
-    Left = 423
+    Left = 397
     Height = 40
     Top = 11
     Width = 112
@@ -55,9 +55,9 @@ object MainForm: TMainForm
   end
   object MemoMessager: TMemo
     Left = 8
-    Height = 243
+    Height = 233
     Top = 64
-    Width = 531
+    Width = 630
     Anchors = [akTop, akLeft, akRight, akBottom]
     Font.CharSet = GB2312_CHARSET
     Font.Height = -15
@@ -71,8 +71,8 @@ object MainForm: TMainForm
   object FlowPanel1: TFlowPanel
     Left = 8
     Height = 32
-    Top = 315
-    Width = 529
+    Top = 305
+    Width = 628
     Anchors = [akLeft, akRight, akBottom]
     BevelOuter = bvNone
     ControlList = <    
@@ -100,9 +100,9 @@ object MainForm: TMainForm
     TabOrder = 5
     object apacheAuthToggle: TCheckBox
       Left = 0
-      Height = 21
+      Height = 28
       Top = 0
-      Width = 94
+      Width = 136
       Anchors = [akLeft, akBottom]
       Caption = '启用访问验证'
       Checked = True
@@ -111,10 +111,10 @@ object MainForm: TMainForm
       TabOrder = 0
     end
     object apacheAuthLabel: TLabel
-      Left = 99
-      Height = 17
+      Left = 141
+      Height = 25
       Top = 4
-      Width = 161
+      Width = 241
       Anchors = []
       BorderSpacing.Left = 5
       BorderSpacing.Top = 4
@@ -129,10 +129,10 @@ object MainForm: TMainForm
     end
     object apacheAuthChangeBtn: TLabel
       Cursor = crHandPoint
-      Left = 270
-      Height = 17
+      Left = 392
+      Height = 24
       Top = 4
-      Width = 24
+      Width = 36
       Anchors = []
       BorderSpacing.Left = 5
       BorderSpacing.Top = 4
@@ -147,10 +147,10 @@ object MainForm: TMainForm
     end
     object copyAuthPassword: TLabel
       Cursor = crHandPoint
-      Left = 304
-      Height = 17
+      Left = 438
+      Height = 24
       Top = 4
-      Width = 48
+      Width = 72
       Anchors = []
       BorderSpacing.Left = 5
       BorderSpacing.Top = 4
@@ -164,6 +164,15 @@ object MainForm: TMainForm
       OnClick = copyAuthPasswordClick
       OnMouseLeave = copyAuthPasswordMouseLeave
     end
+  end
+  object ButtonStartXXD: TButton
+    Left = 526
+    Height = 40
+    Top = 11
+    Width = 112
+    Caption = '启动XXD'
+    OnClick = ButtonStartXXDClick
+    TabOrder = 6
   end
   object MainMenu: TMainMenu
     left = 640
