@@ -97,7 +97,8 @@ var
 begin
     Result := List.Values[key];
     commentIndex := Pos('#', Result);
-    if commentIndex > 0 then Result := copy(Result, 1, commentIndex);
+    if commentIndex > 0 then Result := copy(Result, 1, commentIndex - 1);
+    Result := Trim(Result);
     if Result = '' then Result := defaultValue;
 end;
 
@@ -107,7 +108,8 @@ var
 begin
     Result := List.Values[section + '/' + key];
     commentIndex := Pos('#', Result);
-    if commentIndex > 0 then Result := copy(Result, 1, commentIndex);
+    if commentIndex > 0 then Result := copy(Result, 1, commentIndex - 1);
+    Result := Trim(Result);
     if Result = '' then Result := defaultValue;
 end;
 
