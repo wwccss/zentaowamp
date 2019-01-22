@@ -157,6 +157,7 @@ function StartZentao(): boolean;
 function StopZentao(): boolean;
 function StartXXD(): boolean;
 function StopXXD(): boolean;
+function isXxdRunning(): boolean;
 function GetBuildVersion(formatStr: string = 'auto'): string;
 function LoadConfig(): boolean;
 function SaveConfig(destroy: boolean = False): boolean;
@@ -213,8 +214,8 @@ const
     VC_REDIST         = 'vc_redist.%s.exe';
     VC_DETECTOR       = 'vc_detector_%s.bat'; 
     OS_CHECK_BAT      = 'check_os.bat';
-    VERSION_MAJOR     = 1;
-    VERSION_MINOR     = 4;
+    VERSION_MAJOR     = 2;
+    VERSION_MINOR     = 1;
     VERSION_PACTH     = 1;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
@@ -1588,6 +1589,24 @@ begin
     userconfig.xxdProcessID := 0;
     SaveConfig();
     PrintLn(GetLang('message/stoppedXXD', '已停止 XXD。'));
+end;
+
+function isXxdRunning(): boolean;
+begin
+    Result := False;
+    if xxd.process <> nil then begin
+        if xxd.process.Running then begin
+            Result := True;
+            xxd.status := 'running';
+        end else begin
+            xxd.process := nil;
+            if xxd.status <> 'stopped' then begin
+               xxd.status := 'stopped';
+               userconfig.xxdProcessID := 0;
+               PrintLn(GetLang('message/stoppedXXD', '已停止 XXD。'));
+            end;
+        end;
+    end;
 end;
 
 function BackupZentao(): string;

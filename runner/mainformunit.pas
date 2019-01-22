@@ -62,6 +62,7 @@ type
         MenuItemInitBat          : TMenuItem;
         MenuItemDatabase         : TMenuItem;
         MenuItemBackup           : TMenuItem;
+        Timer1: TTimer;
         TrayIcon1                : TTrayIcon;
         procedure apacheAuthChangeBtnClick(Sender: TObject);
         procedure apacheAuthToggleChange(Sender: TObject);
@@ -99,6 +100,7 @@ type
         procedure MenuItemBackupClick(Sender: TObject);
         procedure MenuItemRunCommandsClick(Sender: TObject);
         procedure MenuItemXamppClick(Sender: TObject);
+        procedure Timer1Timer(Sender: TObject);
         procedure TrayIcon1Click(Sender: TObject);
     private
         { private declarations }
@@ -106,6 +108,7 @@ type
         procedure DisplayMessage(Message: string);
         procedure ChangeLanguage(langSetting: string);
         procedure updateAuthStatus();
+        procedure updateXxdStatus();
     end;
 
 var
@@ -190,6 +193,11 @@ begin
     OpenUrl('http://www.apachefriends.org/en/xampp.html');
 end;
 
+procedure TMainForm.Timer1Timer(Sender: TObject);
+begin
+    updateXxdStatus();
+end;
+
 procedure TMainForm.TrayIcon1Click(Sender: TObject);
 begin
     if WindowState = wsMinimized then begin
@@ -258,6 +266,10 @@ begin
 
     ButtonStartXXD.Visible := xxd.enabled;
     ButtonStartXXD.Enabled := xxd.enabled;
+
+    if xxd.enabled then begin
+        Timer1.Enabled := true;
+    end;
 end;
 
 procedure TMainForm.FormShow(Sender: TObject);
@@ -444,7 +456,6 @@ begin
             if stopXXD() then begin
                 ButtonStartXXD.Caption := GetLang('UI/startXXD', '启动XXD');
             end else begin
-                ButtonStartXXD.Caption := GetLang('UI/startXXD', '启动XXD');
                 ButtonStartXXD.Caption := GetLang('UI/stopXXD', '停止XXD');
             end;
             ButtonStartXXD.Enabled := true;
@@ -594,11 +605,7 @@ begin
         ButtonRun.Caption := GetLang('UI/runing', ButtonRun.Caption);
     end;
 
-    if  xxd.status = 'running' then begin
-        ButtonStartXXD.Caption := GetLang('UI/stopXXD', '停止XXD');
-    end else begin
-        ButtonStartXXD.Caption := GetLang('UI/startXXD', '启动XXD');
-    end;
+    updateXxdStatus();
 
     apacheAuthToggle.Caption := GetLang('ui/enableApacheAuth', '启用 Apache 用户访问验证');
     apacheAuthLabel.Caption := Format(GetLang('ui/apacheInfoLabel', '用户名:%s 密码:%s'), [userconfig.ApacheAuthAccount, userconfig.apacheAuthPassword]);
@@ -625,6 +632,17 @@ begin
         apacheAuthLabel.Font.Color := clGray;
     end;
     apacheAuthChangeBtn.Enabled := userconfig.EnableApacheAuth;
+end;
+
+procedure TMainForm.updateXxdStatus();
+begin
+    if xxd.enabled then begin
+        if isXxdRunning() then begin
+            ButtonStartXXD.Caption := GetLang('UI/stopXXD', '停止XXD');
+        end else begin
+            ButtonStartXXD.Caption := GetLang('UI/startXXD', '启动XXD');
+        end;
+    end;
 end;
 
 end.

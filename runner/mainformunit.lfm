@@ -1,10 +1,10 @@
 object MainForm: TMainForm
-  Left = 316
+  Left = 988
   Height = 370
-  Top = 362
+  Top = 339
   Width = 650
   Caption = '禅道集成运行环境'
-  ClientHeight = 350
+  ClientHeight = 340
   ClientWidth = 650
   Constraints.MinHeight = 130
   Constraints.MinWidth = 550
@@ -55,7 +55,7 @@ object MainForm: TMainForm
   end
   object MemoMessager: TMemo
     Left = 8
-    Height = 243
+    Height = 233
     Top = 64
     Width = 630
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -63,7 +63,6 @@ object MainForm: TMainForm
     Font.Height = -15
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
-    OnChange = MemoMessagerChange
     ParentFont = False
     ReadOnly = True
     ScrollBars = ssVertical
@@ -72,7 +71,7 @@ object MainForm: TMainForm
   object FlowPanel1: TFlowPanel
     Left = 8
     Height = 32
-    Top = 315
+    Top = 305
     Width = 628
     Anchors = [akLeft, akRight, akBottom]
     BevelOuter = bvNone
@@ -101,9 +100,9 @@ object MainForm: TMainForm
     TabOrder = 5
     object apacheAuthToggle: TCheckBox
       Left = 0
-      Height = 21
+      Height = 28
       Top = 0
-      Width = 94
+      Width = 136
       Anchors = [akLeft, akBottom]
       Caption = '启用访问验证'
       Checked = True
@@ -112,10 +111,10 @@ object MainForm: TMainForm
       TabOrder = 0
     end
     object apacheAuthLabel: TLabel
-      Left = 99
-      Height = 17
+      Left = 141
+      Height = 25
       Top = 4
-      Width = 161
+      Width = 241
       Anchors = []
       BorderSpacing.Left = 5
       BorderSpacing.Top = 4
@@ -130,10 +129,10 @@ object MainForm: TMainForm
     end
     object apacheAuthChangeBtn: TLabel
       Cursor = crHandPoint
-      Left = 270
-      Height = 17
+      Left = 392
+      Height = 24
       Top = 4
-      Width = 24
+      Width = 36
       Anchors = []
       BorderSpacing.Left = 5
       BorderSpacing.Top = 4
@@ -148,10 +147,10 @@ object MainForm: TMainForm
     end
     object copyAuthPassword: TLabel
       Cursor = crHandPoint
-      Left = 304
-      Height = 17
+      Left = 438
+      Height = 24
       Top = 4
-      Width = 48
+      Width = 72
       Anchors = []
       BorderSpacing.Left = 5
       BorderSpacing.Top = 4
@@ -321,6 +320,12 @@ object MainForm: TMainForm
     Hint = '打开禅道集成运行环境'
     OnClick = TrayIcon1Click
     left = 8
+    top = 280
+  end
+  object Timer1: TTimer
+    Interval = 3000
+    OnTimer = Timer1Timer
+    left = 48
     top = 280
   end
 end
