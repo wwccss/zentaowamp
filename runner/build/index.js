@@ -76,6 +76,11 @@ const buildTarget = (target, platform = 'win64') => {
 
             console.log(`\tCopy target special files`);
             fs.copySync(path.join(WAMP_PATH, target), targetPath);
+
+            if (platform === 'win32' && fs.existsSync(path.join(WAMP_PATH, `${target}-win32`))) {
+                console.log(`\tCopy target special win32 files`);
+                fs.copySync(path.join(WAMP_PATH, `${target}-win32`), targetPath);
+            }
         }
 
         console.log(`\tCopy target exe file`);
