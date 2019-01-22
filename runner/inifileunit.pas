@@ -92,14 +92,22 @@ begin
 end;
 
 function TIniFile.Get(key: string; defaultValue: string = ''): string; overload;
+var
+    commentIndex: integer;
 begin
     Result := List.Values[key];
+    commentIndex := Pos('#', Result);
+    if commentIndex > 0 then Result := copy(Result, 1, commentIndex);
     if Result = '' then Result := defaultValue;
 end;
 
 function TIniFile.Get(section: string; key: string; defaultValue: string): string; overload;
+var
+    commentIndex: integer;
 begin
     Result := List.Values[section + '/' + key];
+    commentIndex := Pos('#', Result);
+    if commentIndex > 0 then Result := copy(Result, 1, commentIndex);
     if Result = '' then Result := defaultValue;
 end;
 
