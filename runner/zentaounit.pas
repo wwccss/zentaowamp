@@ -137,6 +137,7 @@ type
         Port: integer;
         serverUrl: string;
         process: TProcess;
+        hideWindow: boolean;
     end;
 
 function GetVersion(soft: string; display: Boolean = False): string;
@@ -214,7 +215,7 @@ const
     OS_CHECK_BAT      = 'check_os.bat';
     VERSION_MAJOR     = 1;
     VERSION_MINOR     = 4;
-    VERSION_PACTH     = 0;
+    VERSION_PACTH     = 1;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
     MYSQL_USER_ROOT   = 'root';
@@ -1070,6 +1071,7 @@ begin
         xxd.ConfigFile := config.Get('xxd/configFile', xxd.path + '\config\xxd.conf');
         xxd.config     := TIniFile.Create(xxd.ConfigFile);
         xxd.port       := StrToInt(xxd.config.Get('server/commonPort'));
+        xxd.hideWindow := config.get('xxd/hideWindow', '') = 'true';
         if xxd.config.get('server/isHttps') = '1' then begin
             xxd.serverUrl := 'https://' + xxd.config.Get('server/ip') + ':' + IntToStr(xxd.port);
         end else begin
@@ -1526,20 +1528,21 @@ begin
     PrintLn;
     PrintLn(GetLang('message/startingXXD', '正在启动XXD......'));
     
-    // Use Service
-    // Result := RestartService(xxd.ServiceName, True);                                                                                
-    // if not Result then Result := RestartService(xxd.ServiceName, True, True);
-    // if Result then begin
-    //     PrintLn(Format(GetLang('message/XXDisRunning', 'XXD 正在运行，服务器地址为 %s。'), [xxd.serverUrl]));
-    // end else begin
-    //     PrintLn(GetLang('message/XXDfailedAndTry', '启动XXD失败，请稍后重试。'));
-    // end;
+    // Use Service Result := RestartService(xxd.ServiceName, True);
+    // if not Result then Result := RestartService(xxd.ServiceName, True,
+    // True); if Result then begin
+    // PrintLn(Format(GetLang('message/XXDisRunning', 'XXD 正在运行，服务器地址为 %s。'),
+    // [xxd.serverUrl])); end else begin
+    // PrintLn(GetLang('message/XXDfailedAndTry', '启动XXD失败，请稍后重试。')); end;
 
     // Use TProcess
     try
         xxdProcess := TProcess.create(nil);
         xxdProcess.CurrentDirectory := xxd.path + '\';
         xxdProcess.Executable := xxd.path + '\' + 'xxd.exe';
+        if xxd.hideWindow then begin
+            xxdProcess.ShowWindow := swoHIDE;
+        end;
         xxdProcess.Execute();
     finally 
         if xxdProcess <> nil then begin
