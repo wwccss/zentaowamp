@@ -1,10 +1,10 @@
 object MainForm: TMainForm
-  Left = 429
+  Left = 316
   Height = 370
-  Top = 145
+  Top = 362
   Width = 650
   Caption = '禅道集成运行环境'
-  ClientHeight = 340
+  ClientHeight = 350
   ClientWidth = 650
   Constraints.MinHeight = 130
   Constraints.MinWidth = 550
@@ -55,7 +55,7 @@ object MainForm: TMainForm
   end
   object MemoMessager: TMemo
     Left = 8
-    Height = 233
+    Height = 243
     Top = 64
     Width = 630
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -63,6 +63,7 @@ object MainForm: TMainForm
     Font.Height = -15
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
+    OnChange = MemoMessagerChange
     ParentFont = False
     ReadOnly = True
     ScrollBars = ssVertical
@@ -71,7 +72,7 @@ object MainForm: TMainForm
   object FlowPanel1: TFlowPanel
     Left = 8
     Height = 32
-    Top = 305
+    Top = 315
     Width = 628
     Anchors = [akLeft, akRight, akBottom]
     BevelOuter = bvNone
@@ -100,9 +101,9 @@ object MainForm: TMainForm
     TabOrder = 5
     object apacheAuthToggle: TCheckBox
       Left = 0
-      Height = 28
+      Height = 21
       Top = 0
-      Width = 136
+      Width = 94
       Anchors = [akLeft, akBottom]
       Caption = '启用访问验证'
       Checked = True
@@ -111,10 +112,10 @@ object MainForm: TMainForm
       TabOrder = 0
     end
     object apacheAuthLabel: TLabel
-      Left = 141
-      Height = 25
+      Left = 99
+      Height = 17
       Top = 4
-      Width = 241
+      Width = 161
       Anchors = []
       BorderSpacing.Left = 5
       BorderSpacing.Top = 4
@@ -129,10 +130,10 @@ object MainForm: TMainForm
     end
     object apacheAuthChangeBtn: TLabel
       Cursor = crHandPoint
-      Left = 392
-      Height = 24
+      Left = 270
+      Height = 17
       Top = 4
-      Width = 36
+      Width = 24
       Anchors = []
       BorderSpacing.Left = 5
       BorderSpacing.Top = 4
@@ -147,10 +148,10 @@ object MainForm: TMainForm
     end
     object copyAuthPassword: TLabel
       Cursor = crHandPoint
-      Left = 438
-      Height = 24
+      Left = 304
+      Height = 17
       Top = 4
-      Width = 72
+      Width = 48
       Anchors = []
       BorderSpacing.Left = 5
       BorderSpacing.Top = 4
