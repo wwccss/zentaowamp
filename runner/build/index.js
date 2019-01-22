@@ -29,7 +29,7 @@ console.log('FastMode', isFastMode);
 
 const copyLanguageFiles = () => {
     console.log('Copy languages files to common folder...');
-    return fs.copy(path.join(APP_PATH, 'languages'), path.join(WAMP_PATH, 'common', 'languages'));
+    return fs.copy(path.join(APP_PATH, 'languages'), path.join(WAMP_PATH, 'common', 'runner', 'languages'));
 };
 
 const replaceIcon = (targetExeFile, iconFile) => {
