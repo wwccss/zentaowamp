@@ -12,7 +12,6 @@
       <XPManifest>
         <ExecutionLevel Value="requireAdministrator"/>
       </XPManifest>
-      <Icon Value="0"/>
     </General>
     <i18n>
       <EnableI18N LFM="False"/>

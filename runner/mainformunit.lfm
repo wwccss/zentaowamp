@@ -1,10 +1,10 @@
 object MainForm: TMainForm
-  Left = 988
+  Left = 534
   Height = 370
-  Top = 339
+  Top = 351
   Width = 650
   Caption = '禅道集成运行环境'
-  ClientHeight = 340
+  ClientHeight = 351
   ClientWidth = 650
   Constraints.MinHeight = 130
   Constraints.MinWidth = 550
@@ -14,7 +14,7 @@ object MainForm: TMainForm
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
   Position = poScreenCenter
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '1.8.4.0'
   object ButtonRun: TButton
     Left = 15
     Height = 40
@@ -55,7 +55,7 @@ object MainForm: TMainForm
   end
   object MemoMessager: TMemo
     Left = 8
-    Height = 233
+    Height = 244
     Top = 64
     Width = 630
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -71,7 +71,7 @@ object MainForm: TMainForm
   object FlowPanel1: TFlowPanel
     Left = 8
     Height = 32
-    Top = 305
+    Top = 316
     Width = 628
     Anchors = [akLeft, akRight, akBottom]
     BevelOuter = bvNone
@@ -96,13 +96,14 @@ object MainForm: TMainForm
         WrapAfter = waAuto
         Index = 3
       end>
+    FlowLayout = tlTop
     FlowStyle = fsLeftRightTopBottom
     TabOrder = 5
     object apacheAuthToggle: TCheckBox
       Left = 0
-      Height = 28
+      Height = 17
       Top = 0
-      Width = 136
+      Width = 92
       Anchors = [akLeft, akBottom]
       Caption = '启用访问验证'
       Checked = True
@@ -111,10 +112,10 @@ object MainForm: TMainForm
       TabOrder = 0
     end
     object apacheAuthLabel: TLabel
-      Left = 141
-      Height = 25
+      Left = 97
+      Height = 12
       Top = 4
-      Width = 241
+      Width = 184
       Anchors = []
       BorderSpacing.Left = 5
       BorderSpacing.Top = 4
@@ -129,10 +130,10 @@ object MainForm: TMainForm
     end
     object apacheAuthChangeBtn: TLabel
       Cursor = crHandPoint
-      Left = 392
-      Height = 24
+      Left = 291
+      Height = 12
       Top = 4
-      Width = 36
+      Width = 24
       Anchors = []
       BorderSpacing.Left = 5
       BorderSpacing.Top = 4
@@ -147,10 +148,10 @@ object MainForm: TMainForm
     end
     object copyAuthPassword: TLabel
       Cursor = crHandPoint
-      Left = 438
-      Height = 24
+      Left = 325
+      Height = 12
       Top = 4
-      Width = 72
+      Width = 48
       Anchors = []
       BorderSpacing.Left = 5
       BorderSpacing.Top = 4
