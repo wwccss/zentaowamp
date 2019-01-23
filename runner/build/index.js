@@ -58,7 +58,7 @@ const buildTarget = (target, platform = 'win64') => {
     console.log(`Build target: ${target} - ${platform}...`);
     return new Promise((resolve, reject) => {
         const isWin32 = platform === 'win32';
-        const targetPath = path.join(WAMP_PATH, isWin32 ? `wamp-${target}-win32` : `wamp-${target}`);
+        const targetPath = path.join(WAMP_PATH, isWin32 ? `wamp_${target}_win32` : `wamp_${target}`);
         const targetExeFile = path.join(targetPath, 'start.exe');
 
         if (!isFastMode) {
