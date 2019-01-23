@@ -1,12 +1,7 @@
 runner/xampp/chanzhi-xampp/
 runner/xampp/ranzhi-xampp/
 runner/xampp/zentao-xampp/
+runner/*.exe
 
 runner/zentaorunner\.lps
-runner/xampp/zentao-xampp-win32/mysql/data/zentao/
-runner/xampp/zentao-xampp-win32/mysql/data/zentaopro/
-runner/xampp/xampp/mysql/data/zentaopro/
-runner/xampp/xampp/mysql/data/zentao/
-runner/xampp/xampp/apache/logs/access_log
-runner/xampp/xampp/apache/logs/error_log
-runner/xampp/zentao-xampp-win32/
+runner/xampp/wamp_*/
