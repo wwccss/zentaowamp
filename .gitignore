@@ -4,4 +4,4 @@ runner/xampp/zentao-xampp/
 runner/*.exe
 
 runner/zentaorunner\.lps
-runner/xampp/wamp_*/
+runner/xampp/wamp_*
