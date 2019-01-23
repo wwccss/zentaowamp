@@ -52,29 +52,14 @@ lib/
 *.ppu
 link.res
 ppas.bat
-zentao.lps
+zentaorunner.lps
 
 
 #exclude executable output in windows
-zentaorunner.exe
+*.exe
 
 #node modules
 node_modules
 
 #output
-zentaorunner*.exe
-zentaorunner.ico
-xampp/wamp-all/
-xampp/wamp-all-win32/
-xampp/wamp-chanzhi/
-xampp/wamp-chanzhi-win32/
-xampp/wamp-xuanxuan/
-xampp/wamp-xuanxuan-win32/
-xampp/wamp-ranzhi/
-xampp/wamp-ranzhi-win32/
-xampp/wamp-zentao/
-xampp/wamp-zentao-win32/
-xampp/wamp-yidou/
-xampp/wamp-yidou-win32/
-xampp/*.zip
-xampp/zentao/*.exe
+xampp/wamp_*
