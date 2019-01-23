@@ -63,3 +63,6 @@ node_modules
 
 #output
 xampp/wamp_*
+xampp/example-app/
+xampp/xxd/
+release/
