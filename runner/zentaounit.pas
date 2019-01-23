@@ -763,8 +763,10 @@ begin
     if not Result then Result := UninstallService(apache.ServiceName);
     Result := UninstallService(mysql.ServiceName);
     if not Result then Result := UninstallService(mysql.ServiceName);
-    Result := UninstallService(xxd.ServiceName);
-    if not Result then Result := UninstallService(xxd.ServiceName);
+    // if xxd.enabled then begin
+    //    Result := UninstallService(xxd.ServiceName);
+    //    if not Result then Result := UninstallService(xxd.ServiceName);
+    // end;
 end;
 
 { Get service status }
