@@ -3,6 +3,7 @@ const winresourcer = require('winresourcer');
 const path = require('path');
 const {execFile} = require('child_process');
 const program = require('commander');
+const archiver = require('archiver');
 
 const WAMP_PATH = path.resolve(__dirname, '../xampp');
 const APP_PATH = path.resolve(__dirname, '../');
@@ -38,6 +39,21 @@ const examplePath = includeExample && fs.pathExistsSync(path.join(WAMP_PATH, 'ex
 console.log('Targets', targets);
 console.log('Platforms', platforms);
 console.log('FastMode', isFastMode);
+
+// 创建 zip 文件
+const createZipFromDir = (file, dir, destDir = false) => {
+    return new Promise((resolve, reject) => {
+        const output = fs.createWriteStream(file);
+        const archive = archiver('zip', {
+            zlib: {level: 9}
+        });
+        archive.on('error', reject);
+        archive.on('end', resolve);
+        archive.pipe(output);
+        archive.directory(dir, destDir);
+        archive.finalize();
+    });
+};
 
 const copyLanguageFiles = () => {
     console.log('Copy languages files to common folder...');
@@ -117,8 +133,8 @@ const buildTarget = (target, platform = 'win64') => {
                     fs.copySync(path.join(WAMP_PATH, 'xxd'), path.join(exampleDirPath, 'xxd'));
                 }
             }
-            resolve();
-        }).catch(reject);
+            return createZipFromDir(`${targetPath}.zip`, targetPath);
+        }).then(resolve).catch(reject);
     });
 };
 
