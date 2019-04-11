@@ -64,7 +64,7 @@ begin
             sectionRegex              := TRegExpr.Create;
             sectionRegex.Expression   := '\[(.+)\]';
             nameValueRegex            := TRegExpr.Create;
-            nameValueRegex.Expression := '(\w+)\s*=\s*(.*)';
+            nameValueRegex.Expression := '([\w/]+)\s*=\s*(.*)';
             section                   := '';
 
             for i := 0 to (fileLines.Count - 1) do
