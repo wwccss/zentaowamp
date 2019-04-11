@@ -515,10 +515,10 @@ end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
-    ExitZentao;
     if not ButtonRun.Enabled then begin
         ShowMessage(GetLang('message/exitAppTip', '退出后服务会在后台继续运行，要停止服务请重新打开此程序进行操作。'));
     end;
+    ExitZentao;
 end;
 
 { Display message }
@@ -602,7 +602,7 @@ begin
     if ButtonRun.Enabled then begin
         ButtonRun.Caption := Format(GetLang('UI/startProduct', '启动'), [GetProductTitle]);
     end else begin
-        ButtonRun.Caption := GetLang('UI/runing', ButtonRun.Caption);
+        ButtonRun.Caption := GetLang('UI/running', ButtonRun.Caption);
     end;
 
     updateXxdStatus();
