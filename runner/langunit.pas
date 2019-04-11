@@ -5,12 +5,13 @@ unit langunit;
 interface
 
 uses
-    Classes, SysUtils, regexpr;
+    Classes, SysUtils, regexpr, inifileunit;
 
 procedure SetLanguage(langSetting: string = 'zh_cn'; force: Boolean = False; dir: string = '');
 procedure LoadLang(langSetting: string = 'zh_cn'; dir: string = '');
 function GetLang(key: string; defaultValue: string = ''): string;overload;
 function GetLang(section: string; key: string; defaultValue: string): string;overload;
+procedure setConfigFileForLang(configFile: TIniFile);
 
 const
     LANG_DIR = 'languages';
@@ -20,8 +21,14 @@ var
     language : string;
     langName : string;
     langDir  : string;
+    _configFile : TIniFile;
 
 implementation
+
+procedure setConfigFileForLang(configFile: TIniFile);
+begin
+    _configFile := configFile;
+end;
 
 procedure SetLanguage(langSetting: string = 'zh_cn'; force: Boolean = False; dir: string = '');
 begin
@@ -80,14 +87,16 @@ end;
 
 function GetLang(key: string; defaultValue: string = ''): string;overload;
 begin
-    Result := lang.Values[key];
+    if _configFile <> nil then begin
+        Result := _configFile.get('lang/' + language + '/' + key, '');
+    end;
+    if Result = '' then Result := lang.Values[key];
     if Result = '' then Result := defaultValue;
 end;
 
 function GetLang(section: string; key: string; defaultValue: string): string;overload;
 begin
-    Result := lang.Values[section + '/' + key];
-    if Result = '' then Result := defaultValue;
+    Result := GetLang(section + '/' + key, defaultValue);
 end;
 
 end.
