@@ -1,42 +1,37 @@
-ÎªÁË±£Ö¤ÄúµÄÕı³£Ê¹ÓÃ£¬ÇëÔÚÔËĞĞÖ®Ç°×ĞÏ¸ÔÄ¶ÁÏÂÃæµÄËµÃ÷£º
+ä¸ºäº†ä¿è¯æ‚¨çš„æ­£å¸¸ä½¿ç”¨ï¼Œè¯·åœ¨è¿è¡Œä¹‹å‰ä»”ç»†é˜…è¯»ä¸‹é¢çš„è¯´æ˜ï¼š
 
-1. ÈçºÎÆô¶¯È»Ö®£º
-  Ë«»÷Æô¶¯È»Ö®.exeÔËĞĞ¿ØÖÆÃæ°å¡£ÔÚÈ»Ö®¼¯³ÉÔËĞĞ»·¾³¿ØÖÆÃæ°åÉÏµã»÷Æô¶¯°´Å¥¼´¿ÉÆô¶¯¡£
+1. å¦‚ä½•å¯åŠ¨å–§å–§ï¼š
+  åŒå‡»å¯åŠ¨å–§å–§.exeè¿è¡Œæ§åˆ¶é¢æ¿ã€‚åœ¨å–§å–§é›†æˆè¿è¡Œç¯å¢ƒæ§åˆ¶é¢æ¿ä¸Šç‚¹å‡»å¯åŠ¨æŒ‰é’®å³å¯å¯åŠ¨ã€‚
 
-  Èç¹ûÎŞ·¨Í¨¹ı¿ØÖÆÃæ°åÆô¶¯È»Ö®£¬½øÈëxampp\serviceÄ¿Â¼£¬Ë«»÷ÔËĞĞinstall.bat£¬À´°²×°²¢Æô¶¯È»Ö®µÄ·şÎñ¡£
+2. æ³¨æ„äº‹é¡¹ï¼š
 
-2. ×¢ÒâÊÂÏî£º
+  2.1 ä¸è¦æ”¹åŠ¨xamppçš„ç›®å½•åï¼Œå¦åˆ™ç¨‹åºè¿è¡Œä¼šæœ‰é—®é¢˜ã€‚
+  2.2 å¦‚æœæ— æ³•å¯åŠ¨apacheï¼Œæ£€æŸ¥ç«¯å£å·æ˜¯å¦å†²çªã€‚å¦‚æœç¡®è®¤ä¸æ˜¯ç«¯å£å†²çªä¸”æ— æ³•å¯åŠ¨ï¼Œè¯·è€ƒè™‘å®‰è£…vcè¿è¡Œç¯å¢ƒï¼š
+     32ä½ç³»ç»Ÿä¸‹è½½ï¼šhttp://www.microsoft.com/downloads/details.aspx?FamilyID=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF
+     64ä½ç³»ç»Ÿä¸‹è½½ï¼šhttp://www.microsoft.com/download/en/details.aspx?displaylang=en&id=15336 
+  2.3 å–§å–§ç³»ç»Ÿé»˜è®¤çš„ç®¡ç†å‘˜å¸å·æ˜¯adminï¼Œå¯†ç æ˜¯123456ã€‚
+  2.4 æ•°æ®åº“é»˜è®¤çš„ç®¡ç†å‘˜å¸å·æ˜¯rootï¼Œå¯†ç ä¸º123456ã€‚
+  2.5 å–§å–§çš„è®¿é—®è·¯å¾„ï¼šhttp://localhost/ å…¶ä»–æœºå™¨è®¿é—®å°†localhostæ¢æˆipåœ°å€ã€‚å¦‚æœç«¯å£å·ä¸æ˜¯80ï¼Œè¿˜éœ€è¦åŠ ä¸Šç«¯å£å·ã€‚
+  2.6 æ•°æ®åº“ç®¡ç†è¯·è®¿é—®ï¼šhttp://localhost/adminer/ã€‚admineråªèƒ½åœ¨å–§å–§æœºå™¨ä¸Šé¢è®¿é—®ã€‚
 
-  2.1 ²»Òª¸Ä¶¯xamppµÄÄ¿Â¼Ãû£¬·ñÔò³ÌĞòÔËĞĞ»áÓĞÎÊÌâ¡£
-  2.2 Èç¹ûÎŞ·¨Æô¶¯apache£¬¼ì²é¶Ë¿ÚºÅÊÇ·ñ³åÍ»¡£Èç¹ûÈ·ÈÏ²»ÊÇ¶Ë¿Ú³åÍ»ÇÒÎŞ·¨Æô¶¯£¬Çë¿¼ÂÇ°²×°vcÔËĞĞ»·¾³£º
-     32Î»ÏµÍ³ÏÂÔØ£ºhttp://www.microsoft.com/downloads/details.aspx?FamilyID=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF
-     64Î»ÏµÍ³ÏÂÔØ£ºhttp://www.microsoft.com/download/en/details.aspx?displaylang=en&id=15336 
-  2.3 È»Ö®ÏµÍ³Ä¬ÈÏµÄ¹ÜÀíÔ±ÕÊºÅÊÇadmin£¬ÃÜÂëÊÇ123456¡£
-  2.4 Êı¾İ¿âÄ¬ÈÏµÄ¹ÜÀíÔ±ÕÊºÅÊÇroot£¬ÃÜÂëÎª123456¡£
-  2.5 È»Ö®µÄ·ÃÎÊÂ·¾¶£ºhttp://localhost/ ÆäËû»úÆ÷·ÃÎÊ½«localhost»»³ÉipµØÖ·¡£Èç¹û¶Ë¿ÚºÅ²»ÊÇ80£¬»¹ĞèÒª¼ÓÉÏ¶Ë¿ÚºÅ¡£
-  2.6 Êı¾İ¿â¹ÜÀíÇë·ÃÎÊ£ºhttp://localhost/phpmyadmin/¡£phpmyadminÖ»ÄÜÔÚÈ»Ö®»úÆ÷ÉÏÃæ·ÃÎÊ¡£
+è¯¦ç»†çš„ä»‹ç»ï¼Œè¯·è®¿é—®ï¼šhttp://xuan.im
 
-ÏêÏ¸µÄ½éÉÜ£¬Çë·ÃÎÊ£ºhttp://www.ranzhi.org
+Please read the flowing notes before you run xuanxuan:
 
-Please read the flowing notes before you run ranzhi:
+1. How to start xuanxuan:
 
-1. How to start ranzhi:
-
-   Double Click Æô¶¯È»Ö®.exe to run control application¡£Click the start button to start services.
-
-  If you can't start ranzhi by the control panel, cd xampp\service, double click the install.bat to install and start services
-  for ranzhi manually.
+   Double Click å¯åŠ¨å–§å–§.exe to run control applicationã€‚Click the start button to start services.
 
 2. Notice:
 
   2.1 Don't change the directory name of xampp.
-  2.2 If ranzhi can't start, please check whether the ports of 80 and 3306 conflict with other webserver and database server.
+  2.2 If xuanxuan can't start, please check whether the ports of 80 and 3306 conflict with other webserver and database server.
       If you make sure no conflicts for apache and mysql, please consider to install the vc runtime.
       32bit: http://www.microsoft.com/downloads/details.aspx?FamilyID=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF
       64bit: http://www.microsoft.com/download/en/details.aspx?displaylang=en&id=15336 
-  2.3 The default administrator for ranzhi is admin, password is 123456.
+  2.3 The default administrator for xuanxuan is admin, password is 123456.
   2.4 The default administrator for database is root, password is empty.
-  2.5 The url for ranzhi is: http://your ip address/, if not 80, add it.
-  2.6 To manage database, visit http://localhost/phpmyadmin, which can only be visited from the localhost.
+  2.5 The url for xuanxuan is: http://your ip address/, if not 80, add it.
+  2.6 To manage database, visit http://localhost/adminer/, which can only be visited from the localhost.
 
-For more infomation, please visit: http://www.ranzhi.org/.
+For more infomation, please visit: http://xuan.im.
