@@ -213,6 +213,9 @@ begin
     LoadConfig();
     Icon.LoadFromFile(os.IconFile);
     TrayIcon1.Icon.LoadFromFile(os.IconFile);
+    if userconfig.singleLanguage then begin
+        MenuItemLang.Visible := false;
+    end;
     SetLanguage(userconfig.Language, false, os.RunnerLocation);
 
     PrintLn(GetProductTitle() + Format(GetLang('message/zentaoControl', '控制面板 %s'), [GetBuildVersion]));

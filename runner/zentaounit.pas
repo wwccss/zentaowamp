@@ -116,6 +116,7 @@ type
         ApachePort     : Integer;
         MysqlPort      : Integer;
         Language       : string;
+        singleLanguage : boolean;
         AutoChangePort : boolean;
         EnableApacheAuth: boolean;
         ApacheAuthAccount: string;
@@ -214,9 +215,9 @@ const
     VC_REDIST         = 'vc_redist.%s.exe';
     VC_DETECTOR       = 'vc_detector_%s.bat'; 
     OS_CHECK_BAT      = 'check_os.bat';
-    VERSION_MAJOR     = 1;
-    VERSION_MINOR     = 4;
-    VERSION_PACTH     = 2;
+    VERSION_MAJOR     = 2;
+    VERSION_MINOR     = 1;
+    VERSION_PACTH     = 3;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
     MYSQL_USER_ROOT   = 'root';
@@ -1701,7 +1702,12 @@ begin
         userconfig.LastRunTime        := userConfigFile.GetValue('/LastRunTime', 0);
         userconfig.ApachePort         := userConfigFile.GetValue('apache/port', 80);
         userconfig.MysqlPort          := userConfigFile.GetValue('mysql/port', 3306);
-        userconfig.Language           := userConfigFile.GetValue('/language', config.Get('common/defaultLang', 'zh_cn'));
+        userconfig.singleLanguage     := config.Get('common/singleLanguage', '') = 'true';
+        if userconfig.singleLanguage then begin
+            userconfig.Language := config.Get('common/defaultLang', 'zh_cn');
+        end else begin
+            userconfig.Language := userConfigFile.GetValue('/language', config.Get('common/defaultLang', 'zh_cn'));
+        end;
         userconfig.AutoChangePort     := userConfigFile.GetValue('/AutoChangePort', False);
         userconfig.EnableApacheAuth   := userConfigFile.GetValue('/EnableApacheAuth', True);
         userconfig.ApacheAuthAccount  := userConfigFile.GetValue('/ApacheAuthAccount', '');
