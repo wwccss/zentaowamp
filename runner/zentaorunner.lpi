@@ -19,11 +19,11 @@
     </i18n>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
-      <MajorVersionNr Value="2"/>
-      <MinorVersionNr Value="1"/>
-      <RevisionNr Value="3"/>
+      <MajorVersionNr Value="1"/>
+      <MinorVersionNr Value="3"/>
+      <RevisionNr Value="4"/>
       <Language Value="0804"/>
-      <StringTable CompanyName="青岛易软天创网络科技有限公司" ProductName="集成运行环境" ProductVersion="1.4.3"/>
+      <StringTable CompanyName="青岛易软天创网络科技有限公司" ProductName="集成运行环境" ProductVersion="1.3.4"/>
     </VersionInfo>
     <BuildModes Count="3">
       <Item1 Name="Default" Default="True"/>

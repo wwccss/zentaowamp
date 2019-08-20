@@ -557,10 +557,14 @@ begin
     MenuItemZhtw.Caption             := GetLang('menu/zhtw', '中文繁体');
     MenuItemEn.Caption               := GetLang('menu/en', 'English');
     MenuItemHelp.Caption             := GetLang('menu/help', '帮助');
+    MenuItemOfficialSite.Visible     := GetProductLink('official', '') <> 'false';
     MenuItemOfficialSite.Caption     := GetLang('menu/officialSite', '官方网站');
+    MenuItemOfficialHelp.Visible     := GetProductLink('helpdocument', '') <> 'false';
     MenuItemOfficialHelp.Caption     := GetLang('menu/officialHelp', '帮助文档');
     MenuItemFlowChart.Caption        := GetLang('menu/flowChart', '流 程 图');
+    MenuItemFaq.Visible              := GetProductLink('feedback', '') <> 'false';
     MenuItemFaq.Caption              := GetLang('menu/faq', '常见问题');
+    MenuItemForum.Visible            := GetProductLink('forum', '') <> 'false';
     MenuItemForum.Caption            := GetLang('menu/forum', '官方论坛');
     MenuItemExit.Caption             := GetLang('menu/exit', '退出');
     MenuItemRunCommands.Caption      := GetLang('menu/runCommands', '执行命令');
