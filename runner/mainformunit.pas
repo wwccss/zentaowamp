@@ -252,7 +252,6 @@ begin
 
     MenuItemInitBat.Enabled   := product.InitBat <> '';
     MenuItemBackup.Enabled    := product.BackupFile <> '';
-    MenuItemFlowChart.Visible := product.ID = 'zentao';
 
     if debugMode > 0 then begin
         MenuItemRunCommands.Visible := True;
@@ -340,7 +339,7 @@ end;
 
 procedure TMainForm.MenuItemFlowChartClick(Sender: TObject);
 begin
-    OpenUrl('http://www.zentao.net/book/zentaopmshelp/165.html');
+    OpenUrl(GetProductLink('flowchart', 'http://www.zentao.net/book/zentaopmshelp/165.html'));
 end;
 
 procedure TMainForm.MenuItemFaqClick(Sender: TObject);
@@ -446,7 +445,7 @@ begin
         if (xxd.status = 'stopped') or (xxd.status = 'failed') then begin
             ButtonStartXXD.Enabled := false;
             ButtonStartXXD.Caption := GetLang('UI/startingXXD', 'XXD...');
-            
+
             if startXXD() then begin
                 ButtonStartXXD.Caption := GetLang('UI/stopXXD', '停止XXD');
             end else begin
@@ -562,6 +561,7 @@ begin
     MenuItemOfficialHelp.Visible     := GetProductLink('helpdocument', '') <> 'false';
     MenuItemOfficialHelp.Caption     := GetLang('menu/officialHelp', '帮助文档');
     MenuItemFlowChart.Caption        := GetLang('menu/flowChart', '流 程 图');
+    MenuItemFlowChart.Visible        := (product.ID = 'zentao') or (GetProductLink('flowchart', '') <> 'false');
     MenuItemFaq.Visible              := GetProductLink('feedback', '') <> 'false';
     MenuItemFaq.Caption              := GetLang('menu/faq', '常见问题');
     MenuItemForum.Visible            := GetProductLink('forum', '') <> 'false';
@@ -618,7 +618,7 @@ begin
     apacheAuthLabel.Caption := Format(GetLang('ui/apacheInfoLabel', '用户名:%s 密码:%s'), [userconfig.ApacheAuthAccount, userconfig.apacheAuthPassword]);
     apacheAuthChangeBtn.Caption := GetLang('ui/change', '修改');
     copyAuthPassword.Caption := GetLang('ui/copyPassword', '复制密码');
-    
+
     MenuItemZhcn.Checked := False;
     MenuItemEn.Checked   := False;
     MenuItemZhtw.Checked := False;
@@ -653,4 +653,3 @@ begin
 end;
 
 end.
-
