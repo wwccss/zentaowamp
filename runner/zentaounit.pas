@@ -213,7 +213,7 @@ const
     MAX_PORT          = 65535;
     HOST              = '127.0.0.1';
     VC_REDIST         = 'vc_redist.%s.exe';
-    VC_DETECTOR       = 'vc_detector_%s.bat'; 
+    VC_DETECTOR       = 'vc_detector_%s.bat';
     OS_CHECK_BAT      = 'check_os.bat';
     VERSION_MAJOR     = 1;
     VERSION_MINOR     = 3;
@@ -522,7 +522,7 @@ begin
     PrintLn(product.UpdaterUrl);
     response := HttpGet(product.UpdaterUrl);
     if response <> 'NULL' then begin
-        
+
     end else begin
         Result := 'failed';
     end;
@@ -615,7 +615,7 @@ begin
         port := FixPort(ServiceName, retry);
         ExcuteCommand('net start ' + serviceName).Free;
         Sleep(3000);
-        
+
         serviceStatus := GetServiceStatus(serviceName);
         if serviceStatus = 'running' then begin
             PrintLn(GetLang('message/startedService', '成功启动服务，端口号为：%s'), [IntToStr(port)]);
@@ -764,10 +764,10 @@ begin
     if not Result then Result := UninstallService(apache.ServiceName);
     Result := UninstallService(mysql.ServiceName);
     if not Result then Result := UninstallService(mysql.ServiceName);
-    // if xxd.enabled then begin
-    //    Result := UninstallService(xxd.ServiceName);
-    //    if not Result then Result := UninstallService(xxd.ServiceName);
-    // end;
+    if xxd.enabled then begin
+        Result := UninstallService(xxd.ServiceName);
+        if not Result then Result := UninstallService(xxd.ServiceName);
+    end;
 end;
 
 { Get service status }
@@ -936,7 +936,7 @@ var
     NumBytes: LongInt;
     BytesRead: LongInt;
 begin
-    
+
     ConsoleLn('> Excute Commands', commands + ' (wait? ' + BooleanStr(waitOnExit) + ')');
     with TProcess.Create(nil) do
     begin
@@ -978,7 +978,7 @@ begin
         MemStream.SetSize(BytesRead);
 
         Result := TStringList.Create;
-        Result.LoadFromStream(MemStream); 
+        Result.LoadFromStream(MemStream);
 
         if debugMode > 1 then begin
             ConsoleLn('   Exit code: ' + inttostr(ExitStatus));
@@ -1016,7 +1016,7 @@ begin
     begin
         command := apache.Exe + ' -v';
     end;
-    
+
     output := ExcuteCommand(command, True);
     Result := output[0];
     output.Free;
@@ -1031,7 +1031,7 @@ end;
 procedure InitZentao();
 begin
     isFirstRun := True;
-    
+
     // php
     php.Exe                := os.Location + 'php\php.exe';
     php.ConfigFile         := os.Location + 'php\php.ini';
@@ -1058,7 +1058,7 @@ begin
     mysql.mysqlExe         := os.Location + 'mysql\bin\mysql.exe';
     mysql.ConfigFile       := os.Location + 'mysql\my.ini';
     mysql.ConfigFileTpl    := os.RunnerLocation + config.Get('mysql/configfile', 'res\mysql\my.ini');
-    
+
     mysql.ServiceName      := 'mysqlzt';
     mysql.Status           := GetServiceStatus(mysql.ServiceName);
     mysql.Port             := userconfig.MysqlPort;
@@ -1270,9 +1270,9 @@ function SetConfigPort(serviceName: string): boolean;
 begin
     ConsoleLn('> SetConfigPort', 'serviceName:' + serviceName);
     if serviceName = apache.ServiceName then begin
-        FixConfigFile(apache.ConfigFileTpl, apache.ConfigFile); 
+        FixConfigFile(apache.ConfigFileTpl, apache.ConfigFile);
     end else begin
-        FixConfigFile(php.ConfigFileTpl, php.ConfigFile); 
+        FixConfigFile(php.ConfigFileTpl, php.ConfigFile);
         FixConfigFile(mysql.ConfigFileTpl, mysql.ConfigFile);
 
         if product.id = 'all' then begin
@@ -1292,7 +1292,7 @@ begin
 end;
 
 function GetMySqlPassword(): string;
-var 
+var
     fileLines: TStringList;
     i, position: integer;
     line: string;
@@ -1307,7 +1307,7 @@ begin
         end else begin
             fileLines.LoadFromFile(product.MyConfig);
         end;
-        
+
         if fileLines.Count > 0 then begin
             regex := TRegExpr.Create;
             regex.Expression := '\' + CONFIG_DB_PASS + '\s*=\s*[''"](\w*)[''"];';
@@ -1367,27 +1367,27 @@ begin
         if oldPassword = password then begin
             ConsoleLn('  Change mySql password faild, because new password is the same as old password.');
         end else begin
-            ExcuteCommand(mysql.mysqlExe 
-                + ' --user=' + MYSQL_USER_ROOT 
-                + ' --password=' + oldPassword 
-                + ' --port=' + IntToStr(mysql.port) 
+            ExcuteCommand(mysql.mysqlExe
+                + ' --user=' + MYSQL_USER_ROOT
+                + ' --password=' + oldPassword
+                + ' --port=' + IntToStr(mysql.port)
                 + ' -e "UPDATE mysql.user SET password=PASSWORD(''' + password + ''')'
                 + ' WHERE user=''' + MYSQL_USER_ROOT + ''';"', true);
-            ExcuteCommand(mysql.mysqlExe 
-                + ' --user=' + MYSQL_USER_ROOT 
-                + ' --password=' + oldPassword 
-                + ' --port=' + IntToStr(mysql.port) 
+            ExcuteCommand(mysql.mysqlExe
+                + ' --user=' + MYSQL_USER_ROOT
+                + ' --password=' + oldPassword
+                + ' --port=' + IntToStr(mysql.port)
                 + ' -e "UPDATE mysql.user SET password=PASSWORD(''' + password + ''')'
                 + ' WHERE user=''' + MYSQL_USER + ''';"', true);
-            ExcuteCommand(mysql.mysqlExe 
-                + ' --user=' + MYSQL_USER_ROOT 
-                + ' --password=' + oldPassword 
-                + ' --port=' + IntToStr(mysql.port) 
+            ExcuteCommand(mysql.mysqlExe
+                + ' --user=' + MYSQL_USER_ROOT
+                + ' --password=' + oldPassword
+                + ' --port=' + IntToStr(mysql.port)
                 + ' -e "flush privileges;"', true);
-            cmdOutput := ExcuteCommand(mysql.mysqlExe 
-                + ' --user=' + MYSQL_USER_ROOT 
-                + ' --password=' + password 
-                + ' --port=' + IntToStr(mysql.port) 
+            cmdOutput := ExcuteCommand(mysql.mysqlExe
+                + ' --user=' + MYSQL_USER_ROOT
+                + ' --password=' + password
+                + ' --port=' + IntToStr(mysql.port)
                 + ' -e "flush privileges;"', true);
             if (cmdOutput.count > 0) and (pos('error', LowerCase(cmdOutput[0])) > 0) then begin
                 ConsoleLn('  Change MySql Password fail');
@@ -1416,7 +1416,7 @@ begin
 end;
 
 function UpdateMySqlPassword(configFile: string; password: string): boolean;
-var 
+var
     fileLines: TStringList;
     i, position: integer;
     line: string;
@@ -1531,46 +1531,16 @@ begin
 
     PrintLn;
     PrintLn(GetLang('message/startingXXD', '正在启动XXD......'));
-    
-    // Use Service Result := RestartService(xxd.ServiceName, True);
-    // if not Result then Result := RestartService(xxd.ServiceName, True,
-    // True); if Result then begin
-    // PrintLn(Format(GetLang('message/XXDisRunning', 'XXD 正在运行，服务器地址为 %s。'),
-    // [xxd.serverUrl])); end else begin
-    // PrintLn(GetLang('message/XXDfailedAndTry', '启动XXD失败，请稍后重试。')); end;
 
-    // Use TProcess
-    try
-        xxdProcess := TProcess.create(nil);
-        xxdProcess.CurrentDirectory := xxd.path + '\';
-        xxdProcess.Executable := xxd.path + '\' + 'xxd.exe';
-        if xxd.hideWindow then begin
-            xxdProcess.ShowWindow := swoHIDE;
-        end;
-        xxdProcess.Execute();
-    finally 
-        if xxdProcess <> nil then begin
-            if xxdProcess.Running then begin
-                Result := True;
-                xxd.process := xxdProcess;
-            end else begin
-                Result := False;
-                xxdProcess.Free;
-            end;
-        end else begin
-            Result := False;
-        end;
-
-        if Result then begin
-            userconfig.xxdProcessID := xxdProcess.ProcessID;
-            xxd.status := 'running';
-            PrintLn(Format(GetLang('message/XXDisRunning', 'XXD 正在运行，服务器地址为 %s。'), [xxd.serverUrl]));
-        end else begin
-            userconfig.xxdProcessID := 0;
-            xxd.status := 'stopped';
-            PrintLn(GetLang('message/XXDfailedAndTry', '启动XXD失败，请稍后重试。'));
-        end;
-        SaveConfig();
+    // Use Service
+    Result := RestartService(xxd.ServiceName, True);
+    if not Result then Result := RestartService(xxd.ServiceName, True,
+    True);
+    if Result then begin
+        PrintLn(Format(GetLang('message/XXDisRunning', 'XXD 正在运行，服务器地址为 %s。'),
+    [xxd.serverUrl]));
+    end else begin
+        PrintLn(GetLang('message/XXDfailedAndTry', '启动XXD失败，请稍后重试。'));
     end;
 end;
 
@@ -1578,20 +1548,7 @@ function stopXXD(): boolean;
 begin
     PrintLn;
     PrintLn(GetLang('message/stopingXXD', '正在停止 XXD......'));
-    // Result := StopService(xxd.ServiceName);
-
-    if xxd.process <> nil then begin
-        if xxd.process.running then begin
-            xxd.process.Terminate(0);
-        end;
-        xxd.process.Free();
-    end;
-    xxd.status := 'stopped';
-    xxd.process := nil;
-    Result := TRUE;
-    userconfig.xxdProcessID := 0;
-    SaveConfig();
-    PrintLn(GetLang('message/stoppedXXD', '已停止 XXD。'));
+    Result := StopService(xxd.ServiceName);
 end;
 
 function isXxdRunning(): boolean;
@@ -1604,9 +1561,9 @@ begin
         end else begin
             xxd.process := nil;
             if xxd.status <> 'stopped' then begin
-               xxd.status := 'stopped';
-               userconfig.xxdProcessID := 0;
-               PrintLn(GetLang('message/stoppedXXD', '已停止 XXD。'));
+                xxd.status := 'stopped';
+                userconfig.xxdProcessID := 0;
+                PrintLn(GetLang('message/stoppedXXD', '已停止 XXD。'));
             end;
         end;
     end;
@@ -1634,11 +1591,11 @@ begin
     if fileSuccess then begin
         Print('Files ' + GetLang('message/bakupSuccess', '备份成功。') + '  ');
     end;
-    
+
     if fileSuccess or sqlSuccess then begin
         Result := os.Location + product.ID + '\backup\' + Formatdatetime('yyyymm', Date);
     end;
-    
+
     if not fileSuccess or not sqlSuccess then begin
         PrintLn('Backup failed. Message: ');
         for i := 0 to (outputLines.Count - 1) do
@@ -1857,4 +1814,3 @@ begin
 end;
 
 end.
-
