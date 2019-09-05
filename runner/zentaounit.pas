@@ -1071,7 +1071,7 @@ begin
         xxd.path       := os.Location + xxd.path;
         xxd.exe        := config.Get('xxd/exe', xxd.path + '\xxd.exe');
         xxd.enabled    := true;
-        xxd.status     := 'stopped';
+        xxd.status     := GetServiceStatus(xxd.ServiceName);
         xxd.ConfigFile := config.Get('xxd/configFile', xxd.path + '\config\xxd.conf');
         xxd.config     := TIniFile.Create(xxd.ConfigFile);
         xxd.port       := StrToInt(xxd.config.Get('server/commonPort'));
@@ -1553,20 +1553,7 @@ end;
 
 function isXxdRunning(): boolean;
 begin
-    Result := False;
-    if xxd.process <> nil then begin
-        if xxd.process.Running then begin
-            Result := True;
-            xxd.status := 'running';
-        end else begin
-            xxd.process := nil;
-            if xxd.status <> 'stopped' then begin
-                xxd.status := 'stopped';
-                userconfig.xxdProcessID := 0;
-                PrintLn(GetLang('message/stoppedXXD', '已停止 XXD。'));
-            end;
-        end;
-    end;
+    Result := xxd.status = 'running';
 end;
 
 function BackupZentao(): string;
