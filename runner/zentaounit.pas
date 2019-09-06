@@ -612,7 +612,9 @@ begin
         end else begin
             PrintLn(GetLang('message/startingService', '正在启动服务：%s(P%s)...'), [serviceName, port]);
         end;
-        port := FixPort(ServiceName, retry);
+        if serviceName <> xxd.ServiceName then begin
+            port := FixPort(ServiceName, retry);
+        end;
         ExcuteCommand('net start ' + serviceName).Free;
         Sleep(3000);
 
