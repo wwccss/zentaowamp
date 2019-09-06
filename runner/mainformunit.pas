@@ -198,7 +198,7 @@ end;
 procedure TMainForm.MenuItemXXDLogClick(Sender: TObject);
 begin
     if xxd.enabled then begin
-        ExcuteCommand('explorer ' + product.logPath, False, False);
+        ExcuteCommand('explorer ' + xxd.logPath, False, False);
     end;
 end;
 
