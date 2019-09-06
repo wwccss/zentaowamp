@@ -31,6 +31,7 @@ type
         MemoMessager             : TMemo;
         MenuItem1                : TMenuItem;
         MenuItem2                : TMenuItem;
+        MenuItemXXDLog: TMenuItem;
         MenuItemAll3Log: TMenuItem;
         MenuItemProductProLog: TMenuItem;
         MenuItemApacheLog: TMenuItem;
@@ -100,6 +101,7 @@ type
         procedure MenuItemBackupClick(Sender: TObject);
         procedure MenuItemRunCommandsClick(Sender: TObject);
         procedure MenuItemXamppClick(Sender: TObject);
+        procedure MenuItemXXDLogClick(Sender: TObject);
         procedure Timer1Timer(Sender: TObject);
         procedure TrayIcon1Click(Sender: TObject);
     private
@@ -191,6 +193,11 @@ end;
 procedure TMainForm.MenuItemXamppClick(Sender: TObject);
 begin
     OpenUrl('http://www.apachefriends.org/en/xampp.html');
+end;
+
+procedure TMainForm.MenuItemXXDLogClick(Sender: TObject);
+begin
+
 end;
 
 procedure TMainForm.Timer1Timer(Sender: TObject);
