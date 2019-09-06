@@ -685,7 +685,7 @@ begin
         installCommand := os.Location + 'mysql\bin\mysqld.exe --install ' + mysql.serviceName + ' --defaults-file="' + mysql.configfile + '"';
     end else if serviceName = xxd.ServiceName then begin
         process        := 'xxd';
-        installCommand := 'sc create ' + xxd.ServiceName + ' binPath= "' + xxd.exe + '" start= demand displayname= "zentao wamp xxd"'
+        installCommand := 'sc create ' + xxd.ServiceName + ' binPath= "' + xxd.exe + '" start= demand displayname= "' + xxd.ServiceName + '"'
     end else begin
         Exit;
     end;
@@ -1525,10 +1525,6 @@ function startXXD(): boolean;
 var
     xxdProcess: TProcess;
 begin
-    if xxd.process <> nil then begin
-        exit;
-    end;
-
     PrintLn;
     PrintLn(GetLang('message/startingXXD', '正在启动XXD......'));
 
