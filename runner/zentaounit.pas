@@ -216,7 +216,7 @@ const
     VC_DETECTOR       = 'vc_detector_%s.bat';
     OS_CHECK_BAT      = 'check_os.bat';
     VERSION_MAJOR     = 1;
-    VERSION_MINOR     = 3;
+    VERSION_MINOR     = 4;
     VERSION_PACTH     = 5;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
