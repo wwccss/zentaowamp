@@ -1079,7 +1079,7 @@ begin
         xxd.config     := TIniFile.Create(xxd.ConfigFile);
         xxd.port       := StrToInt(xxd.config.Get('server/commonPort'));
         xxd.hideWindow := config.get('xxd/hideWindow', '') = 'true';
-        xxd.logPath    := xxd.path + 'log\';
+        xxd.logPath    := xxd.path + '\log\';
         if xxd.config.get('server/isHttps') = '1' then begin
             xxd.serverUrl := 'https://' + xxd.config.Get('server/ip') + ':' + IntToStr(xxd.port);
         end else begin
