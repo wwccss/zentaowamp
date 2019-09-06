@@ -197,7 +197,9 @@ end;
 
 procedure TMainForm.MenuItemXXDLogClick(Sender: TObject);
 begin
-
+    if xxd.enabled then begin
+        ExcuteCommand('explorer ' + product.logPath, False, False);
+    end;
 end;
 
 procedure TMainForm.Timer1Timer(Sender: TObject);
@@ -451,21 +453,21 @@ begin
     if xxd.enabled and ButtonStartXXD.Enabled then begin
         if (xxd.status = 'stopped') or (xxd.status = 'failed') then begin
             ButtonStartXXD.Enabled := false;
-            ButtonStartXXD.Caption := GetLang('UI/startingXXD', 'XXD...');
+            ButtonStartXXD.Caption := GetLang('UI/startingXXD', '聊天服务...');
 
             if startXXD() then begin
-                ButtonStartXXD.Caption := GetLang('UI/stopXXD', '停止XXD');
+                ButtonStartXXD.Caption := GetLang('UI/stopXXD', '停止聊天服务');
             end else begin
-                ButtonStartXXD.Caption := GetLang('UI/startXXD', '启动XXD');
+                ButtonStartXXD.Caption := GetLang('UI/startXXD', '启动聊天服务');
             end;
             ButtonStartXXD.Enabled := true;
         end else if xxd.status = 'running' then begin
             ButtonStartXXD.Enabled := false;
-            ButtonStartXXD.Caption := GetLang('UI/stopingXXD', 'XXD...');
+            ButtonStartXXD.Caption := GetLang('UI/stopingXXD', '聊天服务...');
             if stopXXD() then begin
-                ButtonStartXXD.Caption := GetLang('UI/startXXD', '启动XXD');
+                ButtonStartXXD.Caption := GetLang('UI/startXXD', '启动聊天服务');
             end else begin
-                ButtonStartXXD.Caption := GetLang('UI/stopXXD', '停止XXD');
+                ButtonStartXXD.Caption := GetLang('UI/stopXXD', '停止聊天服务');
             end;
             ButtonStartXXD.Enabled := true;
         end;
@@ -650,11 +652,13 @@ end;
 
 procedure TMainForm.updateXxdStatus();
 begin
+    MenuItemXXDLog.Visible = xxd.enabled;
     if xxd.enabled then begin
+        MenuItemXXDLog.Caption := GetLang('menu/xxdLog', '聊天服务日志');
         if isXxdRunning() then begin
-            ButtonStartXXD.Caption := GetLang('UI/stopXXD', '停止XXD');
+            ButtonStartXXD.Caption := GetLang('UI/stopXXD', '停止聊天服务');
         end else begin
-            ButtonStartXXD.Caption := GetLang('UI/startXXD', '启动XXD');
+            ButtonStartXXD.Caption := GetLang('UI/startXXD', '启动聊天服务');
         end;
     end;
 end;
