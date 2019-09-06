@@ -4,7 +4,7 @@ object MainForm: TMainForm
   Top = 351
   Width = 650
   Caption = '禅道集成运行环境'
-  ClientHeight = 351
+  ClientHeight = 350
   ClientWidth = 650
   Constraints.MinHeight = 130
   Constraints.MinWidth = 550
@@ -55,7 +55,7 @@ object MainForm: TMainForm
   end
   object MemoMessager: TMemo
     Left = 8
-    Height = 244
+    Height = 243
     Top = 64
     Width = 630
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -71,7 +71,7 @@ object MainForm: TMainForm
   object FlowPanel1: TFlowPanel
     Left = 8
     Height = 32
-    Top = 316
+    Top = 315
     Width = 628
     Anchors = [akLeft, akRight, akBottom]
     BevelOuter = bvNone
@@ -101,9 +101,9 @@ object MainForm: TMainForm
     TabOrder = 5
     object apacheAuthToggle: TCheckBox
       Left = 0
-      Height = 17
+      Height = 21
       Top = 0
-      Width = 92
+      Width = 94
       Anchors = [akLeft, akBottom]
       Caption = '启用访问验证'
       Checked = True
@@ -112,7 +112,7 @@ object MainForm: TMainForm
       TabOrder = 0
     end
     object apacheAuthLabel: TLabel
-      Left = 97
+      Left = 99
       Height = 12
       Top = 4
       Width = 184
@@ -130,7 +130,7 @@ object MainForm: TMainForm
     end
     object apacheAuthChangeBtn: TLabel
       Cursor = crHandPoint
-      Left = 291
+      Left = 293
       Height = 12
       Top = 4
       Width = 24
@@ -148,7 +148,7 @@ object MainForm: TMainForm
     end
     object copyAuthPassword: TLabel
       Cursor = crHandPoint
-      Left = 325
+      Left = 327
       Height = 12
       Top = 4
       Width = 48
@@ -241,6 +241,11 @@ object MainForm: TMainForm
       object MenuItemPhpLog: TMenuItem
         Caption = 'PHP 日志'
         OnClick = MenuItemPhpLogClick
+      end
+      object MenuItemXXDLog: TMenuItem
+        Caption = 'XXD 日志'
+        Visible = False
+        OnClick = MenuItemXXDLogClick
       end
     end
     object MenuItemTool: TMenuItem
