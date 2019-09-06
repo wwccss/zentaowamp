@@ -517,7 +517,7 @@ end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
-    if not ButtonRun.Enabled or ButtonStartXXD.Enabled then begin
+    if not ButtonRun.Enabled or xxd.status = 'running' then begin
         ShowMessage(GetLang('message/exitAppTip', '退出后服务会在后台继续运行，要停止服务请重新打开此程序进行操作。'));
     end;
     ExitZentao;
