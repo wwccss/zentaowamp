@@ -454,7 +454,7 @@ begin
             ButtonStartXXD.Enabled := true;
         end else if xxd.status = 'running' then begin
             ButtonStartXXD.Enabled := false;
-            ButtonStartXXD.Caption := GetLang('UI/startingXXD', 'XXD...');
+            ButtonStartXXD.Caption := GetLang('UI/stopingXXD', 'XXD...');
             if stopXXD() then begin
                 ButtonStartXXD.Caption := GetLang('UI/startXXD', '启动XXD');
             end else begin
