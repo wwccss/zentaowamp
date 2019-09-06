@@ -217,7 +217,7 @@ const
     OS_CHECK_BAT      = 'check_os.bat';
     VERSION_MAJOR     = 1;
     VERSION_MINOR     = 3;
-    VERSION_PACTH     = 4;
+    VERSION_PACTH     = 5;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
     MYSQL_USER_ROOT   = 'root';
@@ -685,7 +685,7 @@ begin
         installCommand := os.Location + 'mysql\bin\mysqld.exe --install ' + mysql.serviceName + ' --defaults-file="' + mysql.configfile + '"';
     end else if serviceName = xxd.ServiceName then begin
         process        := 'xxd';
-        installCommand := 'sc create ' + xxd.ServiceName + ' binPath="' + xxd.exe + '" start=demand displayname="zentao wamp xxd"'
+        installCommand := 'sc create ' + xxd.ServiceName + ' binPath= "' + xxd.exe + '" start= demand displayname= "zentao wamp xxd"'
     end else begin
         Exit;
     end;
@@ -1071,7 +1071,7 @@ begin
         xxd.path       := os.Location + xxd.path;
         xxd.exe        := config.Get('xxd/exe', xxd.path + '\xxd.exe');
         xxd.enabled    := true;
-        xxd.status     := 'stopped';
+        xxd.status     := GetServiceStatus(xxd.ServiceName);
         xxd.ConfigFile := config.Get('xxd/configFile', xxd.path + '\config\xxd.conf');
         xxd.config     := TIniFile.Create(xxd.ConfigFile);
         xxd.port       := StrToInt(xxd.config.Get('server/commonPort'));
@@ -1553,20 +1553,7 @@ end;
 
 function isXxdRunning(): boolean;
 begin
-    Result := False;
-    if xxd.process <> nil then begin
-        if xxd.process.Running then begin
-            Result := True;
-            xxd.status := 'running';
-        end else begin
-            xxd.process := nil;
-            if xxd.status <> 'stopped' then begin
-                xxd.status := 'stopped';
-                userconfig.xxdProcessID := 0;
-                PrintLn(GetLang('message/stoppedXXD', '已停止 XXD。'));
-            end;
-        end;
-    end;
+    Result := xxd.status = 'running';
 end;
 
 function BackupZentao(): string;
