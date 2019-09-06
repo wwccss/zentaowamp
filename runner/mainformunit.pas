@@ -652,7 +652,7 @@ end;
 
 procedure TMainForm.updateXxdStatus();
 begin
-    MenuItemXXDLog.Visible = xxd.enabled;
+    MenuItemXXDLog.Visible := xxd.enabled;
     if xxd.enabled then begin
         MenuItemXXDLog.Caption := GetLang('menu/xxdLog', '聊天服务日志');
         if isXxdRunning() then begin
