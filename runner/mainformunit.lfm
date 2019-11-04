@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 534
+  Left = 742
   Height = 370
-  Top = 351
+  Top = 627
   Width = 650
   Caption = '禅道集成运行环境'
   ClientHeight = 350
@@ -58,7 +58,7 @@ object MainForm: TMainForm
     Height = 243
     Top = 64
     Width = 630
-    Anchors = [akTop, akLeft, akRight, akBottom]
+    Anchors = [akTop, akLeft, akRight]
     Font.CharSet = GB2312_CHARSET
     Font.Height = -15
     Font.Pitch = fpVariable

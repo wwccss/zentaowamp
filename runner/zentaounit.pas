@@ -62,6 +62,7 @@ type
         AdminerPath   : String;
         htdocsPath    : String;
         logPath       : String;
+        authorization : boolean;
     end;
 
     MysqlConfig = record
@@ -216,8 +217,8 @@ const
     VC_REDIST         = 'vc_redist.%s.exe';
     VC_DETECTOR       = 'vc_detector_%s.bat';
     OS_CHECK_BAT      = 'check_os.bat';
-    VERSION_MAJOR     = 1;
-    VERSION_MINOR     = 4;
+    VERSION_MAJOR     = 2;
+    VERSION_MINOR     = 1;
     VERSION_PACTH     = 5;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
@@ -1055,6 +1056,11 @@ begin
     apache.AdminerPath     := os.Location + 'adminer\';
     apache.htdocsPath      := os.Location + 'htdocs\';
     apache.logPath         := os.Location + 'apache\logs\';
+    apache.authorization   := config.Get('apache/authorization', 'true') <> 'false';
+
+    if not apache.authorization then begin
+        userConfig.EnableApacheAuth := false;
+    end;
 
     // mysql
     mysql.Exe              := os.Location + 'mysql\bin\mysqld.exe';

@@ -266,6 +266,18 @@ begin
         MenuItemRunCommands.Visible := True;
     end;
 
+    apacheAuthToggle.Enabled := apache.authorization;
+    if (not apacheAuthToggle.Enabled) then begin
+        FlowPanel1.Visible := false;
+        MemoMessager.height := 273;
+        MemoMessager.AnchorSideBottom.Control := Self;
+        MemoMessager.AnchorSideBottom.Side := asrBottom;
+        MemoMessager.BorderSpacing.Bottom := 8;
+        MemoMessager.Anchors := [akTop,akLeft,akRight,akBottom];
+    end;
+
+    //MemoMessager.Anchors := [akTop,akLeft,akRight,akBottom];
+
     if (apache.Status = 'running') and (mysql.Status = 'running') then begin
         ButtonVisit.Enabled := True;
         ButtonStop.Enabled  := True;
