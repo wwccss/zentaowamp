@@ -7,6 +7,7 @@ const archiver = require('archiver');
 
 const WAMP_PATH = path.resolve(__dirname, '../xampp');
 const APP_PATH = path.resolve(__dirname, '../');
+const skipSliksvn = new Set(['xuanxuan']);
 
 console.log('APP_PATH', APP_PATH);
 console.log('WAMP_PATH', WAMP_PATH);
@@ -109,6 +110,10 @@ const buildTarget = (target, platform = 'win64') => {
                 console.log(`\tCopy target special win32 files`);
                 fs.copySync(path.join(WAMP_PATH, `${target}-win32`), targetPath);
             }
+        }
+
+        if (skipSliksvn.has(target)) {
+            fs.removeSync(path.join(targetPath, 'sliksvn'));
         }
 
         console.log(`\tCopy target exe file`);
