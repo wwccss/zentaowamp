@@ -434,7 +434,12 @@ begin
         line := StrReplace(line, '%AUTH_CONFIG%', authConfig);
         fileLines[i] := line;
     end;
-    fileLines.SaveToFile(dest);
+
+    try
+        fileLines.SaveToFile(dest);
+    except
+        ShowMessage(Format(GetLang('message/pathNotWritable', '路径不可写，请确保以下路径可以写入文件：%s'), [dest]));
+    end;
     fileLines.Free;
     ConsoleLn('    saved! |<');
     Result := true;
