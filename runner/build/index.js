@@ -23,7 +23,7 @@ program
 
 let targets = program.targets || '*';
 if (!targets || targets === '*') {
-    targets = ['zentao', 'xuanxuan', 'all', 'chanzhi', 'ranzhi'];
+    targets = ['zentao', 'xuanxuan', 'all', 'chanzhi', 'zdoo', 'zentaoqc'];
 } else {
     targets = targets.split(',');
 }
