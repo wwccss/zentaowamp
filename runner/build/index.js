@@ -23,7 +23,7 @@ program
 
 let targets = program.targets || '*';
 if (!targets || targets === '*') {
-    targets = ['zentao', 'xuanxuan', 'all', 'chanzhi', 'zdoo', 'zentaoqc'];
+    targets = ['zentao', 'xuanxuan', 'all', 'chanzhi', 'zdoo', 'qczentao'];
 } else {
     targets = targets.split(',');
 }
@@ -69,7 +69,7 @@ const replaceIcon = (targetExeFile, iconFile) => {
             exeFile: targetExeFile,
             resourceType: "Icongroup",
             resourceName: "MAINICON",
-            lang: '0', // Required, except when updating or deleting 
+            lang: '0', // Required, except when updating or deleting
             resourceFile: iconFile // Required, except when deleting
         }, (err) => {
             if(err) {
