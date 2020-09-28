@@ -1,4 +1,4 @@
-为了保证您的正常使用，请在运行之前仔细阅读下面的说明：
+﻿为了保证您的正常使用，请在运行之前仔细阅读下面的说明：
 
 1. 如何启动喧喧：
   双击启动喧喧.exe运行控制面板。在喧喧集成运行环境控制面板上点击启动按钮即可启动。
@@ -14,7 +14,7 @@
   2.5 喧喧的访问路径：http://localhost/ 其他机器访问将localhost换成ip地址。如果端口号不是80，还需要加上端口号。
   2.6 数据库管理请访问：http://localhost/adminer/。adminer只能在喧喧机器上面访问。
 
-详细的介绍，请访问：http://xuan.im
+详细的介绍，请访问：http://xuanim.com
 
 Please read the flowing notes before you run xuanxuan:
 
@@ -34,4 +34,4 @@ Please read the flowing notes before you run xuanxuan:
   2.5 The url for xuanxuan is: http://your ip address/, if not 80, add it.
   2.6 To manage database, visit http://localhost/adminer/, which can only be visited from the localhost.
 
-For more infomation, please visit: http://xuan.im.
+For more infomation, please visit: http://xuanim.com.
