@@ -217,9 +217,9 @@ const
     VC_REDIST         = 'vc_redist.%s.exe';
     VC_DETECTOR       = 'vc_detector_%s.bat';
     OS_CHECK_BAT      = 'check_os.bat';
-    VERSION_MAJOR     = 1;
-    VERSION_MINOR     = 4;
-    VERSION_PACTH     = 6;
+    VERSION_MAJOR     = 2;
+    VERSION_MINOR     = 1;
+    VERSION_PACTH     = 8;
     INIT_SUCCESSCODE  = '0';
     MYSQL_USER        = 'zentao';
     MYSQL_USER_ROOT   = 'root';
@@ -434,7 +434,6 @@ begin
         line := StrReplace(line, '%AUTH_CONFIG%', authConfig);
         fileLines[i] := line;
     end;
-
     try
         fileLines.SaveToFile(dest);
     except
@@ -1386,19 +1385,14 @@ begin
                 + ' --user=' + MYSQL_USER_ROOT
                 + ' --password=' + oldPassword
                 + ' --port=' + IntToStr(mysql.port)
-                + ' -e "SET password for ''' + MYSQL_USER_ROOT + '''@''localhost'' = password(''' + password + ''');"'
-                , true);
-            ExcuteCommand(mysql.mysqlExe
-                + ' --user=' + MYSQL_USER_ROOT
-                + ' --password=' + oldPassword
-                + ' --port=' + IntToStr(mysql.port)
                 + ' -e "SET password for ''' + MYSQL_USER + '''@''localhost'' = password(''' + password + ''');"'
                 , true);
             ExcuteCommand(mysql.mysqlExe
                 + ' --user=' + MYSQL_USER_ROOT
                 + ' --password=' + oldPassword
                 + ' --port=' + IntToStr(mysql.port)
-                + ' -e "flush privileges;"', true);
+                + ' -e "SET password for ''' + MYSQL_USER_ROOT + '''@''localhost'' = password(''' + password + ''');"'
+                , true);
             cmdOutput := ExcuteCommand(mysql.mysqlExe
                 + ' --user=' + MYSQL_USER_ROOT
                 + ' --password=' + password
