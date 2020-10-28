@@ -1386,14 +1386,14 @@ begin
                 + ' --user=' + MYSQL_USER_ROOT
                 + ' --password=' + oldPassword
                 + ' --port=' + IntToStr(mysql.port)
-                + ' -e "UPDATE mysql.user SET password=PASSWORD(''' + password + ''')'
-                + ' WHERE user=''' + MYSQL_USER_ROOT + ''';"', true);
+                + ' -e "SET password for ''' + MYSQL_USER_ROOT + '''@''localhost'' = password(''' + password + ''');"'
+                , true);
             ExcuteCommand(mysql.mysqlExe
                 + ' --user=' + MYSQL_USER_ROOT
                 + ' --password=' + oldPassword
                 + ' --port=' + IntToStr(mysql.port)
-                + ' -e "UPDATE mysql.user SET password=PASSWORD(''' + password + ''')'
-                + ' WHERE user=''' + MYSQL_USER + ''';"', true);
+                + ' -e "SET password for ''' + MYSQL_USER + '''@''localhost'' = password(''' + password + ''');"'
+                , true);
             ExcuteCommand(mysql.mysqlExe
                 + ' --user=' + MYSQL_USER_ROOT
                 + ' --password=' + oldPassword
